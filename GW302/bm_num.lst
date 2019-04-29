@@ -1,0 +1,4508 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"bm_num.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	ComicSans28
+  18              		.global	CmS28_uk
+  19              		.global	CmS28_mi
+  20              		.global	CmS28_pl
+  21              		.global	CmS28_dp
+  22              		.global	CmS28_9
+  23              		.global	CmS28_8
+  24              		.global	CmS28_7
+  25              		.global	CmS28_6
+  26              		.global	CmS28_5
+  27              		.global	CmS28_4
+  28              		.global	CmS28_3
+  29              		.global	CmS28_2
+  30              		.global	CmS28_1
+  31              		.global	CmS28_0
+  32              		.global	ComicSans26
+  33              		.global	CmS26_uk
+  34              		.global	CmS26_mi
+  35              		.global	CmS26_pl
+  36              		.global	CmS26_dp
+  37              		.global	CmS26_9
+  38              		.global	CmS26_8
+  39              		.global	CmS26_7
+  40              		.global	CmS26_6
+  41              		.global	CmS26_5
+  42              		.global	CmS26_4
+  43              		.global	CmS26_3
+  44              		.global	CmS26_2
+  45              		.global	CmS26_1
+  46              		.global	CmS26_0
+  47              		.global	ComicSansBold10
+  48              		.global	CS10B_uk
+  49              		.global	CS10B_mi
+  50              		.global	CS10B_pl
+  51              		.global	CS10B_dp
+  52              		.global	CS10B_9
+  53              		.global	CS10B_8
+  54              		.global	CS10B_7
+  55              		.global	CS10B_6
+  56              		.global	CS10B_5
+  57              		.global	CS10B_4
+  58              		.global	CS10B_3
+  59              		.global	CS10B_2
+  60              		.global	CS10B_1
+  61              		.global	CS10B_0
+  62              		.global	ComicSansBold12
+  63              		.global	CS12B_uk
+  64              		.global	CS12B_mi
+  65              		.global	CS12B_pl
+  66              		.global	CS12B_dp
+  67              		.global	CS12B_9
+  68              		.global	CS12B_8
+  69              		.global	CS12B_7
+  70              		.global	CS12B_6
+  71              		.global	CS12B_5
+  72              		.global	CS12B_4
+  73              		.global	CS12B_3
+  74              		.global	CS12B_2
+  75              		.global	CS12B_1
+  76              		.global	CS12B_0
+  77              		.global	RDS7x11
+  78              		.global	RDS7x11_uk
+  79              		.global	RDS7x11_mi
+  80              		.global	RDS7x11_pl
+  81              		.global	RDS7x11_dp
+  82              		.global	RDS7x11_9
+  83              		.global	RDS7x11_8
+  84              		.global	RDS7x11_7
+  85              		.global	RDS7x11_6
+  86              		.global	RDS7x11_5
+  87              		.global	RDS7x11_4
+  88              		.global	RDS7x11_3
+  89              		.global	RDS7x11_2
+  90              		.global	RDS7x11_1
+  91              		.global	RDS7x11_0
+  92              		.global	RDSfnt3
+  93              		.global	F3_uk
+  94              		.global	F3_mi
+  95              		.global	F3_pl
+  96              		.global	F3_dp
+  97              		.global	F3_9
+  98              		.global	F3_8
+  99              		.global	F3_7
+ 100              		.global	F3_6
+ 101              		.global	F3_5
+ 102              		.global	F3_4
+ 103              		.global	F3_3
+ 104              		.global	F3_2
+ 105              		.global	F3_1
+ 106              		.global	F3_0
+ 107              		.global	RDSfnt2
+ 108              		.global	F2_uk
+ 109              		.global	F2_mi
+ 110              		.global	F2_pl
+ 111              		.global	F2_dp
+ 112              		.global	F2_9
+ 113              		.global	F2_8
+ 114              		.global	F2_7
+ 115              		.global	F2_6
+ 116              		.global	F2_5
+ 117              		.global	F2_4
+ 118              		.global	F2_3
+ 119              		.global	F2_2
+ 120              		.global	F2_1
+ 121              		.global	F2_0
+ 122              		.global	RDSfnt1
+ 123              		.global	RDSfnt0
+ 124              		.global	F0_uk
+ 125              		.global	F0_mi
+ 126              		.global	F0_pl
+ 127              		.global	F0_dp
+ 128              		.global	F0_9
+ 129              		.global	F0_8
+ 130              		.global	F0_7
+ 131              		.global	F0_6
+ 132              		.global	F0_5
+ 133              		.global	F0_4
+ 134              		.global	F0_3
+ 135              		.global	F0_2
+ 136              		.global	F0_1
+ 137              		.global	F0_0
+ 138              		.comm	POWERtaskhandle,4,4
+ 139              		.comm	TWItaskhandle,4,4
+ 140              		.comm	SetTime,4,4
+ 141              		.section	.rodata.F0_mi,"a",%progbits
+ 142              		.align	2
+ 145              	F0_mi:
+ 146 0000 03       		.byte	3
+ 147 0001 07       		.byte	7
+ 148 0002 00       		.byte	0
+ 149 0003 00       		.byte	0
+ 150 0004 00       		.byte	0
+ 151 0005 E0       		.byte	-32
+ 152 0006 00       		.byte	0
+ 153 0007 00       		.byte	0
+ 154 0008 00       		.byte	0
+ 155 0009 000000   		.section	.rodata.CmS26_pl,"a",%progbits
+ 156              		.align	2
+ 159              	CmS26_pl:
+ 160 0000 0F       		.byte	15
+ 161 0001 17       		.byte	23
+ 162 0002 00       		.byte	0
+ 163 0003 00       		.byte	0
+ 164 0004 00       		.byte	0
+ 165 0005 00       		.byte	0
+ 166 0006 00       		.byte	0
+ 167 0007 00       		.byte	0
+ 168 0008 00       		.byte	0
+ 169 0009 00       		.byte	0
+ 170 000a 00       		.byte	0
+ 171 000b 00       		.byte	0
+ 172 000c 00       		.byte	0
+ 173 000d 00       		.byte	0
+ 174 000e 00       		.byte	0
+ 175 000f 00       		.byte	0
+ 176 0010 00       		.byte	0
+ 177 0011 00       		.byte	0
+ 178 0012 01       		.byte	1
+ 179 0013 80       		.byte	-128
+ 180 0014 03       		.byte	3
+ 181 0015 80       		.byte	-128
+ 182 0016 03       		.byte	3
+ 183 0017 80       		.byte	-128
+ 184 0018 03       		.byte	3
+ 185 0019 80       		.byte	-128
+ 186 001a 03       		.byte	3
+ 187 001b 80       		.byte	-128
+ 188 001c 03       		.byte	3
+ 189 001d 80       		.byte	-128
+ 190 001e FF       		.byte	-1
+ 191 001f FE       		.byte	-2
+ 192 0020 FF       		.byte	-1
+ 193 0021 FE       		.byte	-2
+ 194 0022 FF       		.byte	-1
+ 195 0023 FE       		.byte	-2
+ 196 0024 03       		.byte	3
+ 197 0025 80       		.byte	-128
+ 198 0026 03       		.byte	3
+ 199 0027 80       		.byte	-128
+ 200 0028 03       		.byte	3
+ 201 0029 80       		.byte	-128
+ 202 002a 03       		.byte	3
+ 203 002b 80       		.byte	-128
+ 204 002c 03       		.byte	3
+ 205 002d 80       		.byte	-128
+ 206 002e 03       		.byte	3
+ 207 002f 80       		.byte	-128
+ 208              		.section	.rodata.F0_uk,"a",%progbits
+ 209              		.align	2
+ 212              	F0_uk:
+ 213 0000 04       		.byte	4
+ 214 0001 07       		.byte	7
+ 215 0002 00       		.byte	0
+ 216 0003 F0       		.byte	-16
+ 217 0004 90       		.byte	-112
+ 218 0005 90       		.byte	-112
+ 219 0006 90       		.byte	-112
+ 220 0007 F0       		.byte	-16
+ 221 0008 00       		.byte	0
+ 222 0009 000000   		.section	.rodata.CS12B_dp,"a",%progbits
+ 223              		.align	2
+ 226              	CS12B_dp:
+ 227 0000 02       		.byte	2
+ 228 0001 0C       		.byte	12
+ 229 0002 00       		.byte	0
+ 230 0003 00       		.byte	0
+ 231 0004 00       		.byte	0
+ 232 0005 00       		.byte	0
+ 233 0006 00       		.byte	0
+ 234 0007 00       		.byte	0
+ 235 0008 00       		.byte	0
+ 236 0009 00       		.byte	0
+ 237 000a 00       		.byte	0
+ 238 000b 00       		.byte	0
+ 239 000c C0       		.byte	-64
+ 240 000d C0       		.byte	-64
+ 241 000e 0000     		.section	.rodata.F0_0,"a",%progbits
+ 242              		.align	2
+ 245              	F0_0:
+ 246 0000 04       		.byte	4
+ 247 0001 07       		.byte	7
+ 248 0002 60       		.byte	96
+ 249 0003 90       		.byte	-112
+ 250 0004 90       		.byte	-112
+ 251 0005 B0       		.byte	-80
+ 252 0006 D0       		.byte	-48
+ 253 0007 90       		.byte	-112
+ 254 0008 60       		.byte	96
+ 255 0009 000000   		.section	.rodata.F0_3,"a",%progbits
+ 256              		.align	2
+ 259              	F0_3:
+ 260 0000 04       		.byte	4
+ 261 0001 07       		.byte	7
+ 262 0002 F0       		.byte	-16
+ 263 0003 20       		.byte	32
+ 264 0004 40       		.byte	64
+ 265 0005 20       		.byte	32
+ 266 0006 10       		.byte	16
+ 267 0007 90       		.byte	-112
+ 268 0008 60       		.byte	96
+ 269 0009 000000   		.section	.rodata.F0_1,"a",%progbits
+ 270              		.align	2
+ 273              	F0_1:
+ 274 0000 04       		.byte	4
+ 275 0001 07       		.byte	7
+ 276 0002 20       		.byte	32
+ 277 0003 60       		.byte	96
+ 278 0004 20       		.byte	32
+ 279 0005 20       		.byte	32
+ 280 0006 20       		.byte	32
+ 281 0007 20       		.byte	32
+ 282 0008 70       		.byte	112
+ 283 0009 000000   		.section	.rodata.F0_2,"a",%progbits
+ 284              		.align	2
+ 287              	F0_2:
+ 288 0000 04       		.byte	4
+ 289 0001 07       		.byte	7
+ 290 0002 60       		.byte	96
+ 291 0003 90       		.byte	-112
+ 292 0004 10       		.byte	16
+ 293 0005 20       		.byte	32
+ 294 0006 40       		.byte	64
+ 295 0007 80       		.byte	-128
+ 296 0008 F0       		.byte	-16
+ 297 0009 000000   		.section	.rodata.F2_dp,"a",%progbits
+ 298              		.align	2
+ 301              	F2_dp:
+ 302 0000 04       		.byte	4
+ 303 0001 0E       		.byte	14
+ 304 0002 00       		.byte	0
+ 305 0003 00       		.byte	0
+ 306 0004 00       		.byte	0
+ 307 0005 00       		.byte	0
+ 308 0006 00       		.byte	0
+ 309 0007 00       		.byte	0
+ 310 0008 00       		.byte	0
+ 311 0009 00       		.byte	0
+ 312 000a 00       		.byte	0
+ 313 000b 00       		.byte	0
+ 314 000c 60       		.byte	96
+ 315 000d F0       		.byte	-16
+ 316 000e F0       		.byte	-16
+ 317 000f 60       		.byte	96
+ 318              		.section	.rodata.F0_4,"a",%progbits
+ 319              		.align	2
+ 322              	F0_4:
+ 323 0000 04       		.byte	4
+ 324 0001 07       		.byte	7
+ 325 0002 80       		.byte	-128
+ 326 0003 80       		.byte	-128
+ 327 0004 A0       		.byte	-96
+ 328 0005 A0       		.byte	-96
+ 329 0006 F0       		.byte	-16
+ 330 0007 20       		.byte	32
+ 331 0008 20       		.byte	32
+ 332 0009 000000   		.section	.rodata.F0_5,"a",%progbits
+ 333              		.align	2
+ 336              	F0_5:
+ 337 0000 04       		.byte	4
+ 338 0001 07       		.byte	7
+ 339 0002 F0       		.byte	-16
+ 340 0003 80       		.byte	-128
+ 341 0004 E0       		.byte	-32
+ 342 0005 10       		.byte	16
+ 343 0006 10       		.byte	16
+ 344 0007 90       		.byte	-112
+ 345 0008 60       		.byte	96
+ 346 0009 000000   		.section	.rodata.F0_6,"a",%progbits
+ 347              		.align	2
+ 350              	F0_6:
+ 351 0000 04       		.byte	4
+ 352 0001 07       		.byte	7
+ 353 0002 60       		.byte	96
+ 354 0003 90       		.byte	-112
+ 355 0004 80       		.byte	-128
+ 356 0005 E0       		.byte	-32
+ 357 0006 90       		.byte	-112
+ 358 0007 90       		.byte	-112
+ 359 0008 60       		.byte	96
+ 360 0009 000000   		.section	.rodata.F3_7,"a",%progbits
+ 361              		.align	2
+ 364              	F3_7:
+ 365 0000 0F       		.byte	15
+ 366 0001 15       		.byte	21
+ 367 0002 FF       		.byte	-1
+ 368 0003 FE       		.byte	-2
+ 369 0004 FF       		.byte	-1
+ 370 0005 FE       		.byte	-2
+ 371 0006 FF       		.byte	-1
+ 372 0007 FE       		.byte	-2
+ 373 0008 00       		.byte	0
+ 374 0009 0E       		.byte	14
+ 375 000a 00       		.byte	0
+ 376 000b 0E       		.byte	14
+ 377 000c 00       		.byte	0
+ 378 000d 0E       		.byte	14
+ 379 000e 00       		.byte	0
+ 380 000f 1E       		.byte	30
+ 381 0010 00       		.byte	0
+ 382 0011 3C       		.byte	60
+ 383 0012 00       		.byte	0
+ 384 0013 78       		.byte	120
+ 385 0014 00       		.byte	0
+ 386 0015 F0       		.byte	-16
+ 387 0016 01       		.byte	1
+ 388 0017 E0       		.byte	-32
+ 389 0018 03       		.byte	3
+ 390 0019 C0       		.byte	-64
+ 391 001a 03       		.byte	3
+ 392 001b 80       		.byte	-128
+ 393 001c 03       		.byte	3
+ 394 001d 80       		.byte	-128
+ 395 001e 03       		.byte	3
+ 396 001f 80       		.byte	-128
+ 397 0020 03       		.byte	3
+ 398 0021 80       		.byte	-128
+ 399 0022 03       		.byte	3
+ 400 0023 80       		.byte	-128
+ 401 0024 03       		.byte	3
+ 402 0025 80       		.byte	-128
+ 403 0026 03       		.byte	3
+ 404 0027 80       		.byte	-128
+ 405 0028 03       		.byte	3
+ 406 0029 80       		.byte	-128
+ 407 002a 03       		.byte	3
+ 408 002b 80       		.byte	-128
+ 409              		.section	.rodata.F0_8,"a",%progbits
+ 410              		.align	2
+ 413              	F0_8:
+ 414 0000 04       		.byte	4
+ 415 0001 07       		.byte	7
+ 416 0002 60       		.byte	96
+ 417 0003 90       		.byte	-112
+ 418 0004 90       		.byte	-112
+ 419 0005 60       		.byte	96
+ 420 0006 90       		.byte	-112
+ 421 0007 90       		.byte	-112
+ 422 0008 60       		.byte	96
+ 423 0009 000000   		.section	.rodata.F2_3,"a",%progbits
+ 424              		.align	2
+ 427              	F2_3:
+ 428 0000 0A       		.byte	10
+ 429 0001 0E       		.byte	14
+ 430 0002 3F       		.byte	63
+ 431 0003 00       		.byte	0
+ 432 0004 7F       		.byte	127
+ 433 0005 80       		.byte	-128
+ 434 0006 E1       		.byte	-31
+ 435 0007 C0       		.byte	-64
+ 436 0008 00       		.byte	0
+ 437 0009 C0       		.byte	-64
+ 438 000a 00       		.byte	0
+ 439 000b C0       		.byte	-64
+ 440 000c 01       		.byte	1
+ 441 000d C0       		.byte	-64
+ 442 000e 3F       		.byte	63
+ 443 000f 80       		.byte	-128
+ 444 0010 3F       		.byte	63
+ 445 0011 80       		.byte	-128
+ 446 0012 01       		.byte	1
+ 447 0013 C0       		.byte	-64
+ 448 0014 00       		.byte	0
+ 449 0015 C0       		.byte	-64
+ 450 0016 00       		.byte	0
+ 451 0017 C0       		.byte	-64
+ 452 0018 E1       		.byte	-31
+ 453 0019 C0       		.byte	-64
+ 454 001a 7F       		.byte	127
+ 455 001b 80       		.byte	-128
+ 456 001c 3F       		.byte	63
+ 457 001d 00       		.byte	0
+ 458 001e 0000     		.section	.rodata.F2_4,"a",%progbits
+ 459              		.align	2
+ 462              	F2_4:
+ 463 0000 0A       		.byte	10
+ 464 0001 0E       		.byte	14
+ 465 0002 03       		.byte	3
+ 466 0003 00       		.byte	0
+ 467 0004 07       		.byte	7
+ 468 0005 00       		.byte	0
+ 469 0006 0F       		.byte	15
+ 470 0007 00       		.byte	0
+ 471 0008 1F       		.byte	31
+ 472 0009 00       		.byte	0
+ 473 000a 3B       		.byte	59
+ 474 000b 00       		.byte	0
+ 475 000c 73       		.byte	115
+ 476 000d 00       		.byte	0
+ 477 000e E3       		.byte	-29
+ 478 000f 00       		.byte	0
+ 479 0010 C3       		.byte	-61
+ 480 0011 00       		.byte	0
+ 481 0012 FF       		.byte	-1
+ 482 0013 C0       		.byte	-64
+ 483 0014 FF       		.byte	-1
+ 484 0015 C0       		.byte	-64
+ 485 0016 03       		.byte	3
+ 486 0017 00       		.byte	0
+ 487 0018 03       		.byte	3
+ 488 0019 00       		.byte	0
+ 489 001a 03       		.byte	3
+ 490 001b 00       		.byte	0
+ 491 001c 03       		.byte	3
+ 492 001d 00       		.byte	0
+ 493 001e 0000     		.section	.rodata.F2_5,"a",%progbits
+ 494              		.align	2
+ 497              	F2_5:
+ 498 0000 0A       		.byte	10
+ 499 0001 0E       		.byte	14
+ 500 0002 FF       		.byte	-1
+ 501 0003 C0       		.byte	-64
+ 502 0004 FF       		.byte	-1
+ 503 0005 C0       		.byte	-64
+ 504 0006 C0       		.byte	-64
+ 505 0007 00       		.byte	0
+ 506 0008 C0       		.byte	-64
+ 507 0009 00       		.byte	0
+ 508 000a FF       		.byte	-1
+ 509 000b 00       		.byte	0
+ 510 000c FF       		.byte	-1
+ 511 000d 80       		.byte	-128
+ 512 000e 01       		.byte	1
+ 513 000f C0       		.byte	-64
+ 514 0010 00       		.byte	0
+ 515 0011 C0       		.byte	-64
+ 516 0012 00       		.byte	0
+ 517 0013 C0       		.byte	-64
+ 518 0014 00       		.byte	0
+ 519 0015 C0       		.byte	-64
+ 520 0016 C0       		.byte	-64
+ 521 0017 C0       		.byte	-64
+ 522 0018 E1       		.byte	-31
+ 523 0019 C0       		.byte	-64
+ 524 001a 7F       		.byte	127
+ 525 001b 80       		.byte	-128
+ 526 001c 3F       		.byte	63
+ 527 001d 00       		.byte	0
+ 528 001e 0000     		.section	.rodata.F2_6,"a",%progbits
+ 529              		.align	2
+ 532              	F2_6:
+ 533 0000 0A       		.byte	10
+ 534 0001 0E       		.byte	14
+ 535 0002 0F       		.byte	15
+ 536 0003 00       		.byte	0
+ 537 0004 1F       		.byte	31
+ 538 0005 00       		.byte	0
+ 539 0006 38       		.byte	56
+ 540 0007 00       		.byte	0
+ 541 0008 70       		.byte	112
+ 542 0009 00       		.byte	0
+ 543 000a E0       		.byte	-32
+ 544 000b 00       		.byte	0
+ 545 000c C0       		.byte	-64
+ 546 000d 00       		.byte	0
+ 547 000e FF       		.byte	-1
+ 548 000f 00       		.byte	0
+ 549 0010 FF       		.byte	-1
+ 550 0011 80       		.byte	-128
+ 551 0012 E1       		.byte	-31
+ 552 0013 C0       		.byte	-64
+ 553 0014 C0       		.byte	-64
+ 554 0015 C0       		.byte	-64
+ 555 0016 C0       		.byte	-64
+ 556 0017 C0       		.byte	-64
+ 557 0018 E1       		.byte	-31
+ 558 0019 C0       		.byte	-64
+ 559 001a 7F       		.byte	127
+ 560 001b 80       		.byte	-128
+ 561 001c 3F       		.byte	63
+ 562 001d 00       		.byte	0
+ 563 001e 0000     		.section	.rodata.RDS7x11_dp,"a",%progbits
+ 564              		.align	2
+ 567              	RDS7x11_dp:
+ 568 0000 01       		.byte	1
+ 569 0001 0B       		.byte	11
+ 570 0002 00       		.byte	0
+ 571 0003 00       		.byte	0
+ 572 0004 00       		.byte	0
+ 573 0005 00       		.byte	0
+ 574 0006 00       		.byte	0
+ 575 0007 00       		.byte	0
+ 576 0008 00       		.byte	0
+ 577 0009 00       		.byte	0
+ 578 000a 00       		.byte	0
+ 579 000b 80       		.byte	-128
+ 580 000c 80       		.byte	-128
+ 581 000d 000000   		.section	.rodata.CmS26_mi,"a",%progbits
+ 582              		.align	2
+ 585              	CmS26_mi:
+ 586 0000 0B       		.byte	11
+ 587 0001 11       		.byte	17
+ 588 0002 00       		.byte	0
+ 589 0003 00       		.byte	0
+ 590 0004 00       		.byte	0
+ 591 0005 00       		.byte	0
+ 592 0006 00       		.byte	0
+ 593 0007 00       		.byte	0
+ 594 0008 00       		.byte	0
+ 595 0009 00       		.byte	0
+ 596 000a 00       		.byte	0
+ 597 000b 00       		.byte	0
+ 598 000c 00       		.byte	0
+ 599 000d 00       		.byte	0
+ 600 000e 00       		.byte	0
+ 601 000f 00       		.byte	0
+ 602 0010 00       		.byte	0
+ 603 0011 00       		.byte	0
+ 604 0012 00       		.byte	0
+ 605 0013 00       		.byte	0
+ 606 0014 00       		.byte	0
+ 607 0015 00       		.byte	0
+ 608 0016 00       		.byte	0
+ 609 0017 00       		.byte	0
+ 610 0018 00       		.byte	0
+ 611 0019 00       		.byte	0
+ 612 001a 00       		.byte	0
+ 613 001b 00       		.byte	0
+ 614 001c 00       		.byte	0
+ 615 001d 00       		.byte	0
+ 616 001e FF       		.byte	-1
+ 617 001f E0       		.byte	-32
+ 618 0020 FF       		.byte	-1
+ 619 0021 E0       		.byte	-32
+ 620 0022 FF       		.byte	-1
+ 621 0023 C0       		.byte	-64
+ 622              		.section	.rodata.ComicSansBold10,"a",%progbits
+ 623              		.align	2
+ 626              	ComicSansBold10:
+ 627 0000 02       		.byte	2
+ 628 0001 0A       		.byte	10
+ 629 0002 0000     		.space	2
+ 630 0004 00000000 		.word	CS10B_0
+ 631 0008 00000000 		.word	CS10B_1
+ 632 000c 00000000 		.word	CS10B_2
+ 633 0010 00000000 		.word	CS10B_3
+ 634 0014 00000000 		.word	CS10B_4
+ 635 0018 00000000 		.word	CS10B_5
+ 636 001c 00000000 		.word	CS10B_6
+ 637 0020 00000000 		.word	CS10B_7
+ 638 0024 00000000 		.word	CS10B_8
+ 639 0028 00000000 		.word	CS10B_9
+ 640 002c 00000000 		.word	CS10B_dp
+ 641 0030 00000000 		.word	CS10B_pl
+ 642 0034 00000000 		.word	CS10B_mi
+ 643 0038 00000000 		.word	CS10B_uk
+ 644              		.section	.rodata.RDS7x11_0,"a",%progbits
+ 645              		.align	2
+ 648              	RDS7x11_0:
+ 649 0000 07       		.byte	7
+ 650 0001 0B       		.byte	11
+ 651 0002 38       		.byte	56
+ 652 0003 44       		.byte	68
+ 653 0004 82       		.byte	-126
+ 654 0005 82       		.byte	-126
+ 655 0006 82       		.byte	-126
+ 656 0007 82       		.byte	-126
+ 657 0008 82       		.byte	-126
+ 658 0009 82       		.byte	-126
+ 659 000a 82       		.byte	-126
+ 660 000b 44       		.byte	68
+ 661 000c 38       		.byte	56
+ 662 000d 000000   		.section	.rodata.RDS7x11_1,"a",%progbits
+ 663              		.align	2
+ 666              	RDS7x11_1:
+ 667 0000 05       		.byte	5
+ 668 0001 0B       		.byte	11
+ 669 0002 20       		.byte	32
+ 670 0003 60       		.byte	96
+ 671 0004 A0       		.byte	-96
+ 672 0005 20       		.byte	32
+ 673 0006 20       		.byte	32
+ 674 0007 20       		.byte	32
+ 675 0008 20       		.byte	32
+ 676 0009 20       		.byte	32
+ 677 000a 20       		.byte	32
+ 678 000b 20       		.byte	32
+ 679 000c F8       		.byte	-8
+ 680 000d 000000   		.section	.rodata.RDS7x11_2,"a",%progbits
+ 681              		.align	2
+ 684              	RDS7x11_2:
+ 685 0000 07       		.byte	7
+ 686 0001 0B       		.byte	11
+ 687 0002 38       		.byte	56
+ 688 0003 44       		.byte	68
+ 689 0004 82       		.byte	-126
+ 690 0005 02       		.byte	2
+ 691 0006 04       		.byte	4
+ 692 0007 08       		.byte	8
+ 693 0008 10       		.byte	16
+ 694 0009 20       		.byte	32
+ 695 000a 40       		.byte	64
+ 696 000b 80       		.byte	-128
+ 697 000c FE       		.byte	-2
+ 698 000d 000000   		.section	.rodata.CS12B_pl,"a",%progbits
+ 699              		.align	2
+ 702              	CS12B_pl:
+ 703 0000 08       		.byte	8
+ 704 0001 0B       		.byte	11
+ 705 0002 00       		.byte	0
+ 706 0003 00       		.byte	0
+ 707 0004 00       		.byte	0
+ 708 0005 18       		.byte	24
+ 709 0006 18       		.byte	24
+ 710 0007 18       		.byte	24
+ 711 0008 FF       		.byte	-1
+ 712 0009 FF       		.byte	-1
+ 713 000a 18       		.byte	24
+ 714 000b 18       		.byte	24
+ 715 000c 18       		.byte	24
+ 716 000d 000000   		.section	.rodata.RDS7x11_4,"a",%progbits
+ 717              		.align	2
+ 720              	RDS7x11_4:
+ 721 0000 07       		.byte	7
+ 722 0001 0B       		.byte	11
+ 723 0002 08       		.byte	8
+ 724 0003 18       		.byte	24
+ 725 0004 18       		.byte	24
+ 726 0005 28       		.byte	40
+ 727 0006 28       		.byte	40
+ 728 0007 48       		.byte	72
+ 729 0008 48       		.byte	72
+ 730 0009 88       		.byte	-120
+ 731 000a FE       		.byte	-2
+ 732 000b 08       		.byte	8
+ 733 000c 08       		.byte	8
+ 734 000d 000000   		.section	.rodata.RDS7x11_5,"a",%progbits
+ 735              		.align	2
+ 738              	RDS7x11_5:
+ 739 0000 07       		.byte	7
+ 740 0001 0B       		.byte	11
+ 741 0002 FE       		.byte	-2
+ 742 0003 80       		.byte	-128
+ 743 0004 80       		.byte	-128
+ 744 0005 80       		.byte	-128
+ 745 0006 78       		.byte	120
+ 746 0007 04       		.byte	4
+ 747 0008 02       		.byte	2
+ 748 0009 02       		.byte	2
+ 749 000a 82       		.byte	-126
+ 750 000b 44       		.byte	68
+ 751 000c 38       		.byte	56
+ 752 000d 000000   		.section	.rodata.RDS7x11_6,"a",%progbits
+ 753              		.align	2
+ 756              	RDS7x11_6:
+ 757 0000 07       		.byte	7
+ 758 0001 0B       		.byte	11
+ 759 0002 38       		.byte	56
+ 760 0003 44       		.byte	68
+ 761 0004 82       		.byte	-126
+ 762 0005 80       		.byte	-128
+ 763 0006 B8       		.byte	-72
+ 764 0007 C4       		.byte	-60
+ 765 0008 82       		.byte	-126
+ 766 0009 82       		.byte	-126
+ 767 000a 82       		.byte	-126
+ 768 000b 44       		.byte	68
+ 769 000c 38       		.byte	56
+ 770 000d 000000   		.section	.rodata.CS10B_0,"a",%progbits
+ 771              		.align	2
+ 774              	CS10B_0:
+ 775 0000 06       		.byte	6
+ 776 0001 0A       		.byte	10
+ 777 0002 38       		.byte	56
+ 778 0003 78       		.byte	120
+ 779 0004 CC       		.byte	-52
+ 780 0005 CC       		.byte	-52
+ 781 0006 CC       		.byte	-52
+ 782 0007 CC       		.byte	-52
+ 783 0008 CC       		.byte	-52
+ 784 0009 CC       		.byte	-52
+ 785 000a 78       		.byte	120
+ 786 000b 78       		.byte	120
+ 787              		.section	.rodata.RDS7x11_8,"a",%progbits
+ 788              		.align	2
+ 791              	RDS7x11_8:
+ 792 0000 07       		.byte	7
+ 793 0001 0B       		.byte	11
+ 794 0002 38       		.byte	56
+ 795 0003 44       		.byte	68
+ 796 0004 82       		.byte	-126
+ 797 0005 82       		.byte	-126
+ 798 0006 44       		.byte	68
+ 799 0007 38       		.byte	56
+ 800 0008 44       		.byte	68
+ 801 0009 82       		.byte	-126
+ 802 000a 82       		.byte	-126
+ 803 000b 44       		.byte	68
+ 804 000c 38       		.byte	56
+ 805 000d 000000   		.section	.rodata.CS10B_2,"a",%progbits
+ 806              		.align	2
+ 809              	CS10B_2:
+ 810 0000 07       		.byte	7
+ 811 0001 0A       		.byte	10
+ 812 0002 3C       		.byte	60
+ 813 0003 FE       		.byte	-2
+ 814 0004 C6       		.byte	-58
+ 815 0005 06       		.byte	6
+ 816 0006 1C       		.byte	28
+ 817 0007 38       		.byte	56
+ 818 0008 60       		.byte	96
+ 819 0009 C0       		.byte	-64
+ 820 000a FE       		.byte	-2
+ 821 000b FE       		.byte	-2
+ 822              		.section	.rodata.CS10B_3,"a",%progbits
+ 823              		.align	2
+ 826              	CS10B_3:
+ 827 0000 06       		.byte	6
+ 828 0001 0A       		.byte	10
+ 829 0002 78       		.byte	120
+ 830 0003 FC       		.byte	-4
+ 831 0004 CC       		.byte	-52
+ 832 0005 0C       		.byte	12
+ 833 0006 78       		.byte	120
+ 834 0007 7C       		.byte	124
+ 835 0008 0C       		.byte	12
+ 836 0009 CC       		.byte	-52
+ 837 000a FC       		.byte	-4
+ 838 000b 78       		.byte	120
+ 839              		.section	.rodata.CS10B_4,"a",%progbits
+ 840              		.align	2
+ 843              	CS10B_4:
+ 844 0000 07       		.byte	7
+ 845 0001 0A       		.byte	10
+ 846 0002 0C       		.byte	12
+ 847 0003 1C       		.byte	28
+ 848 0004 1C       		.byte	28
+ 849 0005 2C       		.byte	44
+ 850 0006 4C       		.byte	76
+ 851 0007 FE       		.byte	-2
+ 852 0008 FE       		.byte	-2
+ 853 0009 0C       		.byte	12
+ 854 000a 0C       		.byte	12
+ 855 000b 0C       		.byte	12
+ 856              		.section	.rodata.CS10B_5,"a",%progbits
+ 857              		.align	2
+ 860              	CS10B_5:
+ 861 0000 06       		.byte	6
+ 862 0001 0A       		.byte	10
+ 863 0002 FC       		.byte	-4
+ 864 0003 FC       		.byte	-4
+ 865 0004 C0       		.byte	-64
+ 866 0005 F8       		.byte	-8
+ 867 0006 FC       		.byte	-4
+ 868 0007 0C       		.byte	12
+ 869 0008 0C       		.byte	12
+ 870 0009 8C       		.byte	-116
+ 871 000a F8       		.byte	-8
+ 872 000b 70       		.byte	112
+ 873              		.section	.rodata.CS10B_6,"a",%progbits
+ 874              		.align	2
+ 877              	CS10B_6:
+ 878 0000 06       		.byte	6
+ 879 0001 0A       		.byte	10
+ 880 0002 18       		.byte	24
+ 881 0003 38       		.byte	56
+ 882 0004 70       		.byte	112
+ 883 0005 E0       		.byte	-32
+ 884 0006 F8       		.byte	-8
+ 885 0007 FC       		.byte	-4
+ 886 0008 CC       		.byte	-52
+ 887 0009 CC       		.byte	-52
+ 888 000a FC       		.byte	-4
+ 889 000b 78       		.byte	120
+ 890              		.section	.rodata.CS10B_7,"a",%progbits
+ 891              		.align	2
+ 894              	CS10B_7:
+ 895 0000 07       		.byte	7
+ 896 0001 0A       		.byte	10
+ 897 0002 FE       		.byte	-2
+ 898 0003 FE       		.byte	-2
+ 899 0004 04       		.byte	4
+ 900 0005 08       		.byte	8
+ 901 0006 18       		.byte	24
+ 902 0007 10       		.byte	16
+ 903 0008 30       		.byte	48
+ 904 0009 30       		.byte	48
+ 905 000a 60       		.byte	96
+ 906 000b 60       		.byte	96
+ 907              		.section	.rodata.CS10B_8,"a",%progbits
+ 908              		.align	2
+ 911              	CS10B_8:
+ 912 0000 06       		.byte	6
+ 913 0001 0A       		.byte	10
+ 914 0002 78       		.byte	120
+ 915 0003 FC       		.byte	-4
+ 916 0004 CC       		.byte	-52
+ 917 0005 CC       		.byte	-52
+ 918 0006 78       		.byte	120
+ 919 0007 78       		.byte	120
+ 920 0008 CC       		.byte	-52
+ 921 0009 CC       		.byte	-52
+ 922 000a FC       		.byte	-4
+ 923 000b 78       		.byte	120
+ 924              		.section	.rodata.CS10B_9,"a",%progbits
+ 925              		.align	2
+ 928              	CS10B_9:
+ 929 0000 06       		.byte	6
+ 930 0001 0A       		.byte	10
+ 931 0002 78       		.byte	120
+ 932 0003 FC       		.byte	-4
+ 933 0004 CC       		.byte	-52
+ 934 0005 CC       		.byte	-52
+ 935 0006 CC       		.byte	-52
+ 936 0007 FC       		.byte	-4
+ 937 0008 78       		.byte	120
+ 938 0009 18       		.byte	24
+ 939 000a 70       		.byte	112
+ 940 000b 60       		.byte	96
+ 941              		.section	.rodata.F0_dp,"a",%progbits
+ 942              		.align	2
+ 945              	F0_dp:
+ 946 0000 01       		.byte	1
+ 947 0001 07       		.byte	7
+ 948 0002 00       		.byte	0
+ 949 0003 00       		.byte	0
+ 950 0004 00       		.byte	0
+ 951 0005 00       		.byte	0
+ 952 0006 00       		.byte	0
+ 953 0007 80       		.byte	-128
+ 954 0008 80       		.byte	-128
+ 955 0009 000000   		.section	.rodata.CmS28_dp,"a",%progbits
+ 956              		.align	2
+ 959              	CmS28_dp:
+ 960 0000 04       		.byte	4
+ 961 0001 1C       		.byte	28
+ 962 0002 00       		.byte	0
+ 963 0003 00       		.byte	0
+ 964 0004 00       		.byte	0
+ 965 0005 00       		.byte	0
+ 966 0006 00       		.byte	0
+ 967 0007 00       		.byte	0
+ 968 0008 00       		.byte	0
+ 969 0009 00       		.byte	0
+ 970 000a 00       		.byte	0
+ 971 000b 00       		.byte	0
+ 972 000c 00       		.byte	0
+ 973 000d 00       		.byte	0
+ 974 000e 00       		.byte	0
+ 975 000f 00       		.byte	0
+ 976 0010 00       		.byte	0
+ 977 0011 00       		.byte	0
+ 978 0012 00       		.byte	0
+ 979 0013 00       		.byte	0
+ 980 0014 00       		.byte	0
+ 981 0015 00       		.byte	0
+ 982 0016 00       		.byte	0
+ 983 0017 00       		.byte	0
+ 984 0018 00       		.byte	0
+ 985 0019 00       		.byte	0
+ 986 001a 60       		.byte	96
+ 987 001b F0       		.byte	-16
+ 988 001c F0       		.byte	-16
+ 989 001d 60       		.byte	96
+ 990 001e 0000     		.section	.rodata.F3_dp,"a",%progbits
+ 991              		.align	2
+ 994              	F3_dp:
+ 995 0000 06       		.byte	6
+ 996 0001 15       		.byte	21
+ 997 0002 00       		.byte	0
+ 998 0003 00       		.byte	0
+ 999 0004 00       		.byte	0
+ 1000 0005 00       		.byte	0
+ 1001 0006 00       		.byte	0
+ 1002 0007 00       		.byte	0
+ 1003 0008 00       		.byte	0
+ 1004 0009 00       		.byte	0
+ 1005 000a 00       		.byte	0
+ 1006 000b 00       		.byte	0
+ 1007 000c 00       		.byte	0
+ 1008 000d 00       		.byte	0
+ 1009 000e 00       		.byte	0
+ 1010 000f 00       		.byte	0
+ 1011 0010 00       		.byte	0
+ 1012 0011 30       		.byte	48
+ 1013 0012 78       		.byte	120
+ 1014 0013 FC       		.byte	-4
+ 1015 0014 FC       		.byte	-4
+ 1016 0015 78       		.byte	120
+ 1017 0016 30       		.byte	48
+ 1018 0017 00       		.section	.rodata.CS10B_dp,"a",%progbits
+ 1019              		.align	2
+ 1022              	CS10B_dp:
+ 1023 0000 02       		.byte	2
+ 1024 0001 0A       		.byte	10
+ 1025 0002 00       		.byte	0
+ 1026 0003 00       		.byte	0
+ 1027 0004 00       		.byte	0
+ 1028 0005 00       		.byte	0
+ 1029 0006 00       		.byte	0
+ 1030 0007 00       		.byte	0
+ 1031 0008 00       		.byte	0
+ 1032 0009 00       		.byte	0
+ 1033 000a C0       		.byte	-64
+ 1034 000b C0       		.byte	-64
+ 1035              		.section	.rodata.RDS7x11_pl,"a",%progbits
+ 1036              		.align	2
+ 1039              	RDS7x11_pl:
+ 1040 0000 05       		.byte	5
+ 1041 0001 08       		.byte	8
+ 1042 0002 00       		.byte	0
+ 1043 0003 00       		.byte	0
+ 1044 0004 00       		.byte	0
+ 1045 0005 20       		.byte	32
+ 1046 0006 20       		.byte	32
+ 1047 0007 F8       		.byte	-8
+ 1048 0008 20       		.byte	32
+ 1049 0009 20       		.byte	32
+ 1050 000a 0000     		.section	.rodata.F2_7,"a",%progbits
+ 1051              		.align	2
+ 1054              	F2_7:
+ 1055 0000 0A       		.byte	10
+ 1056 0001 0E       		.byte	14
+ 1057 0002 FF       		.byte	-1
+ 1058 0003 C0       		.byte	-64
+ 1059 0004 FF       		.byte	-1
+ 1060 0005 C0       		.byte	-64
+ 1061 0006 00       		.byte	0
+ 1062 0007 C0       		.byte	-64
+ 1063 0008 00       		.byte	0
+ 1064 0009 C0       		.byte	-64
+ 1065 000a 01       		.byte	1
+ 1066 000b C0       		.byte	-64
+ 1067 000c 03       		.byte	3
+ 1068 000d 80       		.byte	-128
+ 1069 000e 07       		.byte	7
+ 1070 000f 00       		.byte	0
+ 1071 0010 0E       		.byte	14
+ 1072 0011 00       		.byte	0
+ 1073 0012 0C       		.byte	12
+ 1074 0013 00       		.byte	0
+ 1075 0014 0C       		.byte	12
+ 1076 0015 00       		.byte	0
+ 1077 0016 0C       		.byte	12
+ 1078 0017 00       		.byte	0
+ 1079 0018 0C       		.byte	12
+ 1080 0019 00       		.byte	0
+ 1081 001a 0C       		.byte	12
+ 1082 001b 00       		.byte	0
+ 1083 001c 0C       		.byte	12
+ 1084 001d 00       		.byte	0
+ 1085 001e 0000     		.section	.rodata.RDSfnt0,"a",%progbits
+ 1086              		.align	2
+ 1089              	RDSfnt0:
+ 1090 0000 01       		.byte	1
+ 1091 0001 07       		.byte	7
+ 1092 0002 0000     		.space	2
+ 1093 0004 00000000 		.word	F0_0
+ 1094 0008 00000000 		.word	F0_1
+ 1095 000c 00000000 		.word	F0_2
+ 1096 0010 00000000 		.word	F0_3
+ 1097 0014 00000000 		.word	F0_4
+ 1098 0018 00000000 		.word	F0_5
+ 1099 001c 00000000 		.word	F0_6
+ 1100 0020 00000000 		.word	F0_7
+ 1101 0024 00000000 		.word	F0_8
+ 1102 0028 00000000 		.word	F0_9
+ 1103 002c 00000000 		.word	F0_dp
+ 1104 0030 00000000 		.word	F0_pl
+ 1105 0034 00000000 		.word	F0_mi
+ 1106 0038 00000000 		.word	F0_uk
+ 1107              		.section	.rodata.RDSfnt1,"a",%progbits
+ 1108              		.align	2
+ 1111              	RDSfnt1:
+ 1112 0000 02       		.byte	2
+ 1113 0001 07       		.byte	7
+ 1114 0002 0000     		.space	2
+ 1115 0004 00000000 		.word	F1_I130
+ 1116 0008 00000000 		.word	F1_I131
+ 1117 000c 00000000 		.word	F1_I132
+ 1118 0010 00000000 		.word	F1_I133
+ 1119 0014 00000000 		.word	F1_I134
+ 1120 0018 00000000 		.word	F1_I135
+ 1121 001c 00000000 		.word	F1_I136
+ 1122 0020 00000000 		.word	F1_I137
+ 1123 0024 00000000 		.word	F1_I138
+ 1124 0028 00000000 		.word	F1_I139
+ 1125 002c 00000000 		.word	F1_I12E
+ 1126 0030 00000000 		.word	F1_I12B
+ 1127 0034 00000000 		.word	F1_I12D
+ 1128 0038 00000000 		.word	F1_FILL
+ 1129              		.section	.rodata.CS12B_mi,"a",%progbits
+ 1130              		.align	2
+ 1133              	CS12B_mi:
+ 1134 0000 07       		.byte	7
+ 1135 0001 09       		.byte	9
+ 1136 0002 00       		.byte	0
+ 1137 0003 00       		.byte	0
+ 1138 0004 00       		.byte	0
+ 1139 0005 00       		.byte	0
+ 1140 0006 00       		.byte	0
+ 1141 0007 00       		.byte	0
+ 1142 0008 00       		.byte	0
+ 1143 0009 FE       		.byte	-2
+ 1144 000a FE       		.byte	-2
+ 1145 000b 00       		.section	.rodata.RDSfnt3,"a",%progbits
+ 1146              		.align	2
+ 1149              	RDSfnt3:
+ 1150 0000 04       		.byte	4
+ 1151 0001 15       		.byte	21
+ 1152 0002 0000     		.space	2
+ 1153 0004 00000000 		.word	F3_0
+ 1154 0008 00000000 		.word	F3_1
+ 1155 000c 00000000 		.word	F3_2
+ 1156 0010 00000000 		.word	F3_3
+ 1157 0014 00000000 		.word	F3_4
+ 1158 0018 00000000 		.word	F3_5
+ 1159 001c 00000000 		.word	F3_6
+ 1160 0020 00000000 		.word	F3_7
+ 1161 0024 00000000 		.word	F3_8
+ 1162 0028 00000000 		.word	F3_9
+ 1163 002c 00000000 		.word	F3_dp
+ 1164 0030 00000000 		.word	F3_pl
+ 1165 0034 00000000 		.word	F3_mi
+ 1166 0038 00000000 		.word	F3_uk
+ 1167              		.section	.rodata.CS10B_1,"a",%progbits
+ 1168              		.align	2
+ 1171              	CS10B_1:
+ 1172 0000 06       		.byte	6
+ 1173 0001 0A       		.byte	10
+ 1174 0002 30       		.byte	48
+ 1175 0003 F0       		.byte	-16
+ 1176 0004 F0       		.byte	-16
+ 1177 0005 30       		.byte	48
+ 1178 0006 30       		.byte	48
+ 1179 0007 30       		.byte	48
+ 1180 0008 30       		.byte	48
+ 1181 0009 30       		.byte	48
+ 1182 000a FC       		.byte	-4
+ 1183 000b FC       		.byte	-4
+ 1184              		.section	.rodata.F2_mi,"a",%progbits
+ 1185              		.align	2
+ 1188              	F2_mi:
+ 1189 0000 0A       		.byte	10
+ 1190 0001 0E       		.byte	14
+ 1191 0002 00       		.byte	0
+ 1192 0003 00       		.byte	0
+ 1193 0004 00       		.byte	0
+ 1194 0005 00       		.byte	0
+ 1195 0006 00       		.byte	0
+ 1196 0007 00       		.byte	0
+ 1197 0008 00       		.byte	0
+ 1198 0009 00       		.byte	0
+ 1199 000a 00       		.byte	0
+ 1200 000b 00       		.byte	0
+ 1201 000c 00       		.byte	0
+ 1202 000d 00       		.byte	0
+ 1203 000e FF       		.byte	-1
+ 1204 000f C0       		.byte	-64
+ 1205 0010 FF       		.byte	-1
+ 1206 0011 C0       		.byte	-64
+ 1207 0012 00       		.byte	0
+ 1208 0013 00       		.byte	0
+ 1209 0014 00       		.byte	0
+ 1210 0015 00       		.byte	0
+ 1211 0016 00       		.byte	0
+ 1212 0017 00       		.byte	0
+ 1213 0018 00       		.byte	0
+ 1214 0019 00       		.byte	0
+ 1215 001a 00       		.byte	0
+ 1216 001b 00       		.byte	0
+ 1217 001c 00       		.byte	0
+ 1218 001d 00       		.byte	0
+ 1219 001e 0000     		.section	.rodata.RDS7x11,"a",%progbits
+ 1220              		.align	2
+ 1223              	RDS7x11:
+ 1224 0000 02       		.byte	2
+ 1225 0001 0B       		.byte	11
+ 1226 0002 0000     		.space	2
+ 1227 0004 00000000 		.word	RDS7x11_0
+ 1228 0008 00000000 		.word	RDS7x11_1
+ 1229 000c 00000000 		.word	RDS7x11_2
+ 1230 0010 00000000 		.word	RDS7x11_3
+ 1231 0014 00000000 		.word	RDS7x11_4
+ 1232 0018 00000000 		.word	RDS7x11_5
+ 1233 001c 00000000 		.word	RDS7x11_6
+ 1234 0020 00000000 		.word	RDS7x11_7
+ 1235 0024 00000000 		.word	RDS7x11_8
+ 1236 0028 00000000 		.word	RDS7x11_9
+ 1237 002c 00000000 		.word	RDS7x11_dp
+ 1238 0030 00000000 		.word	RDS7x11_pl
+ 1239 0034 00000000 		.word	RDS7x11_mi
+ 1240 0038 00000000 		.word	RDS7x11_uk
+ 1241              		.section	.rodata.CmS26_uk,"a",%progbits
+ 1242              		.align	2
+ 1245              	CmS26_uk:
+ 1246 0000 0F       		.byte	15
+ 1247 0001 18       		.byte	24
+ 1248 0002 00       		.byte	0
+ 1249 0003 00       		.byte	0
+ 1250 0004 00       		.byte	0
+ 1251 0005 00       		.byte	0
+ 1252 0006 3F       		.byte	63
+ 1253 0007 FE       		.byte	-2
+ 1254 0008 3F       		.byte	63
+ 1255 0009 FE       		.byte	-2
+ 1256 000a 30       		.byte	48
+ 1257 000b 06       		.byte	6
+ 1258 000c 30       		.byte	48
+ 1259 000d 06       		.byte	6
+ 1260 000e 30       		.byte	48
+ 1261 000f 06       		.byte	6
+ 1262 0010 30       		.byte	48
+ 1263 0011 06       		.byte	6
+ 1264 0012 30       		.byte	48
+ 1265 0013 06       		.byte	6
+ 1266 0014 30       		.byte	48
+ 1267 0015 06       		.byte	6
+ 1268 0016 30       		.byte	48
+ 1269 0017 06       		.byte	6
+ 1270 0018 30       		.byte	48
+ 1271 0019 06       		.byte	6
+ 1272 001a 30       		.byte	48
+ 1273 001b 06       		.byte	6
+ 1274 001c 30       		.byte	48
+ 1275 001d 06       		.byte	6
+ 1276 001e 30       		.byte	48
+ 1277 001f 06       		.byte	6
+ 1278 0020 30       		.byte	48
+ 1279 0021 06       		.byte	6
+ 1280 0022 30       		.byte	48
+ 1281 0023 06       		.byte	6
+ 1282 0024 30       		.byte	48
+ 1283 0025 06       		.byte	6
+ 1284 0026 30       		.byte	48
+ 1285 0027 06       		.byte	6
+ 1286 0028 30       		.byte	48
+ 1287 0029 06       		.byte	6
+ 1288 002a 30       		.byte	48
+ 1289 002b 06       		.byte	6
+ 1290 002c 30       		.byte	48
+ 1291 002d 06       		.byte	6
+ 1292 002e 3F       		.byte	63
+ 1293 002f FE       		.byte	-2
+ 1294 0030 3F       		.byte	63
+ 1295 0031 FE       		.byte	-2
+ 1296 0032 0000     		.section	.rodata.CmS28_pl,"a",%progbits
+ 1297              		.align	2
+ 1300              	CmS28_pl:
+ 1301 0000 10       		.byte	16
+ 1302 0001 18       		.byte	24
+ 1303 0002 00       		.byte	0
+ 1304 0003 00       		.byte	0
+ 1305 0004 00       		.byte	0
+ 1306 0005 00       		.byte	0
+ 1307 0006 00       		.byte	0
+ 1308 0007 00       		.byte	0
+ 1309 0008 00       		.byte	0
+ 1310 0009 00       		.byte	0
+ 1311 000a 00       		.byte	0
+ 1312 000b 00       		.byte	0
+ 1313 000c 00       		.byte	0
+ 1314 000d 00       		.byte	0
+ 1315 000e 00       		.byte	0
+ 1316 000f 00       		.byte	0
+ 1317 0010 00       		.byte	0
+ 1318 0011 00       		.byte	0
+ 1319 0012 01       		.byte	1
+ 1320 0013 80       		.byte	-128
+ 1321 0014 03       		.byte	3
+ 1322 0015 C0       		.byte	-64
+ 1323 0016 03       		.byte	3
+ 1324 0017 C0       		.byte	-64
+ 1325 0018 03       		.byte	3
+ 1326 0019 C0       		.byte	-64
+ 1327 001a 03       		.byte	3
+ 1328 001b C0       		.byte	-64
+ 1329 001c 03       		.byte	3
+ 1330 001d C0       		.byte	-64
+ 1331 001e 7F       		.byte	127
+ 1332 001f FE       		.byte	-2
+ 1333 0020 FF       		.byte	-1
+ 1334 0021 FF       		.byte	-1
+ 1335 0022 FF       		.byte	-1
+ 1336 0023 FF       		.byte	-1
+ 1337 0024 7F       		.byte	127
+ 1338 0025 FF       		.byte	-1
+ 1339 0026 03       		.byte	3
+ 1340 0027 C0       		.byte	-64
+ 1341 0028 03       		.byte	3
+ 1342 0029 C0       		.byte	-64
+ 1343 002a 03       		.byte	3
+ 1344 002b C0       		.byte	-64
+ 1345 002c 03       		.byte	3
+ 1346 002d C0       		.byte	-64
+ 1347 002e 03       		.byte	3
+ 1348 002f C0       		.byte	-64
+ 1349 0030 03       		.byte	3
+ 1350 0031 C0       		.byte	-64
+ 1351 0032 0000     		.section	.rodata.F3_pl,"a",%progbits
+ 1352              		.align	2
+ 1355              	F3_pl:
+ 1356 0000 0F       		.byte	15
+ 1357 0001 11       		.byte	17
+ 1358 0002 00       		.byte	0
+ 1359 0003 00       		.byte	0
+ 1360 0004 00       		.byte	0
+ 1361 0005 00       		.byte	0
+ 1362 0006 03       		.byte	3
+ 1363 0007 80       		.byte	-128
+ 1364 0008 03       		.byte	3
+ 1365 0009 80       		.byte	-128
+ 1366 000a 03       		.byte	3
+ 1367 000b 80       		.byte	-128
+ 1368 000c 03       		.byte	3
+ 1369 000d 80       		.byte	-128
+ 1370 000e 03       		.byte	3
+ 1371 000f 80       		.byte	-128
+ 1372 0010 03       		.byte	3
+ 1373 0011 80       		.byte	-128
+ 1374 0012 FF       		.byte	-1
+ 1375 0013 FE       		.byte	-2
+ 1376 0014 FF       		.byte	-1
+ 1377 0015 FE       		.byte	-2
+ 1378 0016 FF       		.byte	-1
+ 1379 0017 FE       		.byte	-2
+ 1380 0018 03       		.byte	3
+ 1381 0019 80       		.byte	-128
+ 1382 001a 03       		.byte	3
+ 1383 001b 80       		.byte	-128
+ 1384 001c 03       		.byte	3
+ 1385 001d 80       		.byte	-128
+ 1386 001e 03       		.byte	3
+ 1387 001f 80       		.byte	-128
+ 1388 0020 03       		.byte	3
+ 1389 0021 80       		.byte	-128
+ 1390 0022 03       		.byte	3
+ 1391 0023 80       		.byte	-128
+ 1392              		.section	.rodata.CS10B_pl,"a",%progbits
+ 1393              		.align	2
+ 1396              	CS10B_pl:
+ 1397 0000 06       		.byte	6
+ 1398 0001 09       		.byte	9
+ 1399 0002 00       		.byte	0
+ 1400 0003 00       		.byte	0
+ 1401 0004 00       		.byte	0
+ 1402 0005 30       		.byte	48
+ 1403 0006 30       		.byte	48
+ 1404 0007 FC       		.byte	-4
+ 1405 0008 FC       		.byte	-4
+ 1406 0009 30       		.byte	48
+ 1407 000a 30       		.byte	48
+ 1408 000b 00       		.section	.rodata.RDS7x11_mi,"a",%progbits
+ 1409              		.align	2
+ 1412              	RDS7x11_mi:
+ 1413 0000 05       		.byte	5
+ 1414 0001 06       		.byte	6
+ 1415 0002 00       		.byte	0
+ 1416 0003 00       		.byte	0
+ 1417 0004 00       		.byte	0
+ 1418 0005 00       		.byte	0
+ 1419 0006 00       		.byte	0
+ 1420 0007 F8       		.byte	-8
+ 1421              		.section	.rodata.RDS7x11_3,"a",%progbits
+ 1422              		.align	2
+ 1425              	RDS7x11_3:
+ 1426 0000 07       		.byte	7
+ 1427 0001 0B       		.byte	11
+ 1428 0002 38       		.byte	56
+ 1429 0003 44       		.byte	68
+ 1430 0004 82       		.byte	-126
+ 1431 0005 02       		.byte	2
+ 1432 0006 04       		.byte	4
+ 1433 0007 38       		.byte	56
+ 1434 0008 04       		.byte	4
+ 1435 0009 02       		.byte	2
+ 1436 000a 82       		.byte	-126
+ 1437 000b 44       		.byte	68
+ 1438 000c 38       		.byte	56
+ 1439 000d 000000   		.section	.rodata.F3_0,"a",%progbits
+ 1440              		.align	2
+ 1443              	F3_0:
+ 1444 0000 0F       		.byte	15
+ 1445 0001 15       		.byte	21
+ 1446 0002 1F       		.byte	31
+ 1447 0003 F0       		.byte	-16
+ 1448 0004 3F       		.byte	63
+ 1449 0005 F8       		.byte	-8
+ 1450 0006 7F       		.byte	127
+ 1451 0007 FC       		.byte	-4
+ 1452 0008 F0       		.byte	-16
+ 1453 0009 1E       		.byte	30
+ 1454 000a E0       		.byte	-32
+ 1455 000b 0E       		.byte	14
+ 1456 000c E0       		.byte	-32
+ 1457 000d 0E       		.byte	14
+ 1458 000e E0       		.byte	-32
+ 1459 000f 0E       		.byte	14
+ 1460 0010 E0       		.byte	-32
+ 1461 0011 0E       		.byte	14
+ 1462 0012 E0       		.byte	-32
+ 1463 0013 0E       		.byte	14
+ 1464 0014 E0       		.byte	-32
+ 1465 0015 0E       		.byte	14
+ 1466 0016 E0       		.byte	-32
+ 1467 0017 0E       		.byte	14
+ 1468 0018 E0       		.byte	-32
+ 1469 0019 0E       		.byte	14
+ 1470 001a E0       		.byte	-32
+ 1471 001b 0E       		.byte	14
+ 1472 001c E0       		.byte	-32
+ 1473 001d 0E       		.byte	14
+ 1474 001e E0       		.byte	-32
+ 1475 001f 0E       		.byte	14
+ 1476 0020 E0       		.byte	-32
+ 1477 0021 0E       		.byte	14
+ 1478 0022 E0       		.byte	-32
+ 1479 0023 0E       		.byte	14
+ 1480 0024 F0       		.byte	-16
+ 1481 0025 1E       		.byte	30
+ 1482 0026 7F       		.byte	127
+ 1483 0027 FC       		.byte	-4
+ 1484 0028 3F       		.byte	63
+ 1485 0029 F8       		.byte	-8
+ 1486 002a 1F       		.byte	31
+ 1487 002b F0       		.byte	-16
+ 1488              		.section	.rodata.F3_1,"a",%progbits
+ 1489              		.align	2
+ 1492              	F3_1:
+ 1493 0000 0F       		.byte	15
+ 1494 0001 15       		.byte	21
+ 1495 0002 01       		.byte	1
+ 1496 0003 C0       		.byte	-64
+ 1497 0004 01       		.byte	1
+ 1498 0005 C0       		.byte	-64
+ 1499 0006 03       		.byte	3
+ 1500 0007 C0       		.byte	-64
+ 1501 0008 0F       		.byte	15
+ 1502 0009 C0       		.byte	-64
+ 1503 000a 0F       		.byte	15
+ 1504 000b C0       		.byte	-64
+ 1505 000c 0F       		.byte	15
+ 1506 000d C0       		.byte	-64
+ 1507 000e 01       		.byte	1
+ 1508 000f C0       		.byte	-64
+ 1509 0010 01       		.byte	1
+ 1510 0011 C0       		.byte	-64
+ 1511 0012 01       		.byte	1
+ 1512 0013 C0       		.byte	-64
+ 1513 0014 01       		.byte	1
+ 1514 0015 C0       		.byte	-64
+ 1515 0016 01       		.byte	1
+ 1516 0017 C0       		.byte	-64
+ 1517 0018 01       		.byte	1
+ 1518 0019 C0       		.byte	-64
+ 1519 001a 01       		.byte	1
+ 1520 001b C0       		.byte	-64
+ 1521 001c 01       		.byte	1
+ 1522 001d C0       		.byte	-64
+ 1523 001e 01       		.byte	1
+ 1524 001f C0       		.byte	-64
+ 1525 0020 01       		.byte	1
+ 1526 0021 C0       		.byte	-64
+ 1527 0022 01       		.byte	1
+ 1528 0023 C0       		.byte	-64
+ 1529 0024 01       		.byte	1
+ 1530 0025 C0       		.byte	-64
+ 1531 0026 0F       		.byte	15
+ 1532 0027 F8       		.byte	-8
+ 1533 0028 0F       		.byte	15
+ 1534 0029 F8       		.byte	-8
+ 1535 002a 0F       		.byte	15
+ 1536 002b F8       		.byte	-8
+ 1537              		.section	.rodata.F3_2,"a",%progbits
+ 1538              		.align	2
+ 1541              	F3_2:
+ 1542 0000 0F       		.byte	15
+ 1543 0001 15       		.byte	21
+ 1544 0002 3F       		.byte	63
+ 1545 0003 F8       		.byte	-8
+ 1546 0004 7F       		.byte	127
+ 1547 0005 FC       		.byte	-4
+ 1548 0006 FF       		.byte	-1
+ 1549 0007 FE       		.byte	-2
+ 1550 0008 F0       		.byte	-16
+ 1551 0009 1E       		.byte	30
+ 1552 000a E0       		.byte	-32
+ 1553 000b 0E       		.byte	14
+ 1554 000c E0       		.byte	-32
+ 1555 000d 0E       		.byte	14
+ 1556 000e 00       		.byte	0
+ 1557 000f 0E       		.byte	14
+ 1558 0010 00       		.byte	0
+ 1559 0011 1E       		.byte	30
+ 1560 0012 00       		.byte	0
+ 1561 0013 3C       		.byte	60
+ 1562 0014 00       		.byte	0
+ 1563 0015 78       		.byte	120
+ 1564 0016 00       		.byte	0
+ 1565 0017 F0       		.byte	-16
+ 1566 0018 01       		.byte	1
+ 1567 0019 E0       		.byte	-32
+ 1568 001a 03       		.byte	3
+ 1569 001b C0       		.byte	-64
+ 1570 001c 07       		.byte	7
+ 1571 001d 80       		.byte	-128
+ 1572 001e 0F       		.byte	15
+ 1573 001f 00       		.byte	0
+ 1574 0020 1E       		.byte	30
+ 1575 0021 00       		.byte	0
+ 1576 0022 3C       		.byte	60
+ 1577 0023 00       		.byte	0
+ 1578 0024 78       		.byte	120
+ 1579 0025 00       		.byte	0
+ 1580 0026 FF       		.byte	-1
+ 1581 0027 FE       		.byte	-2
+ 1582 0028 FF       		.byte	-1
+ 1583 0029 FE       		.byte	-2
+ 1584 002a FF       		.byte	-1
+ 1585 002b FE       		.byte	-2
+ 1586              		.section	.rodata.CS12B_uk,"a",%progbits
+ 1587              		.align	2
+ 1590              	CS12B_uk:
+ 1591 0000 06       		.byte	6
+ 1592 0001 0A       		.byte	10
+ 1593 0002 00       		.byte	0
+ 1594 0003 00       		.byte	0
+ 1595 0004 FC       		.byte	-4
+ 1596 0005 84       		.byte	-124
+ 1597 0006 84       		.byte	-124
+ 1598 0007 84       		.byte	-124
+ 1599 0008 84       		.byte	-124
+ 1600 0009 84       		.byte	-124
+ 1601 000a 84       		.byte	-124
+ 1602 000b FC       		.byte	-4
+ 1603              		.section	.rodata.F3_4,"a",%progbits
+ 1604              		.align	2
+ 1607              	F3_4:
+ 1608 0000 0F       		.byte	15
+ 1609 0001 15       		.byte	21
+ 1610 0002 00       		.byte	0
+ 1611 0003 70       		.byte	112
+ 1612 0004 00       		.byte	0
+ 1613 0005 F0       		.byte	-16
+ 1614 0006 01       		.byte	1
+ 1615 0007 F0       		.byte	-16
+ 1616 0008 03       		.byte	3
+ 1617 0009 F0       		.byte	-16
+ 1618 000a 07       		.byte	7
+ 1619 000b F0       		.byte	-16
+ 1620 000c 0F       		.byte	15
+ 1621 000d 70       		.byte	112
+ 1622 000e 1E       		.byte	30
+ 1623 000f 70       		.byte	112
+ 1624 0010 3C       		.byte	60
+ 1625 0011 70       		.byte	112
+ 1626 0012 78       		.byte	120
+ 1627 0013 70       		.byte	112
+ 1628 0014 F0       		.byte	-16
+ 1629 0015 70       		.byte	112
+ 1630 0016 E0       		.byte	-32
+ 1631 0017 70       		.byte	112
+ 1632 0018 E0       		.byte	-32
+ 1633 0019 70       		.byte	112
+ 1634 001a FF       		.byte	-1
+ 1635 001b FE       		.byte	-2
+ 1636 001c FF       		.byte	-1
+ 1637 001d FE       		.byte	-2
+ 1638 001e FF       		.byte	-1
+ 1639 001f FE       		.byte	-2
+ 1640 0020 00       		.byte	0
+ 1641 0021 70       		.byte	112
+ 1642 0022 00       		.byte	0
+ 1643 0023 70       		.byte	112
+ 1644 0024 00       		.byte	0
+ 1645 0025 70       		.byte	112
+ 1646 0026 00       		.byte	0
+ 1647 0027 70       		.byte	112
+ 1648 0028 00       		.byte	0
+ 1649 0029 70       		.byte	112
+ 1650 002a 00       		.byte	0
+ 1651 002b 70       		.byte	112
+ 1652              		.section	.rodata.F3_5,"a",%progbits
+ 1653              		.align	2
+ 1656              	F3_5:
+ 1657 0000 0F       		.byte	15
+ 1658 0001 15       		.byte	21
+ 1659 0002 FF       		.byte	-1
+ 1660 0003 FE       		.byte	-2
+ 1661 0004 FF       		.byte	-1
+ 1662 0005 FE       		.byte	-2
+ 1663 0006 FF       		.byte	-1
+ 1664 0007 FE       		.byte	-2
+ 1665 0008 E0       		.byte	-32
+ 1666 0009 00       		.byte	0
+ 1667 000a E0       		.byte	-32
+ 1668 000b 00       		.byte	0
+ 1669 000c E0       		.byte	-32
+ 1670 000d 00       		.byte	0
+ 1671 000e FF       		.byte	-1
+ 1672 000f F0       		.byte	-16
+ 1673 0010 FF       		.byte	-1
+ 1674 0011 F8       		.byte	-8
+ 1675 0012 FF       		.byte	-1
+ 1676 0013 FC       		.byte	-4
+ 1677 0014 00       		.byte	0
+ 1678 0015 1E       		.byte	30
+ 1679 0016 00       		.byte	0
+ 1680 0017 0E       		.byte	14
+ 1681 0018 00       		.byte	0
+ 1682 0019 0E       		.byte	14
+ 1683 001a 00       		.byte	0
+ 1684 001b 0E       		.byte	14
+ 1685 001c 00       		.byte	0
+ 1686 001d 0E       		.byte	14
+ 1687 001e 00       		.byte	0
+ 1688 001f 0E       		.byte	14
+ 1689 0020 E0       		.byte	-32
+ 1690 0021 0E       		.byte	14
+ 1691 0022 E0       		.byte	-32
+ 1692 0023 0E       		.byte	14
+ 1693 0024 F0       		.byte	-16
+ 1694 0025 1E       		.byte	30
+ 1695 0026 7F       		.byte	127
+ 1696 0027 FC       		.byte	-4
+ 1697 0028 3F       		.byte	63
+ 1698 0029 F8       		.byte	-8
+ 1699 002a 1F       		.byte	31
+ 1700 002b F0       		.byte	-16
+ 1701              		.section	.rodata.F3_6,"a",%progbits
+ 1702              		.align	2
+ 1705              	F3_6:
+ 1706 0000 0F       		.byte	15
+ 1707 0001 15       		.byte	21
+ 1708 0002 03       		.byte	3
+ 1709 0003 F0       		.byte	-16
+ 1710 0004 07       		.byte	7
+ 1711 0005 F0       		.byte	-16
+ 1712 0006 0F       		.byte	15
+ 1713 0007 F0       		.byte	-16
+ 1714 0008 1E       		.byte	30
+ 1715 0009 00       		.byte	0
+ 1716 000a 3C       		.byte	60
+ 1717 000b 00       		.byte	0
+ 1718 000c 78       		.byte	120
+ 1719 000d 00       		.byte	0
+ 1720 000e F0       		.byte	-16
+ 1721 000f 00       		.byte	0
+ 1722 0010 E0       		.byte	-32
+ 1723 0011 00       		.byte	0
+ 1724 0012 E0       		.byte	-32
+ 1725 0013 00       		.byte	0
+ 1726 0014 FF       		.byte	-1
+ 1727 0015 F0       		.byte	-16
+ 1728 0016 FF       		.byte	-1
+ 1729 0017 F8       		.byte	-8
+ 1730 0018 FF       		.byte	-1
+ 1731 0019 FC       		.byte	-4
+ 1732 001a F0       		.byte	-16
+ 1733 001b 1E       		.byte	30
+ 1734 001c E0       		.byte	-32
+ 1735 001d 0E       		.byte	14
+ 1736 001e E0       		.byte	-32
+ 1737 001f 0E       		.byte	14
+ 1738 0020 E0       		.byte	-32
+ 1739 0021 0E       		.byte	14
+ 1740 0022 E0       		.byte	-32
+ 1741 0023 0E       		.byte	14
+ 1742 0024 F0       		.byte	-16
+ 1743 0025 1E       		.byte	30
+ 1744 0026 7F       		.byte	127
+ 1745 0027 FC       		.byte	-4
+ 1746 0028 3F       		.byte	63
+ 1747 0029 F8       		.byte	-8
+ 1748 002a 1F       		.byte	31
+ 1749 002b F0       		.byte	-16
+ 1750              		.section	.rodata.RDS7x11_7,"a",%progbits
+ 1751              		.align	2
+ 1754              	RDS7x11_7:
+ 1755 0000 07       		.byte	7
+ 1756 0001 0B       		.byte	11
+ 1757 0002 FE       		.byte	-2
+ 1758 0003 02       		.byte	2
+ 1759 0004 04       		.byte	4
+ 1760 0005 04       		.byte	4
+ 1761 0006 08       		.byte	8
+ 1762 0007 08       		.byte	8
+ 1763 0008 10       		.byte	16
+ 1764 0009 10       		.byte	16
+ 1765 000a 20       		.byte	32
+ 1766 000b 20       		.byte	32
+ 1767 000c 20       		.byte	32
+ 1768 000d 000000   		.section	.rodata.F3_8,"a",%progbits
+ 1769              		.align	2
+ 1772              	F3_8:
+ 1773 0000 0F       		.byte	15
+ 1774 0001 15       		.byte	21
+ 1775 0002 1F       		.byte	31
+ 1776 0003 F0       		.byte	-16
+ 1777 0004 3F       		.byte	63
+ 1778 0005 F8       		.byte	-8
+ 1779 0006 7F       		.byte	127
+ 1780 0007 FC       		.byte	-4
+ 1781 0008 F0       		.byte	-16
+ 1782 0009 1E       		.byte	30
+ 1783 000a E0       		.byte	-32
+ 1784 000b 0E       		.byte	14
+ 1785 000c E0       		.byte	-32
+ 1786 000d 0E       		.byte	14
+ 1787 000e E0       		.byte	-32
+ 1788 000f 0E       		.byte	14
+ 1789 0010 E0       		.byte	-32
+ 1790 0011 0E       		.byte	14
+ 1791 0012 70       		.byte	112
+ 1792 0013 1C       		.byte	28
+ 1793 0014 3F       		.byte	63
+ 1794 0015 F8       		.byte	-8
+ 1795 0016 3F       		.byte	63
+ 1796 0017 F8       		.byte	-8
+ 1797 0018 7F       		.byte	127
+ 1798 0019 FC       		.byte	-4
+ 1799 001a F0       		.byte	-16
+ 1800 001b 1E       		.byte	30
+ 1801 001c E0       		.byte	-32
+ 1802 001d 0E       		.byte	14
+ 1803 001e E0       		.byte	-32
+ 1804 001f 0E       		.byte	14
+ 1805 0020 E0       		.byte	-32
+ 1806 0021 0E       		.byte	14
+ 1807 0022 E0       		.byte	-32
+ 1808 0023 0E       		.byte	14
+ 1809 0024 F0       		.byte	-16
+ 1810 0025 1E       		.byte	30
+ 1811 0026 7F       		.byte	127
+ 1812 0027 FC       		.byte	-4
+ 1813 0028 3F       		.byte	63
+ 1814 0029 F8       		.byte	-8
+ 1815 002a 1F       		.byte	31
+ 1816 002b F0       		.byte	-16
+ 1817              		.section	.rodata.F3_9,"a",%progbits
+ 1818              		.align	2
+ 1821              	F3_9:
+ 1822 0000 0F       		.byte	15
+ 1823 0001 15       		.byte	21
+ 1824 0002 1F       		.byte	31
+ 1825 0003 F0       		.byte	-16
+ 1826 0004 3F       		.byte	63
+ 1827 0005 F8       		.byte	-8
+ 1828 0006 7F       		.byte	127
+ 1829 0007 FC       		.byte	-4
+ 1830 0008 F0       		.byte	-16
+ 1831 0009 1E       		.byte	30
+ 1832 000a E0       		.byte	-32
+ 1833 000b 0E       		.byte	14
+ 1834 000c E0       		.byte	-32
+ 1835 000d 0E       		.byte	14
+ 1836 000e E0       		.byte	-32
+ 1837 000f 0E       		.byte	14
+ 1838 0010 E0       		.byte	-32
+ 1839 0011 0E       		.byte	14
+ 1840 0012 F0       		.byte	-16
+ 1841 0013 1E       		.byte	30
+ 1842 0014 7F       		.byte	127
+ 1843 0015 FE       		.byte	-2
+ 1844 0016 3F       		.byte	63
+ 1845 0017 FE       		.byte	-2
+ 1846 0018 1F       		.byte	31
+ 1847 0019 FE       		.byte	-2
+ 1848 001a 00       		.byte	0
+ 1849 001b 0E       		.byte	14
+ 1850 001c 00       		.byte	0
+ 1851 001d 1E       		.byte	30
+ 1852 001e 00       		.byte	0
+ 1853 001f 3C       		.byte	60
+ 1854 0020 00       		.byte	0
+ 1855 0021 78       		.byte	120
+ 1856 0022 00       		.byte	0
+ 1857 0023 F0       		.byte	-16
+ 1858 0024 01       		.byte	1
+ 1859 0025 E0       		.byte	-32
+ 1860 0026 1F       		.byte	31
+ 1861 0027 C0       		.byte	-64
+ 1862 0028 1F       		.byte	31
+ 1863 0029 80       		.byte	-128
+ 1864 002a 1F       		.byte	31
+ 1865 002b 00       		.byte	0
+ 1866              		.section	.rodata.F2_uk,"a",%progbits
+ 1867              		.align	2
+ 1870              	F2_uk:
+ 1871 0000 0A       		.byte	10
+ 1872 0001 0C       		.byte	12
+ 1873 0002 00       		.byte	0
+ 1874 0003 00       		.byte	0
+ 1875 0004 00       		.byte	0
+ 1876 0005 00       		.byte	0
+ 1877 0006 3F       		.byte	63
+ 1878 0007 00       		.byte	0
+ 1879 0008 3F       		.byte	63
+ 1880 0009 00       		.byte	0
+ 1881 000a 33       		.byte	51
+ 1882 000b 00       		.byte	0
+ 1883 000c 33       		.byte	51
+ 1884 000d 00       		.byte	0
+ 1885 000e 33       		.byte	51
+ 1886 000f 00       		.byte	0
+ 1887 0010 33       		.byte	51
+ 1888 0011 00       		.byte	0
+ 1889 0012 33       		.byte	51
+ 1890 0013 00       		.byte	0
+ 1891 0014 33       		.byte	51
+ 1892 0015 00       		.byte	0
+ 1893 0016 3F       		.byte	63
+ 1894 0017 00       		.byte	0
+ 1895 0018 3F       		.byte	63
+ 1896 0019 00       		.byte	0
+ 1897 001a 0000     		.section	.rodata.RDS7x11_9,"a",%progbits
+ 1898              		.align	2
+ 1901              	RDS7x11_9:
+ 1902 0000 07       		.byte	7
+ 1903 0001 0B       		.byte	11
+ 1904 0002 38       		.byte	56
+ 1905 0003 44       		.byte	68
+ 1906 0004 82       		.byte	-126
+ 1907 0005 82       		.byte	-126
+ 1908 0006 82       		.byte	-126
+ 1909 0007 46       		.byte	70
+ 1910 0008 3A       		.byte	58
+ 1911 0009 02       		.byte	2
+ 1912 000a 82       		.byte	-126
+ 1913 000b 44       		.byte	68
+ 1914 000c 38       		.byte	56
+ 1915 000d 000000   		.section	.rodata.F2_pl,"a",%progbits
+ 1916              		.align	2
+ 1919              	F2_pl:
+ 1920 0000 0A       		.byte	10
+ 1921 0001 0C       		.byte	12
+ 1922 0002 00       		.byte	0
+ 1923 0003 00       		.byte	0
+ 1924 0004 00       		.byte	0
+ 1925 0005 00       		.byte	0
+ 1926 0006 0C       		.byte	12
+ 1927 0007 00       		.byte	0
+ 1928 0008 0C       		.byte	12
+ 1929 0009 00       		.byte	0
+ 1930 000a 0C       		.byte	12
+ 1931 000b 00       		.byte	0
+ 1932 000c 0C       		.byte	12
+ 1933 000d 00       		.byte	0
+ 1934 000e FF       		.byte	-1
+ 1935 000f C0       		.byte	-64
+ 1936 0010 FF       		.byte	-1
+ 1937 0011 C0       		.byte	-64
+ 1938 0012 0C       		.byte	12
+ 1939 0013 00       		.byte	0
+ 1940 0014 0C       		.byte	12
+ 1941 0015 00       		.byte	0
+ 1942 0016 0C       		.byte	12
+ 1943 0017 00       		.byte	0
+ 1944 0018 0C       		.byte	12
+ 1945 0019 00       		.byte	0
+ 1946 001a 0000     		.section	.rodata.F0_7,"a",%progbits
+ 1947              		.align	2
+ 1950              	F0_7:
+ 1951 0000 04       		.byte	4
+ 1952 0001 07       		.byte	7
+ 1953 0002 F0       		.byte	-16
+ 1954 0003 10       		.byte	16
+ 1955 0004 20       		.byte	32
+ 1956 0005 20       		.byte	32
+ 1957 0006 40       		.byte	64
+ 1958 0007 40       		.byte	64
+ 1959 0008 40       		.byte	64
+ 1960 0009 000000   		.section	.rodata.CmS28_0,"a",%progbits
+ 1961              		.align	2
+ 1964              	CmS28_0:
+ 1965 0000 15       		.byte	21
+ 1966 0001 1C       		.byte	28
+ 1967 0002 00       		.byte	0
+ 1968 0003 FC       		.byte	-4
+ 1969 0004 00       		.byte	0
+ 1970 0005 03       		.byte	3
+ 1971 0006 FF       		.byte	-1
+ 1972 0007 00       		.byte	0
+ 1973 0008 0F       		.byte	15
+ 1974 0009 FF       		.byte	-1
+ 1975 000a 80       		.byte	-128
+ 1976 000b 1F       		.byte	31
+ 1977 000c FF       		.byte	-1
+ 1978 000d C0       		.byte	-64
+ 1979 000e 1F       		.byte	31
+ 1980 000f 07       		.byte	7
+ 1981 0010 E0       		.byte	-32
+ 1982 0011 3E       		.byte	62
+ 1983 0012 01       		.byte	1
+ 1984 0013 F0       		.byte	-16
+ 1985 0014 7C       		.byte	124
+ 1986 0015 00       		.byte	0
+ 1987 0016 F0       		.byte	-16
+ 1988 0017 78       		.byte	120
+ 1989 0018 00       		.byte	0
+ 1990 0019 F0       		.byte	-16
+ 1991 001a 78       		.byte	120
+ 1992 001b 00       		.byte	0
+ 1993 001c F8       		.byte	-8
+ 1994 001d F8       		.byte	-8
+ 1995 001e 00       		.byte	0
+ 1996 001f 78       		.byte	120
+ 1997 0020 F0       		.byte	-16
+ 1998 0021 00       		.byte	0
+ 1999 0022 78       		.byte	120
+ 2000 0023 F0       		.byte	-16
+ 2001 0024 00       		.byte	0
+ 2002 0025 78       		.byte	120
+ 2003 0026 F0       		.byte	-16
+ 2004 0027 00       		.byte	0
+ 2005 0028 78       		.byte	120
+ 2006 0029 F0       		.byte	-16
+ 2007 002a 00       		.byte	0
+ 2008 002b 78       		.byte	120
+ 2009 002c F0       		.byte	-16
+ 2010 002d 00       		.byte	0
+ 2011 002e 78       		.byte	120
+ 2012 002f F0       		.byte	-16
+ 2013 0030 00       		.byte	0
+ 2014 0031 78       		.byte	120
+ 2015 0032 F0       		.byte	-16
+ 2016 0033 00       		.byte	0
+ 2017 0034 78       		.byte	120
+ 2018 0035 F0       		.byte	-16
+ 2019 0036 00       		.byte	0
+ 2020 0037 78       		.byte	120
+ 2021 0038 F8       		.byte	-8
+ 2022 0039 00       		.byte	0
+ 2023 003a F0       		.byte	-16
+ 2024 003b 78       		.byte	120
+ 2025 003c 00       		.byte	0
+ 2026 003d F0       		.byte	-16
+ 2027 003e 78       		.byte	120
+ 2028 003f 00       		.byte	0
+ 2029 0040 F0       		.byte	-16
+ 2030 0041 7C       		.byte	124
+ 2031 0042 01       		.byte	1
+ 2032 0043 F0       		.byte	-16
+ 2033 0044 3E       		.byte	62
+ 2034 0045 03       		.byte	3
+ 2035 0046 E0       		.byte	-32
+ 2036 0047 3F       		.byte	63
+ 2037 0048 07       		.byte	7
+ 2038 0049 E0       		.byte	-32
+ 2039 004a 1F       		.byte	31
+ 2040 004b FF       		.byte	-1
+ 2041 004c C0       		.byte	-64
+ 2042 004d 0F       		.byte	15
+ 2043 004e FF       		.byte	-1
+ 2044 004f 80       		.byte	-128
+ 2045 0050 07       		.byte	7
+ 2046 0051 FF       		.byte	-1
+ 2047 0052 00       		.byte	0
+ 2048 0053 01       		.byte	1
+ 2049 0054 FC       		.byte	-4
+ 2050 0055 00       		.byte	0
+ 2051 0056 0000     		.section	.rodata.CmS28_1,"a",%progbits
+ 2052              		.align	2
+ 2055              	CmS28_1:
+ 2056 0000 0C       		.byte	12
+ 2057 0001 1C       		.byte	28
+ 2058 0002 07       		.byte	7
+ 2059 0003 00       		.byte	0
+ 2060 0004 0F       		.byte	15
+ 2061 0005 00       		.byte	0
+ 2062 0006 1F       		.byte	31
+ 2063 0007 00       		.byte	0
+ 2064 0008 3F       		.byte	63
+ 2065 0009 00       		.byte	0
+ 2066 000a 7F       		.byte	127
+ 2067 000b 00       		.byte	0
+ 2068 000c FF       		.byte	-1
+ 2069 000d 00       		.byte	0
+ 2070 000e EF       		.byte	-17
+ 2071 000f 00       		.byte	0
+ 2072 0010 CF       		.byte	-49
+ 2073 0011 00       		.byte	0
+ 2074 0012 0F       		.byte	15
+ 2075 0013 00       		.byte	0
+ 2076 0014 0F       		.byte	15
+ 2077 0015 00       		.byte	0
+ 2078 0016 0F       		.byte	15
+ 2079 0017 00       		.byte	0
+ 2080 0018 0F       		.byte	15
+ 2081 0019 00       		.byte	0
+ 2082 001a 0F       		.byte	15
+ 2083 001b 00       		.byte	0
+ 2084 001c 0F       		.byte	15
+ 2085 001d 00       		.byte	0
+ 2086 001e 0F       		.byte	15
+ 2087 001f 00       		.byte	0
+ 2088 0020 0F       		.byte	15
+ 2089 0021 00       		.byte	0
+ 2090 0022 0F       		.byte	15
+ 2091 0023 00       		.byte	0
+ 2092 0024 0F       		.byte	15
+ 2093 0025 00       		.byte	0
+ 2094 0026 0F       		.byte	15
+ 2095 0027 00       		.byte	0
+ 2096 0028 0F       		.byte	15
+ 2097 0029 00       		.byte	0
+ 2098 002a 0F       		.byte	15
+ 2099 002b 00       		.byte	0
+ 2100 002c 0F       		.byte	15
+ 2101 002d 00       		.byte	0
+ 2102 002e 0F       		.byte	15
+ 2103 002f 00       		.byte	0
+ 2104 0030 0F       		.byte	15
+ 2105 0031 00       		.byte	0
+ 2106 0032 7F       		.byte	127
+ 2107 0033 E0       		.byte	-32
+ 2108 0034 FF       		.byte	-1
+ 2109 0035 F0       		.byte	-16
+ 2110 0036 FF       		.byte	-1
+ 2111 0037 F0       		.byte	-16
+ 2112 0038 7F       		.byte	127
+ 2113 0039 E0       		.byte	-32
+ 2114 003a 0000     		.section	.rodata.CmS28_2,"a",%progbits
+ 2115              		.align	2
+ 2118              	CmS28_2:
+ 2119 0000 11       		.byte	17
+ 2120 0001 1C       		.byte	28
+ 2121 0002 03       		.byte	3
+ 2122 0003 F0       		.byte	-16
+ 2123 0004 00       		.byte	0
+ 2124 0005 0F       		.byte	15
+ 2125 0006 FC       		.byte	-4
+ 2126 0007 00       		.byte	0
+ 2127 0008 1F       		.byte	31
+ 2128 0009 FF       		.byte	-1
+ 2129 000a 00       		.byte	0
+ 2130 000b 3F       		.byte	63
+ 2131 000c FF       		.byte	-1
+ 2132 000d 00       		.byte	0
+ 2133 000e 7E       		.byte	126
+ 2134 000f 1F       		.byte	31
+ 2135 0010 80       		.byte	-128
+ 2136 0011 F8       		.byte	-8
+ 2137 0012 0F       		.byte	15
+ 2138 0013 80       		.byte	-128
+ 2139 0014 F0       		.byte	-16
+ 2140 0015 07       		.byte	7
+ 2141 0016 80       		.byte	-128
+ 2142 0017 E0       		.byte	-32
+ 2143 0018 07       		.byte	7
+ 2144 0019 80       		.byte	-128
+ 2145 001a 00       		.byte	0
+ 2146 001b 07       		.byte	7
+ 2147 001c 80       		.byte	-128
+ 2148 001d 00       		.byte	0
+ 2149 001e 0F       		.byte	15
+ 2150 001f 00       		.byte	0
+ 2151 0020 00       		.byte	0
+ 2152 0021 0F       		.byte	15
+ 2153 0022 00       		.byte	0
+ 2154 0023 00       		.byte	0
+ 2155 0024 1E       		.byte	30
+ 2156 0025 00       		.byte	0
+ 2157 0026 00       		.byte	0
+ 2158 0027 3E       		.byte	62
+ 2159 0028 00       		.byte	0
+ 2160 0029 00       		.byte	0
+ 2161 002a FC       		.byte	-4
+ 2162 002b 00       		.byte	0
+ 2163 002c 01       		.byte	1
+ 2164 002d F0       		.byte	-16
+ 2165 002e 00       		.byte	0
+ 2166 002f 07       		.byte	7
+ 2167 0030 E0       		.byte	-32
+ 2168 0031 00       		.byte	0
+ 2169 0032 0F       		.byte	15
+ 2170 0033 80       		.byte	-128
+ 2171 0034 00       		.byte	0
+ 2172 0035 1F       		.byte	31
+ 2173 0036 00       		.byte	0
+ 2174 0037 00       		.byte	0
+ 2175 0038 3E       		.byte	62
+ 2176 0039 00       		.byte	0
+ 2177 003a 00       		.byte	0
+ 2178 003b 7C       		.byte	124
+ 2179 003c 00       		.byte	0
+ 2180 003d 00       		.byte	0
+ 2181 003e 78       		.byte	120
+ 2182 003f 00       		.byte	0
+ 2183 0040 00       		.byte	0
+ 2184 0041 F0       		.byte	-16
+ 2185 0042 00       		.byte	0
+ 2186 0043 00       		.byte	0
+ 2187 0044 F0       		.byte	-16
+ 2188 0045 00       		.byte	0
+ 2189 0046 00       		.byte	0
+ 2190 0047 F1       		.byte	-15
+ 2191 0048 FE       		.byte	-2
+ 2192 0049 00       		.byte	0
+ 2193 004a FF       		.byte	-1
+ 2194 004b FF       		.byte	-1
+ 2195 004c 80       		.byte	-128
+ 2196 004d FF       		.byte	-1
+ 2197 004e FF       		.byte	-1
+ 2198 004f 80       		.byte	-128
+ 2199 0050 FF       		.byte	-1
+ 2200 0051 FF       		.byte	-1
+ 2201 0052 80       		.byte	-128
+ 2202 0053 7C       		.byte	124
+ 2203 0054 03       		.byte	3
+ 2204 0055 00       		.byte	0
+ 2205 0056 0000     		.section	.rodata.CmS28_3,"a",%progbits
+ 2206              		.align	2
+ 2209              	CmS28_3:
+ 2210 0000 11       		.byte	17
+ 2211 0001 1C       		.byte	28
+ 2212 0002 07       		.byte	7
+ 2213 0003 E0       		.byte	-32
+ 2214 0004 00       		.byte	0
+ 2215 0005 1F       		.byte	31
+ 2216 0006 F8       		.byte	-8
+ 2217 0007 00       		.byte	0
+ 2218 0008 3F       		.byte	63
+ 2219 0009 FC       		.byte	-4
+ 2220 000a 00       		.byte	0
+ 2221 000b 7F       		.byte	127
+ 2222 000c FE       		.byte	-2
+ 2223 000d 00       		.byte	0
+ 2224 000e 78       		.byte	120
+ 2225 000f 3F       		.byte	63
+ 2226 0010 00       		.byte	0
+ 2227 0011 30       		.byte	48
+ 2228 0012 1F       		.byte	31
+ 2229 0013 00       		.byte	0
+ 2230 0014 00       		.byte	0
+ 2231 0015 0F       		.byte	15
+ 2232 0016 00       		.byte	0
+ 2233 0017 00       		.byte	0
+ 2234 0018 0F       		.byte	15
+ 2235 0019 00       		.byte	0
+ 2236 001a 00       		.byte	0
+ 2237 001b 0F       		.byte	15
+ 2238 001c 00       		.byte	0
+ 2239 001d 00       		.byte	0
+ 2240 001e 1F       		.byte	31
+ 2241 001f 00       		.byte	0
+ 2242 0020 00       		.byte	0
+ 2243 0021 FE       		.byte	-2
+ 2244 0022 00       		.byte	0
+ 2245 0023 07       		.byte	7
+ 2246 0024 FE       		.byte	-2
+ 2247 0025 00       		.byte	0
+ 2248 0026 0F       		.byte	15
+ 2249 0027 FC       		.byte	-4
+ 2250 0028 00       		.byte	0
+ 2251 0029 0F       		.byte	15
+ 2252 002a F0       		.byte	-16
+ 2253 002b 00       		.byte	0
+ 2254 002c 00       		.byte	0
+ 2255 002d FC       		.byte	-4
+ 2256 002e 00       		.byte	0
+ 2257 002f 00       		.byte	0
+ 2258 0030 3E       		.byte	62
+ 2259 0031 00       		.byte	0
+ 2260 0032 00       		.byte	0
+ 2261 0033 0F       		.byte	15
+ 2262 0034 00       		.byte	0
+ 2263 0035 00       		.byte	0
+ 2264 0036 0F       		.byte	15
+ 2265 0037 80       		.byte	-128
+ 2266 0038 00       		.byte	0
+ 2267 0039 07       		.byte	7
+ 2268 003a 80       		.byte	-128
+ 2269 003b 00       		.byte	0
+ 2270 003c 07       		.byte	7
+ 2271 003d 80       		.byte	-128
+ 2272 003e 60       		.byte	96
+ 2273 003f 07       		.byte	7
+ 2274 0040 80       		.byte	-128
+ 2275 0041 E0       		.byte	-32
+ 2276 0042 07       		.byte	7
+ 2277 0043 80       		.byte	-128
+ 2278 0044 F0       		.byte	-16
+ 2279 0045 0F       		.byte	15
+ 2280 0046 80       		.byte	-128
+ 2281 0047 F8       		.byte	-8
+ 2282 0048 3F       		.byte	63
+ 2283 0049 00       		.byte	0
+ 2284 004a 7F       		.byte	127
+ 2285 004b FF       		.byte	-1
+ 2286 004c 00       		.byte	0
+ 2287 004d 3F       		.byte	63
+ 2288 004e FE       		.byte	-2
+ 2289 004f 00       		.byte	0
+ 2290 0050 1F       		.byte	31
+ 2291 0051 F8       		.byte	-8
+ 2292 0052 00       		.byte	0
+ 2293 0053 07       		.byte	7
+ 2294 0054 E0       		.byte	-32
+ 2295 0055 00       		.byte	0
+ 2296 0056 0000     		.section	.rodata.CmS28_4,"a",%progbits
+ 2297              		.align	2
+ 2300              	CmS28_4:
+ 2301 0000 15       		.byte	21
+ 2302 0001 1C       		.byte	28
+ 2303 0002 00       		.byte	0
+ 2304 0003 07       		.byte	7
+ 2305 0004 80       		.byte	-128
+ 2306 0005 00       		.byte	0
+ 2307 0006 0F       		.byte	15
+ 2308 0007 80       		.byte	-128
+ 2309 0008 00       		.byte	0
+ 2310 0009 1F       		.byte	31
+ 2311 000a 80       		.byte	-128
+ 2312 000b 00       		.byte	0
+ 2313 000c 3F       		.byte	63
+ 2314 000d 80       		.byte	-128
+ 2315 000e 00       		.byte	0
+ 2316 000f 3F       		.byte	63
+ 2317 0010 80       		.byte	-128
+ 2318 0011 00       		.byte	0
+ 2319 0012 7F       		.byte	127
+ 2320 0013 80       		.byte	-128
+ 2321 0014 00       		.byte	0
+ 2322 0015 F7       		.byte	-9
+ 2323 0016 80       		.byte	-128
+ 2324 0017 00       		.byte	0
+ 2325 0018 F7       		.byte	-9
+ 2326 0019 80       		.byte	-128
+ 2327 001a 01       		.byte	1
+ 2328 001b E7       		.byte	-25
+ 2329 001c 80       		.byte	-128
+ 2330 001d 03       		.byte	3
+ 2331 001e C7       		.byte	-57
+ 2332 001f 80       		.byte	-128
+ 2333 0020 03       		.byte	3
+ 2334 0021 C7       		.byte	-57
+ 2335 0022 80       		.byte	-128
+ 2336 0023 07       		.byte	7
+ 2337 0024 87       		.byte	-121
+ 2338 0025 80       		.byte	-128
+ 2339 0026 0F       		.byte	15
+ 2340 0027 07       		.byte	7
+ 2341 0028 80       		.byte	-128
+ 2342 0029 1E       		.byte	30
+ 2343 002a 07       		.byte	7
+ 2344 002b 80       		.byte	-128
+ 2345 002c 1E       		.byte	30
+ 2346 002d 07       		.byte	7
+ 2347 002e 80       		.byte	-128
+ 2348 002f 3C       		.byte	60
+ 2349 0030 07       		.byte	7
+ 2350 0031 80       		.byte	-128
+ 2351 0032 7F       		.byte	127
+ 2352 0033 FF       		.byte	-1
+ 2353 0034 F0       		.byte	-16
+ 2354 0035 FF       		.byte	-1
+ 2355 0036 FF       		.byte	-1
+ 2356 0037 F8       		.byte	-8
+ 2357 0038 FF       		.byte	-1
+ 2358 0039 FF       		.byte	-1
+ 2359 003a F8       		.byte	-8
+ 2360 003b FF       		.byte	-1
+ 2361 003c FF       		.byte	-1
+ 2362 003d F0       		.byte	-16
+ 2363 003e 00       		.byte	0
+ 2364 003f 07       		.byte	7
+ 2365 0040 80       		.byte	-128
+ 2366 0041 00       		.byte	0
+ 2367 0042 07       		.byte	7
+ 2368 0043 80       		.byte	-128
+ 2369 0044 00       		.byte	0
+ 2370 0045 07       		.byte	7
+ 2371 0046 80       		.byte	-128
+ 2372 0047 00       		.byte	0
+ 2373 0048 07       		.byte	7
+ 2374 0049 80       		.byte	-128
+ 2375 004a 00       		.byte	0
+ 2376 004b 07       		.byte	7
+ 2377 004c 80       		.byte	-128
+ 2378 004d 00       		.byte	0
+ 2379 004e 07       		.byte	7
+ 2380 004f 80       		.byte	-128
+ 2381 0050 00       		.byte	0
+ 2382 0051 07       		.byte	7
+ 2383 0052 80       		.byte	-128
+ 2384 0053 00       		.byte	0
+ 2385 0054 03       		.byte	3
+ 2386 0055 80       		.byte	-128
+ 2387 0056 0000     		.section	.rodata.RDS7x11_uk,"a",%progbits
+ 2388              		.align	2
+ 2391              	RDS7x11_uk:
+ 2392 0000 06       		.byte	6
+ 2393 0001 0A       		.byte	10
+ 2394 0002 00       		.byte	0
+ 2395 0003 7C       		.byte	124
+ 2396 0004 44       		.byte	68
+ 2397 0005 44       		.byte	68
+ 2398 0006 44       		.byte	68
+ 2399 0007 44       		.byte	68
+ 2400 0008 44       		.byte	68
+ 2401 0009 44       		.byte	68
+ 2402 000a 44       		.byte	68
+ 2403 000b 7C       		.byte	124
+ 2404              		.section	.rodata.CmS28_6,"a",%progbits
+ 2405              		.align	2
+ 2408              	CmS28_6:
+ 2409 0000 12       		.byte	18
+ 2410 0001 1C       		.byte	28
+ 2411 0002 00       		.byte	0
+ 2412 0003 30       		.byte	48
+ 2413 0004 00       		.byte	0
+ 2414 0005 00       		.byte	0
+ 2415 0006 78       		.byte	120
+ 2416 0007 00       		.byte	0
+ 2417 0008 00       		.byte	0
+ 2418 0009 F8       		.byte	-8
+ 2419 000a 00       		.byte	0
+ 2420 000b 01       		.byte	1
+ 2421 000c F0       		.byte	-16
+ 2422 000d 00       		.byte	0
+ 2423 000e 03       		.byte	3
+ 2424 000f E0       		.byte	-32
+ 2425 0010 00       		.byte	0
+ 2426 0011 07       		.byte	7
+ 2427 0012 C0       		.byte	-64
+ 2428 0013 00       		.byte	0
+ 2429 0014 0F       		.byte	15
+ 2430 0015 80       		.byte	-128
+ 2431 0016 00       		.byte	0
+ 2432 0017 1F       		.byte	31
+ 2433 0018 00       		.byte	0
+ 2434 0019 00       		.byte	0
+ 2435 001a 3E       		.byte	62
+ 2436 001b 00       		.byte	0
+ 2437 001c 00       		.byte	0
+ 2438 001d 3C       		.byte	60
+ 2439 001e 00       		.byte	0
+ 2440 001f 00       		.byte	0
+ 2441 0020 7C       		.byte	124
+ 2442 0021 00       		.byte	0
+ 2443 0022 00       		.byte	0
+ 2444 0023 79       		.byte	121
+ 2445 0024 F8       		.byte	-8
+ 2446 0025 00       		.byte	0
+ 2447 0026 7F       		.byte	127
+ 2448 0027 FE       		.byte	-2
+ 2449 0028 00       		.byte	0
+ 2450 0029 FF       		.byte	-1
+ 2451 002a FF       		.byte	-1
+ 2452 002b 00       		.byte	0
+ 2453 002c FF       		.byte	-1
+ 2454 002d FF       		.byte	-1
+ 2455 002e 80       		.byte	-128
+ 2456 002f FC       		.byte	-4
+ 2457 0030 0F       		.byte	15
+ 2458 0031 80       		.byte	-128
+ 2459 0032 F0       		.byte	-16
+ 2460 0033 07       		.byte	7
+ 2461 0034 C0       		.byte	-64
+ 2462 0035 F0       		.byte	-16
+ 2463 0036 03       		.byte	3
+ 2464 0037 C0       		.byte	-64
+ 2465 0038 F0       		.byte	-16
+ 2466 0039 03       		.byte	3
+ 2467 003a C0       		.byte	-64
+ 2468 003b F0       		.byte	-16
+ 2469 003c 03       		.byte	3
+ 2470 003d C0       		.byte	-64
+ 2471 003e F0       		.byte	-16
+ 2472 003f 03       		.byte	3
+ 2473 0040 C0       		.byte	-64
+ 2474 0041 F8       		.byte	-8
+ 2475 0042 07       		.byte	7
+ 2476 0043 C0       		.byte	-64
+ 2477 0044 78       		.byte	120
+ 2478 0045 07       		.byte	7
+ 2479 0046 80       		.byte	-128
+ 2480 0047 7E       		.byte	126
+ 2481 0048 1F       		.byte	31
+ 2482 0049 80       		.byte	-128
+ 2483 004a 3F       		.byte	63
+ 2484 004b FF       		.byte	-1
+ 2485 004c 00       		.byte	0
+ 2486 004d 3F       		.byte	63
+ 2487 004e FE       		.byte	-2
+ 2488 004f 00       		.byte	0
+ 2489 0050 0F       		.byte	15
+ 2490 0051 FC       		.byte	-4
+ 2491 0052 00       		.byte	0
+ 2492 0053 07       		.byte	7
+ 2493 0054 F0       		.byte	-16
+ 2494 0055 00       		.byte	0
+ 2495 0056 0000     		.section	.rodata.CmS28_7,"a",%progbits
+ 2496              		.align	2
+ 2499              	CmS28_7:
+ 2500 0000 15       		.byte	21
+ 2501 0001 1C       		.byte	28
+ 2502 0002 FF       		.byte	-1
+ 2503 0003 FF       		.byte	-1
+ 2504 0004 F8       		.byte	-8
+ 2505 0005 FF       		.byte	-1
+ 2506 0006 FF       		.byte	-1
+ 2507 0007 F8       		.byte	-8
+ 2508 0008 FF       		.byte	-1
+ 2509 0009 FF       		.byte	-1
+ 2510 000a F8       		.byte	-8
+ 2511 000b 7F       		.byte	127
+ 2512 000c FF       		.byte	-1
+ 2513 000d F0       		.byte	-16
+ 2514 000e 00       		.byte	0
+ 2515 000f 01       		.byte	1
+ 2516 0010 E0       		.byte	-32
+ 2517 0011 00       		.byte	0
+ 2518 0012 03       		.byte	3
+ 2519 0013 E0       		.byte	-32
+ 2520 0014 00       		.byte	0
+ 2521 0015 07       		.byte	7
+ 2522 0016 C0       		.byte	-64
+ 2523 0017 00       		.byte	0
+ 2524 0018 0F       		.byte	15
+ 2525 0019 80       		.byte	-128
+ 2526 001a 00       		.byte	0
+ 2527 001b 0F       		.byte	15
+ 2528 001c 00       		.byte	0
+ 2529 001d 00       		.byte	0
+ 2530 001e 1E       		.byte	30
+ 2531 001f 00       		.byte	0
+ 2532 0020 00       		.byte	0
+ 2533 0021 1E       		.byte	30
+ 2534 0022 00       		.byte	0
+ 2535 0023 00       		.byte	0
+ 2536 0024 3C       		.byte	60
+ 2537 0025 00       		.byte	0
+ 2538 0026 00       		.byte	0
+ 2539 0027 3C       		.byte	60
+ 2540 0028 00       		.byte	0
+ 2541 0029 00       		.byte	0
+ 2542 002a 78       		.byte	120
+ 2543 002b 00       		.byte	0
+ 2544 002c 00       		.byte	0
+ 2545 002d 78       		.byte	120
+ 2546 002e 00       		.byte	0
+ 2547 002f 00       		.byte	0
+ 2548 0030 F8       		.byte	-8
+ 2549 0031 00       		.byte	0
+ 2550 0032 00       		.byte	0
+ 2551 0033 F0       		.byte	-16
+ 2552 0034 00       		.byte	0
+ 2553 0035 00       		.byte	0
+ 2554 0036 F0       		.byte	-16
+ 2555 0037 00       		.byte	0
+ 2556 0038 01       		.byte	1
+ 2557 0039 E0       		.byte	-32
+ 2558 003a 00       		.byte	0
+ 2559 003b 01       		.byte	1
+ 2560 003c E0       		.byte	-32
+ 2561 003d 00       		.byte	0
+ 2562 003e 03       		.byte	3
+ 2563 003f C0       		.byte	-64
+ 2564 0040 00       		.byte	0
+ 2565 0041 03       		.byte	3
+ 2566 0042 C0       		.byte	-64
+ 2567 0043 00       		.byte	0
+ 2568 0044 03       		.byte	3
+ 2569 0045 80       		.byte	-128
+ 2570 0046 00       		.byte	0
+ 2571 0047 07       		.byte	7
+ 2572 0048 80       		.byte	-128
+ 2573 0049 00       		.byte	0
+ 2574 004a 07       		.byte	7
+ 2575 004b 80       		.byte	-128
+ 2576 004c 00       		.byte	0
+ 2577 004d 0F       		.byte	15
+ 2578 004e 00       		.byte	0
+ 2579 004f 00       		.byte	0
+ 2580 0050 0F       		.byte	15
+ 2581 0051 00       		.byte	0
+ 2582 0052 00       		.byte	0
+ 2583 0053 0E       		.byte	14
+ 2584 0054 00       		.byte	0
+ 2585 0055 00       		.byte	0
+ 2586 0056 0000     		.section	.rodata.CmS28_8,"a",%progbits
+ 2587              		.align	2
+ 2590              	CmS28_8:
+ 2591 0000 12       		.byte	18
+ 2592 0001 1C       		.byte	28
+ 2593 0002 03       		.byte	3
+ 2594 0003 F8       		.byte	-8
+ 2595 0004 00       		.byte	0
+ 2596 0005 1F       		.byte	31
+ 2597 0006 FE       		.byte	-2
+ 2598 0007 00       		.byte	0
+ 2599 0008 3F       		.byte	63
+ 2600 0009 FF       		.byte	-1
+ 2601 000a 00       		.byte	0
+ 2602 000b 7F       		.byte	127
+ 2603 000c FF       		.byte	-1
+ 2604 000d 00       		.byte	0
+ 2605 000e 7C       		.byte	124
+ 2606 000f 0F       		.byte	15
+ 2607 0010 80       		.byte	-128
+ 2608 0011 F8       		.byte	-8
+ 2609 0012 07       		.byte	7
+ 2610 0013 80       		.byte	-128
+ 2611 0014 F0       		.byte	-16
+ 2612 0015 07       		.byte	7
+ 2613 0016 80       		.byte	-128
+ 2614 0017 F0       		.byte	-16
+ 2615 0018 07       		.byte	7
+ 2616 0019 80       		.byte	-128
+ 2617 001a F0       		.byte	-16
+ 2618 001b 0F       		.byte	15
+ 2619 001c 80       		.byte	-128
+ 2620 001d FC       		.byte	-4
+ 2621 001e 3F       		.byte	63
+ 2622 001f 00       		.byte	0
+ 2623 0020 7F       		.byte	127
+ 2624 0021 FE       		.byte	-2
+ 2625 0022 00       		.byte	0
+ 2626 0023 3F       		.byte	63
+ 2627 0024 FC       		.byte	-4
+ 2628 0025 00       		.byte	0
+ 2629 0026 1F       		.byte	31
+ 2630 0027 FC       		.byte	-4
+ 2631 0028 00       		.byte	0
+ 2632 0029 3F       		.byte	63
+ 2633 002a FF       		.byte	-1
+ 2634 002b 00       		.byte	0
+ 2635 002c 7F       		.byte	127
+ 2636 002d 3F       		.byte	63
+ 2637 002e 80       		.byte	-128
+ 2638 002f 7C       		.byte	124
+ 2639 0030 0F       		.byte	15
+ 2640 0031 80       		.byte	-128
+ 2641 0032 F8       		.byte	-8
+ 2642 0033 07       		.byte	7
+ 2643 0034 C0       		.byte	-64
+ 2644 0035 F0       		.byte	-16
+ 2645 0036 03       		.byte	3
+ 2646 0037 C0       		.byte	-64
+ 2647 0038 F0       		.byte	-16
+ 2648 0039 03       		.byte	3
+ 2649 003a C0       		.byte	-64
+ 2650 003b F0       		.byte	-16
+ 2651 003c 03       		.byte	3
+ 2652 003d C0       		.byte	-64
+ 2653 003e F0       		.byte	-16
+ 2654 003f 03       		.byte	3
+ 2655 0040 C0       		.byte	-64
+ 2656 0041 F0       		.byte	-16
+ 2657 0042 03       		.byte	3
+ 2658 0043 C0       		.byte	-64
+ 2659 0044 F8       		.byte	-8
+ 2660 0045 07       		.byte	7
+ 2661 0046 C0       		.byte	-64
+ 2662 0047 7C       		.byte	124
+ 2663 0048 0F       		.byte	15
+ 2664 0049 80       		.byte	-128
+ 2665 004a 7F       		.byte	127
+ 2666 004b FF       		.byte	-1
+ 2667 004c 80       		.byte	-128
+ 2668 004d 3F       		.byte	63
+ 2669 004e FF       		.byte	-1
+ 2670 004f 00       		.byte	0
+ 2671 0050 1F       		.byte	31
+ 2672 0051 FE       		.byte	-2
+ 2673 0052 00       		.byte	0
+ 2674 0053 07       		.byte	7
+ 2675 0054 F0       		.byte	-16
+ 2676 0055 00       		.byte	0
+ 2677 0056 0000     		.section	.rodata.CmS28_9,"a",%progbits
+ 2678              		.align	2
+ 2681              	CmS28_9:
+ 2682 0000 13       		.byte	19
+ 2683 0001 1C       		.byte	28
+ 2684 0002 03       		.byte	3
+ 2685 0003 F8       		.byte	-8
+ 2686 0004 00       		.byte	0
+ 2687 0005 0F       		.byte	15
+ 2688 0006 FE       		.byte	-2
+ 2689 0007 00       		.byte	0
+ 2690 0008 1F       		.byte	31
+ 2691 0009 FF       		.byte	-1
+ 2692 000a 00       		.byte	0
+ 2693 000b 3F       		.byte	63
+ 2694 000c FF       		.byte	-1
+ 2695 000d 80       		.byte	-128
+ 2696 000e 7E       		.byte	126
+ 2697 000f 0F       		.byte	15
+ 2698 0010 C0       		.byte	-64
+ 2699 0011 78       		.byte	120
+ 2700 0012 07       		.byte	7
+ 2701 0013 C0       		.byte	-64
+ 2702 0014 F8       		.byte	-8
+ 2703 0015 03       		.byte	3
+ 2704 0016 C0       		.byte	-64
+ 2705 0017 F0       		.byte	-16
+ 2706 0018 03       		.byte	3
+ 2707 0019 E0       		.byte	-32
+ 2708 001a F0       		.byte	-16
+ 2709 001b 01       		.byte	1
+ 2710 001c E0       		.byte	-32
+ 2711 001d F0       		.byte	-16
+ 2712 001e 01       		.byte	1
+ 2713 001f E0       		.byte	-32
+ 2714 0020 F8       		.byte	-8
+ 2715 0021 03       		.byte	3
+ 2716 0022 E0       		.byte	-32
+ 2717 0023 7E       		.byte	126
+ 2718 0024 0F       		.byte	15
+ 2719 0025 E0       		.byte	-32
+ 2720 0026 7F       		.byte	127
+ 2721 0027 FF       		.byte	-1
+ 2722 0028 E0       		.byte	-32
+ 2723 0029 3F       		.byte	63
+ 2724 002a FF       		.byte	-1
+ 2725 002b C0       		.byte	-64
+ 2726 002c 0F       		.byte	15
+ 2727 002d FB       		.byte	-5
+ 2728 002e C0       		.byte	-64
+ 2729 002f 03       		.byte	3
+ 2730 0030 E7       		.byte	-25
+ 2731 0031 C0       		.byte	-64
+ 2732 0032 00       		.byte	0
+ 2733 0033 07       		.byte	7
+ 2734 0034 80       		.byte	-128
+ 2735 0035 00       		.byte	0
+ 2736 0036 0F       		.byte	15
+ 2737 0037 80       		.byte	-128
+ 2738 0038 00       		.byte	0
+ 2739 0039 0F       		.byte	15
+ 2740 003a 80       		.byte	-128
+ 2741 003b 00       		.byte	0
+ 2742 003c 1F       		.byte	31
+ 2743 003d 00       		.byte	0
+ 2744 003e 00       		.byte	0
+ 2745 003f 3F       		.byte	63
+ 2746 0040 00       		.byte	0
+ 2747 0041 00       		.byte	0
+ 2748 0042 7E       		.byte	126
+ 2749 0043 00       		.byte	0
+ 2750 0044 01       		.byte	1
+ 2751 0045 FC       		.byte	-4
+ 2752 0046 00       		.byte	0
+ 2753 0047 07       		.byte	7
+ 2754 0048 F8       		.byte	-8
+ 2755 0049 00       		.byte	0
+ 2756 004a 1F       		.byte	31
+ 2757 004b F0       		.byte	-16
+ 2758 004c 00       		.byte	0
+ 2759 004d 3F       		.byte	63
+ 2760 004e C0       		.byte	-64
+ 2761 004f 00       		.byte	0
+ 2762 0050 3F       		.byte	63
+ 2763 0051 00       		.byte	0
+ 2764 0052 00       		.byte	0
+ 2765 0053 1C       		.byte	28
+ 2766 0054 00       		.byte	0
+ 2767 0055 00       		.byte	0
+ 2768 0056 0000     		.section	.rodata.F2_9,"a",%progbits
+ 2769              		.align	2
+ 2772              	F2_9:
+ 2773 0000 0A       		.byte	10
+ 2774 0001 0E       		.byte	14
+ 2775 0002 3F       		.byte	63
+ 2776 0003 00       		.byte	0
+ 2777 0004 7F       		.byte	127
+ 2778 0005 80       		.byte	-128
+ 2779 0006 E1       		.byte	-31
+ 2780 0007 C0       		.byte	-64
+ 2781 0008 C0       		.byte	-64
+ 2782 0009 C0       		.byte	-64
+ 2783 000a C0       		.byte	-64
+ 2784 000b C0       		.byte	-64
+ 2785 000c E1       		.byte	-31
+ 2786 000d C0       		.byte	-64
+ 2787 000e 7F       		.byte	127
+ 2788 000f C0       		.byte	-64
+ 2789 0010 3F       		.byte	63
+ 2790 0011 C0       		.byte	-64
+ 2791 0012 00       		.byte	0
+ 2792 0013 C0       		.byte	-64
+ 2793 0014 01       		.byte	1
+ 2794 0015 C0       		.byte	-64
+ 2795 0016 03       		.byte	3
+ 2796 0017 80       		.byte	-128
+ 2797 0018 07       		.byte	7
+ 2798 0019 00       		.byte	0
+ 2799 001a 3E       		.byte	62
+ 2800 001b 00       		.byte	0
+ 2801 001c 3C       		.byte	60
+ 2802 001d 00       		.byte	0
+ 2803 001e 0000     		.section	.rodata.F3_mi,"a",%progbits
+ 2804              		.align	2
+ 2807              	F3_mi:
+ 2808 0000 0F       		.byte	15
+ 2809 0001 15       		.byte	21
+ 2810 0002 00       		.byte	0
+ 2811 0003 00       		.byte	0
+ 2812 0004 00       		.byte	0
+ 2813 0005 00       		.byte	0
+ 2814 0006 00       		.byte	0
+ 2815 0007 00       		.byte	0
+ 2816 0008 00       		.byte	0
+ 2817 0009 00       		.byte	0
+ 2818 000a 00       		.byte	0
+ 2819 000b 00       		.byte	0
+ 2820 000c 00       		.byte	0
+ 2821 000d 00       		.byte	0
+ 2822 000e 00       		.byte	0
+ 2823 000f 00       		.byte	0
+ 2824 0010 00       		.byte	0
+ 2825 0011 00       		.byte	0
+ 2826 0012 FF       		.byte	-1
+ 2827 0013 FE       		.byte	-2
+ 2828 0014 FF       		.byte	-1
+ 2829 0015 FE       		.byte	-2
+ 2830 0016 FF       		.byte	-1
+ 2831 0017 FE       		.byte	-2
+ 2832 0018 00       		.byte	0
+ 2833 0019 00       		.byte	0
+ 2834 001a 00       		.byte	0
+ 2835 001b 00       		.byte	0
+ 2836 001c 00       		.byte	0
+ 2837 001d 00       		.byte	0
+ 2838 001e 00       		.byte	0
+ 2839 001f 00       		.byte	0
+ 2840 0020 00       		.byte	0
+ 2841 0021 00       		.byte	0
+ 2842 0022 00       		.byte	0
+ 2843 0023 00       		.byte	0
+ 2844 0024 00       		.byte	0
+ 2845 0025 00       		.byte	0
+ 2846 0026 00       		.byte	0
+ 2847 0027 00       		.byte	0
+ 2848 0028 00       		.byte	0
+ 2849 0029 00       		.byte	0
+ 2850 002a 00       		.byte	0
+ 2851 002b 00       		.byte	0
+ 2852              		.section	.rodata.CS10B_mi,"a",%progbits
+ 2853              		.align	2
+ 2856              	CS10B_mi:
+ 2857 0000 05       		.byte	5
+ 2858 0001 07       		.byte	7
+ 2859 0002 00       		.byte	0
+ 2860 0003 00       		.byte	0
+ 2861 0004 00       		.byte	0
+ 2862 0005 00       		.byte	0
+ 2863 0006 00       		.byte	0
+ 2864 0007 F8       		.byte	-8
+ 2865 0008 F8       		.byte	-8
+ 2866 0009 000000   		.section	.rodata.CmS28_5,"a",%progbits
+ 2867              		.align	2
+ 2870              	CmS28_5:
+ 2871 0000 12       		.byte	18
+ 2872 0001 1C       		.byte	28
+ 2873 0002 FF       		.byte	-1
+ 2874 0003 FF       		.byte	-1
+ 2875 0004 80       		.byte	-128
+ 2876 0005 FF       		.byte	-1
+ 2877 0006 FF       		.byte	-1
+ 2878 0007 80       		.byte	-128
+ 2879 0008 7F       		.byte	127
+ 2880 0009 FF       		.byte	-1
+ 2881 000a 00       		.byte	0
+ 2882 000b 78       		.byte	120
+ 2883 000c 00       		.byte	0
+ 2884 000d 00       		.byte	0
+ 2885 000e 70       		.byte	112
+ 2886 000f 00       		.byte	0
+ 2887 0010 00       		.byte	0
+ 2888 0011 70       		.byte	112
+ 2889 0012 00       		.byte	0
+ 2890 0013 00       		.byte	0
+ 2891 0014 70       		.byte	112
+ 2892 0015 00       		.byte	0
+ 2893 0016 00       		.byte	0
+ 2894 0017 71       		.byte	113
+ 2895 0018 F8       		.byte	-8
+ 2896 0019 00       		.byte	0
+ 2897 001a 77       		.byte	119
+ 2898 001b FE       		.byte	-2
+ 2899 001c 00       		.byte	0
+ 2900 001d FF       		.byte	-1
+ 2901 001e FF       		.byte	-1
+ 2902 001f 00       		.byte	0
+ 2903 0020 FF       		.byte	-1
+ 2904 0021 FF       		.byte	-1
+ 2905 0022 80       		.byte	-128
+ 2906 0023 FE       		.byte	-2
+ 2907 0024 0F       		.byte	15
+ 2908 0025 80       		.byte	-128
+ 2909 0026 FC       		.byte	-4
+ 2910 0027 07       		.byte	7
+ 2911 0028 80       		.byte	-128
+ 2912 0029 F8       		.byte	-8
+ 2913 002a 07       		.byte	7
+ 2914 002b C0       		.byte	-64
+ 2915 002c F0       		.byte	-16
+ 2916 002d 03       		.byte	3
+ 2917 002e C0       		.byte	-64
+ 2918 002f E0       		.byte	-32
+ 2919 0030 03       		.byte	3
+ 2920 0031 C0       		.byte	-64
+ 2921 0032 00       		.byte	0
+ 2922 0033 03       		.byte	3
+ 2923 0034 C0       		.byte	-64
+ 2924 0035 00       		.byte	0
+ 2925 0036 03       		.byte	3
+ 2926 0037 C0       		.byte	-64
+ 2927 0038 00       		.byte	0
+ 2928 0039 03       		.byte	3
+ 2929 003a C0       		.byte	-64
+ 2930 003b 00       		.byte	0
+ 2931 003c 03       		.byte	3
+ 2932 003d C0       		.byte	-64
+ 2933 003e 00       		.byte	0
+ 2934 003f 07       		.byte	7
+ 2935 0040 C0       		.byte	-64
+ 2936 0041 60       		.byte	96
+ 2937 0042 0F       		.byte	15
+ 2938 0043 80       		.byte	-128
+ 2939 0044 F0       		.byte	-16
+ 2940 0045 1F       		.byte	31
+ 2941 0046 80       		.byte	-128
+ 2942 0047 F8       		.byte	-8
+ 2943 0048 3F       		.byte	63
+ 2944 0049 00       		.byte	0
+ 2945 004a 7F       		.byte	127
+ 2946 004b FE       		.byte	-2
+ 2947 004c 00       		.byte	0
+ 2948 004d 7F       		.byte	127
+ 2949 004e FC       		.byte	-4
+ 2950 004f 00       		.byte	0
+ 2951 0050 1F       		.byte	31
+ 2952 0051 F8       		.byte	-8
+ 2953 0052 00       		.byte	0
+ 2954 0053 0F       		.byte	15
+ 2955 0054 E0       		.byte	-32
+ 2956 0055 00       		.byte	0
+ 2957 0056 0000     		.section	.rodata.CS12B_3,"a",%progbits
+ 2958              		.align	2
+ 2961              	CS12B_3:
+ 2962 0000 08       		.byte	8
+ 2963 0001 0C       		.byte	12
+ 2964 0002 3C       		.byte	60
+ 2965 0003 7F       		.byte	127
+ 2966 0004 FF       		.byte	-1
+ 2967 0005 C7       		.byte	-57
+ 2968 0006 3F       		.byte	63
+ 2969 0007 3E       		.byte	62
+ 2970 0008 3F       		.byte	63
+ 2971 0009 07       		.byte	7
+ 2972 000a C7       		.byte	-57
+ 2973 000b FF       		.byte	-1
+ 2974 000c 7E       		.byte	126
+ 2975 000d 3C       		.byte	60
+ 2976 000e 0000     		.section	.rodata.F0_pl,"a",%progbits
+ 2977              		.align	2
+ 2980              	F0_pl:
+ 2981 0000 03       		.byte	3
+ 2982 0001 07       		.byte	7
+ 2983 0002 00       		.byte	0
+ 2984 0003 00       		.byte	0
+ 2985 0004 40       		.byte	64
+ 2986 0005 E0       		.byte	-32
+ 2987 0006 40       		.byte	64
+ 2988 0007 00       		.byte	0
+ 2989 0008 00       		.byte	0
+ 2990 0009 000000   		.section	.rodata.CS12B_0,"a",%progbits
+ 2991              		.align	2
+ 2994              	CS12B_0:
+ 2995 0000 08       		.byte	8
+ 2996 0001 0C       		.byte	12
+ 2997 0002 3C       		.byte	60
+ 2998 0003 7E       		.byte	126
+ 2999 0004 7E       		.byte	126
+ 3000 0005 E7       		.byte	-25
+ 3001 0006 E7       		.byte	-25
+ 3002 0007 E7       		.byte	-25
+ 3003 0008 E7       		.byte	-25
+ 3004 0009 E7       		.byte	-25
+ 3005 000a E7       		.byte	-25
+ 3006 000b 7E       		.byte	126
+ 3007 000c 7E       		.byte	126
+ 3008 000d 3C       		.byte	60
+ 3009 000e 0000     		.section	.rodata.CS12B_1,"a",%progbits
+ 3010              		.align	2
+ 3013              	CS12B_1:
+ 3014 0000 07       		.byte	7
+ 3015 0001 0C       		.byte	12
+ 3016 0002 18       		.byte	24
+ 3017 0003 78       		.byte	120
+ 3018 0004 F8       		.byte	-8
+ 3019 0005 F8       		.byte	-8
+ 3020 0006 38       		.byte	56
+ 3021 0007 38       		.byte	56
+ 3022 0008 38       		.byte	56
+ 3023 0009 38       		.byte	56
+ 3024 000a 38       		.byte	56
+ 3025 000b FE       		.byte	-2
+ 3026 000c FE       		.byte	-2
+ 3027 000d FE       		.byte	-2
+ 3028 000e 0000     		.section	.rodata.CS12B_2,"a",%progbits
+ 3029              		.align	2
+ 3032              	CS12B_2:
+ 3033 0000 09       		.byte	9
+ 3034 0001 0C       		.byte	12
+ 3035 0002 1E       		.byte	30
+ 3036 0003 00       		.byte	0
+ 3037 0004 7F       		.byte	127
+ 3038 0005 80       		.byte	-128
+ 3039 0006 FF       		.byte	-1
+ 3040 0007 80       		.byte	-128
+ 3041 0008 E3       		.byte	-29
+ 3042 0009 80       		.byte	-128
+ 3043 000a 03       		.byte	3
+ 3044 000b 80       		.byte	-128
+ 3045 000c 0F       		.byte	15
+ 3046 000d 00       		.byte	0
+ 3047 000e 3C       		.byte	60
+ 3048 000f 00       		.byte	0
+ 3049 0010 70       		.byte	112
+ 3050 0011 00       		.byte	0
+ 3051 0012 E0       		.byte	-32
+ 3052 0013 00       		.byte	0
+ 3053 0014 FF       		.byte	-1
+ 3054 0015 00       		.byte	0
+ 3055 0016 FF       		.byte	-1
+ 3056 0017 80       		.byte	-128
+ 3057 0018 FF       		.byte	-1
+ 3058 0019 80       		.byte	-128
+ 3059 001a 0000     		.section	.rodata.ComicSansBold12,"a",%progbits
+ 3060              		.align	2
+ 3063              	ComicSansBold12:
+ 3064 0000 02       		.byte	2
+ 3065 0001 0C       		.byte	12
+ 3066 0002 0000     		.space	2
+ 3067 0004 00000000 		.word	CS12B_0
+ 3068 0008 00000000 		.word	CS12B_1
+ 3069 000c 00000000 		.word	CS12B_2
+ 3070 0010 00000000 		.word	CS12B_3
+ 3071 0014 00000000 		.word	CS12B_4
+ 3072 0018 00000000 		.word	CS12B_5
+ 3073 001c 00000000 		.word	CS12B_6
+ 3074 0020 00000000 		.word	CS12B_7
+ 3075 0024 00000000 		.word	CS12B_8
+ 3076 0028 00000000 		.word	CS12B_9
+ 3077 002c 00000000 		.word	CS12B_dp
+ 3078 0030 00000000 		.word	CS12B_pl
+ 3079 0034 00000000 		.word	CS12B_mi
+ 3080 0038 00000000 		.word	CS12B_uk
+ 3081              		.section	.rodata.CS12B_4,"a",%progbits
+ 3082              		.align	2
+ 3085              	CS12B_4:
+ 3086 0000 0A       		.byte	10
+ 3087 0001 0C       		.byte	12
+ 3088 0002 07       		.byte	7
+ 3089 0003 00       		.byte	0
+ 3090 0004 07       		.byte	7
+ 3091 0005 00       		.byte	0
+ 3092 0006 0F       		.byte	15
+ 3093 0007 00       		.byte	0
+ 3094 0008 1F       		.byte	31
+ 3095 0009 00       		.byte	0
+ 3096 000a 37       		.byte	55
+ 3097 000b 00       		.byte	0
+ 3098 000c 27       		.byte	39
+ 3099 000d 00       		.byte	0
+ 3100 000e 7F       		.byte	127
+ 3101 000f 80       		.byte	-128
+ 3102 0010 FF       		.byte	-1
+ 3103 0011 C0       		.byte	-64
+ 3104 0012 FF       		.byte	-1
+ 3105 0013 80       		.byte	-128
+ 3106 0014 07       		.byte	7
+ 3107 0015 00       		.byte	0
+ 3108 0016 07       		.byte	7
+ 3109 0017 00       		.byte	0
+ 3110 0018 07       		.byte	7
+ 3111 0019 00       		.byte	0
+ 3112 001a 0000     		.section	.rodata.CS12B_5,"a",%progbits
+ 3113              		.align	2
+ 3116              	CS12B_5:
+ 3117 0000 09       		.byte	9
+ 3118 0001 0C       		.byte	12
+ 3119 0002 7F       		.byte	127
+ 3120 0003 80       		.byte	-128
+ 3121 0004 7F       		.byte	127
+ 3122 0005 80       		.byte	-128
+ 3123 0006 7F       		.byte	127
+ 3124 0007 80       		.byte	-128
+ 3125 0008 70       		.byte	112
+ 3126 0009 00       		.byte	0
+ 3127 000a 7F       		.byte	127
+ 3128 000b 00       		.byte	0
+ 3129 000c 7F       		.byte	127
+ 3130 000d 00       		.byte	0
+ 3131 000e 7F       		.byte	127
+ 3132 000f 80       		.byte	-128
+ 3133 0010 03       		.byte	3
+ 3134 0011 80       		.byte	-128
+ 3135 0012 63       		.byte	99
+ 3136 0013 80       		.byte	-128
+ 3137 0014 7F       		.byte	127
+ 3138 0015 80       		.byte	-128
+ 3139 0016 3F       		.byte	63
+ 3140 0017 00       		.byte	0
+ 3141 0018 1E       		.byte	30
+ 3142 0019 00       		.byte	0
+ 3143 001a 0000     		.section	.rodata.CS12B_6,"a",%progbits
+ 3144              		.align	2
+ 3147              	CS12B_6:
+ 3148 0000 08       		.byte	8
+ 3149 0001 0C       		.byte	12
+ 3150 0002 0C       		.byte	12
+ 3151 0003 1C       		.byte	28
+ 3152 0004 38       		.byte	56
+ 3153 0005 70       		.byte	112
+ 3154 0006 7E       		.byte	126
+ 3155 0007 FF       		.byte	-1
+ 3156 0008 FF       		.byte	-1
+ 3157 0009 E7       		.byte	-25
+ 3158 000a E7       		.byte	-25
+ 3159 000b FF       		.byte	-1
+ 3160 000c 7E       		.byte	126
+ 3161 000d 3C       		.byte	60
+ 3162 000e 0000     		.section	.rodata.CS12B_7,"a",%progbits
+ 3163              		.align	2
+ 3166              	CS12B_7:
+ 3167 0000 09       		.byte	9
+ 3168 0001 0C       		.byte	12
+ 3169 0002 FF       		.byte	-1
+ 3170 0003 80       		.byte	-128
+ 3171 0004 FF       		.byte	-1
+ 3172 0005 80       		.byte	-128
+ 3173 0006 FF       		.byte	-1
+ 3174 0007 00       		.byte	0
+ 3175 0008 03       		.byte	3
+ 3176 0009 00       		.byte	0
+ 3177 000a 06       		.byte	6
+ 3178 000b 00       		.byte	0
+ 3179 000c 0E       		.byte	14
+ 3180 000d 00       		.byte	0
+ 3181 000e 0E       		.byte	14
+ 3182 000f 00       		.byte	0
+ 3183 0010 1C       		.byte	28
+ 3184 0011 00       		.byte	0
+ 3185 0012 1C       		.byte	28
+ 3186 0013 00       		.byte	0
+ 3187 0014 1C       		.byte	28
+ 3188 0015 00       		.byte	0
+ 3189 0016 38       		.byte	56
+ 3190 0017 00       		.byte	0
+ 3191 0018 38       		.byte	56
+ 3192 0019 00       		.byte	0
+ 3193 001a 0000     		.section	.rodata.CS12B_8,"a",%progbits
+ 3194              		.align	2
+ 3197              	CS12B_8:
+ 3198 0000 08       		.byte	8
+ 3199 0001 0C       		.byte	12
+ 3200 0002 7C       		.byte	124
+ 3201 0003 FF       		.byte	-1
+ 3202 0004 FF       		.byte	-1
+ 3203 0005 E7       		.byte	-25
+ 3204 0006 FF       		.byte	-1
+ 3205 0007 7E       		.byte	126
+ 3206 0008 FF       		.byte	-1
+ 3207 0009 E7       		.byte	-25
+ 3208 000a E7       		.byte	-25
+ 3209 000b FF       		.byte	-1
+ 3210 000c FE       		.byte	-2
+ 3211 000d 3C       		.byte	60
+ 3212 000e 0000     		.section	.rodata.CS12B_9,"a",%progbits
+ 3213              		.align	2
+ 3216              	CS12B_9:
+ 3217 0000 08       		.byte	8
+ 3218 0001 0C       		.byte	12
+ 3219 0002 3C       		.byte	60
+ 3220 0003 7E       		.byte	126
+ 3221 0004 FF       		.byte	-1
+ 3222 0005 E7       		.byte	-25
+ 3223 0006 E7       		.byte	-25
+ 3224 0007 FF       		.byte	-1
+ 3225 0008 7F       		.byte	127
+ 3226 0009 3E       		.byte	62
+ 3227 000a 0E       		.byte	14
+ 3228 000b 1C       		.byte	28
+ 3229 000c 78       		.byte	120
+ 3230 000d 60       		.byte	96
+ 3231 000e 0000     		.section	.rodata.CmS26_dp,"a",%progbits
+ 3232              		.align	2
+ 3235              	CmS26_dp:
+ 3236 0000 04       		.byte	4
+ 3237 0001 1A       		.byte	26
+ 3238 0002 00       		.byte	0
+ 3239 0003 00       		.byte	0
+ 3240 0004 00       		.byte	0
+ 3241 0005 00       		.byte	0
+ 3242 0006 00       		.byte	0
+ 3243 0007 00       		.byte	0
+ 3244 0008 00       		.byte	0
+ 3245 0009 00       		.byte	0
+ 3246 000a 00       		.byte	0
+ 3247 000b 00       		.byte	0
+ 3248 000c 00       		.byte	0
+ 3249 000d 00       		.byte	0
+ 3250 000e 00       		.byte	0
+ 3251 000f 00       		.byte	0
+ 3252 0010 00       		.byte	0
+ 3253 0011 00       		.byte	0
+ 3254 0012 00       		.byte	0
+ 3255 0013 00       		.byte	0
+ 3256 0014 00       		.byte	0
+ 3257 0015 00       		.byte	0
+ 3258 0016 00       		.byte	0
+ 3259 0017 00       		.byte	0
+ 3260 0018 60       		.byte	96
+ 3261 0019 F0       		.byte	-16
+ 3262 001a F0       		.byte	-16
+ 3263 001b 60       		.byte	96
+ 3264              		.section	.rodata.F3_3,"a",%progbits
+ 3265              		.align	2
+ 3268              	F3_3:
+ 3269 0000 0F       		.byte	15
+ 3270 0001 15       		.byte	21
+ 3271 0002 1F       		.byte	31
+ 3272 0003 F0       		.byte	-16
+ 3273 0004 3F       		.byte	63
+ 3274 0005 F8       		.byte	-8
+ 3275 0006 7F       		.byte	127
+ 3276 0007 FC       		.byte	-4
+ 3277 0008 F0       		.byte	-16
+ 3278 0009 1E       		.byte	30
+ 3279 000a E0       		.byte	-32
+ 3280 000b 0E       		.byte	14
+ 3281 000c E0       		.byte	-32
+ 3282 000d 0E       		.byte	14
+ 3283 000e 00       		.byte	0
+ 3284 000f 0E       		.byte	14
+ 3285 0010 00       		.byte	0
+ 3286 0011 0E       		.byte	14
+ 3287 0012 00       		.byte	0
+ 3288 0013 1C       		.byte	28
+ 3289 0014 1F       		.byte	31
+ 3290 0015 F8       		.byte	-8
+ 3291 0016 1F       		.byte	31
+ 3292 0017 F8       		.byte	-8
+ 3293 0018 1F       		.byte	31
+ 3294 0019 FC       		.byte	-4
+ 3295 001a 00       		.byte	0
+ 3296 001b 1E       		.byte	30
+ 3297 001c 00       		.byte	0
+ 3298 001d 0E       		.byte	14
+ 3299 001e 00       		.byte	0
+ 3300 001f 0E       		.byte	14
+ 3301 0020 E0       		.byte	-32
+ 3302 0021 0E       		.byte	14
+ 3303 0022 E0       		.byte	-32
+ 3304 0023 0E       		.byte	14
+ 3305 0024 F0       		.byte	-16
+ 3306 0025 1E       		.byte	30
+ 3307 0026 7F       		.byte	127
+ 3308 0027 FC       		.byte	-4
+ 3309 0028 3F       		.byte	63
+ 3310 0029 F8       		.byte	-8
+ 3311 002a 1F       		.byte	31
+ 3312 002b F0       		.byte	-16
+ 3313              		.section	.rodata.CmS28_uk,"a",%progbits
+ 3314              		.align	2
+ 3317              	CmS28_uk:
+ 3318 0000 10       		.byte	16
+ 3319 0001 1A       		.byte	26
+ 3320 0002 00       		.byte	0
+ 3321 0003 00       		.byte	0
+ 3322 0004 00       		.byte	0
+ 3323 0005 00       		.byte	0
+ 3324 0006 3F       		.byte	63
+ 3325 0007 FF       		.byte	-1
+ 3326 0008 3F       		.byte	63
+ 3327 0009 FF       		.byte	-1
+ 3328 000a 30       		.byte	48
+ 3329 000b 03       		.byte	3
+ 3330 000c 30       		.byte	48
+ 3331 000d 03       		.byte	3
+ 3332 000e 30       		.byte	48
+ 3333 000f 03       		.byte	3
+ 3334 0010 30       		.byte	48
+ 3335 0011 03       		.byte	3
+ 3336 0012 30       		.byte	48
+ 3337 0013 03       		.byte	3
+ 3338 0014 30       		.byte	48
+ 3339 0015 03       		.byte	3
+ 3340 0016 30       		.byte	48
+ 3341 0017 03       		.byte	3
+ 3342 0018 30       		.byte	48
+ 3343 0019 03       		.byte	3
+ 3344 001a 30       		.byte	48
+ 3345 001b 03       		.byte	3
+ 3346 001c 30       		.byte	48
+ 3347 001d 03       		.byte	3
+ 3348 001e 30       		.byte	48
+ 3349 001f 03       		.byte	3
+ 3350 0020 30       		.byte	48
+ 3351 0021 03       		.byte	3
+ 3352 0022 30       		.byte	48
+ 3353 0023 03       		.byte	3
+ 3354 0024 30       		.byte	48
+ 3355 0025 03       		.byte	3
+ 3356 0026 30       		.byte	48
+ 3357 0027 03       		.byte	3
+ 3358 0028 30       		.byte	48
+ 3359 0029 03       		.byte	3
+ 3360 002a 30       		.byte	48
+ 3361 002b 03       		.byte	3
+ 3362 002c 30       		.byte	48
+ 3363 002d 03       		.byte	3
+ 3364 002e 30       		.byte	48
+ 3365 002f 03       		.byte	3
+ 3366 0030 30       		.byte	48
+ 3367 0031 03       		.byte	3
+ 3368 0032 3F       		.byte	63
+ 3369 0033 FF       		.byte	-1
+ 3370 0034 3F       		.byte	63
+ 3371 0035 FF       		.byte	-1
+ 3372 0036 0000     		.section	.rodata.F3_uk,"a",%progbits
+ 3373              		.align	2
+ 3376              	F3_uk:
+ 3377 0000 0F       		.byte	15
+ 3378 0001 12       		.byte	18
+ 3379 0002 00       		.byte	0
+ 3380 0003 00       		.byte	0
+ 3381 0004 00       		.byte	0
+ 3382 0005 00       		.byte	0
+ 3383 0006 00       		.byte	0
+ 3384 0007 00       		.byte	0
+ 3385 0008 1F       		.byte	31
+ 3386 0009 F0       		.byte	-16
+ 3387 000a 1F       		.byte	31
+ 3388 000b F0       		.byte	-16
+ 3389 000c 1F       		.byte	31
+ 3390 000d F0       		.byte	-16
+ 3391 000e 1C       		.byte	28
+ 3392 000f 70       		.byte	112
+ 3393 0010 1C       		.byte	28
+ 3394 0011 70       		.byte	112
+ 3395 0012 1C       		.byte	28
+ 3396 0013 70       		.byte	112
+ 3397 0014 1C       		.byte	28
+ 3398 0015 70       		.byte	112
+ 3399 0016 1C       		.byte	28
+ 3400 0017 70       		.byte	112
+ 3401 0018 1C       		.byte	28
+ 3402 0019 70       		.byte	112
+ 3403 001a 1C       		.byte	28
+ 3404 001b 70       		.byte	112
+ 3405 001c 1C       		.byte	28
+ 3406 001d 70       		.byte	112
+ 3407 001e 1C       		.byte	28
+ 3408 001f 70       		.byte	112
+ 3409 0020 1C       		.byte	28
+ 3410 0021 70       		.byte	112
+ 3411 0022 1F       		.byte	31
+ 3412 0023 F0       		.byte	-16
+ 3413 0024 1F       		.byte	31
+ 3414 0025 F0       		.byte	-16
+ 3415 0026 0000     		.section	.rodata.CS10B_uk,"a",%progbits
+ 3416              		.align	2
+ 3419              	CS10B_uk:
+ 3420 0000 06       		.byte	6
+ 3421 0001 08       		.byte	8
+ 3422 0002 00       		.byte	0
+ 3423 0003 00       		.byte	0
+ 3424 0004 FC       		.byte	-4
+ 3425 0005 84       		.byte	-124
+ 3426 0006 84       		.byte	-124
+ 3427 0007 84       		.byte	-124
+ 3428 0008 84       		.byte	-124
+ 3429 0009 FC       		.byte	-4
+ 3430 000a 0000     		.section	.rodata.ComicSans26,"a",%progbits
+ 3431              		.align	2
+ 3434              	ComicSans26:
+ 3435 0000 04       		.byte	4
+ 3436 0001 1A       		.byte	26
+ 3437 0002 0000     		.space	2
+ 3438 0004 00000000 		.word	CmS26_0
+ 3439 0008 00000000 		.word	CmS26_1
+ 3440 000c 00000000 		.word	CmS26_2
+ 3441 0010 00000000 		.word	CmS26_3
+ 3442 0014 00000000 		.word	CmS26_4
+ 3443 0018 00000000 		.word	CmS26_5
+ 3444 001c 00000000 		.word	CmS26_6
+ 3445 0020 00000000 		.word	CmS26_7
+ 3446 0024 00000000 		.word	CmS26_8
+ 3447 0028 00000000 		.word	CmS26_9
+ 3448 002c 00000000 		.word	CmS26_dp
+ 3449 0030 00000000 		.word	CmS26_pl
+ 3450 0034 00000000 		.word	CmS26_mi
+ 3451 0038 00000000 		.word	CmS26_uk
+ 3452              		.section	.rodata.F2_0,"a",%progbits
+ 3453              		.align	2
+ 3456              	F2_0:
+ 3457 0000 0A       		.byte	10
+ 3458 0001 0E       		.byte	14
+ 3459 0002 3F       		.byte	63
+ 3460 0003 00       		.byte	0
+ 3461 0004 7F       		.byte	127
+ 3462 0005 80       		.byte	-128
+ 3463 0006 E1       		.byte	-31
+ 3464 0007 C0       		.byte	-64
+ 3465 0008 C0       		.byte	-64
+ 3466 0009 C0       		.byte	-64
+ 3467 000a C0       		.byte	-64
+ 3468 000b C0       		.byte	-64
+ 3469 000c C0       		.byte	-64
+ 3470 000d C0       		.byte	-64
+ 3471 000e C0       		.byte	-64
+ 3472 000f C0       		.byte	-64
+ 3473 0010 C0       		.byte	-64
+ 3474 0011 C0       		.byte	-64
+ 3475 0012 C0       		.byte	-64
+ 3476 0013 C0       		.byte	-64
+ 3477 0014 C0       		.byte	-64
+ 3478 0015 C0       		.byte	-64
+ 3479 0016 C0       		.byte	-64
+ 3480 0017 C0       		.byte	-64
+ 3481 0018 E1       		.byte	-31
+ 3482 0019 C0       		.byte	-64
+ 3483 001a 7F       		.byte	127
+ 3484 001b 80       		.byte	-128
+ 3485 001c 3F       		.byte	63
+ 3486 001d 00       		.byte	0
+ 3487 001e 0000     		.section	.rodata.ComicSans28,"a",%progbits
+ 3488              		.align	2
+ 3491              	ComicSans28:
+ 3492 0000 04       		.byte	4
+ 3493 0001 1C       		.byte	28
+ 3494 0002 0000     		.space	2
+ 3495 0004 00000000 		.word	CmS28_0
+ 3496 0008 00000000 		.word	CmS28_1
+ 3497 000c 00000000 		.word	CmS28_2
+ 3498 0010 00000000 		.word	CmS28_3
+ 3499 0014 00000000 		.word	CmS28_4
+ 3500 0018 00000000 		.word	CmS28_5
+ 3501 001c 00000000 		.word	CmS28_6
+ 3502 0020 00000000 		.word	CmS28_7
+ 3503 0024 00000000 		.word	CmS28_8
+ 3504 0028 00000000 		.word	CmS28_9
+ 3505 002c 00000000 		.word	CmS28_dp
+ 3506 0030 00000000 		.word	CmS28_pl
+ 3507 0034 00000000 		.word	CmS28_mi
+ 3508 0038 00000000 		.word	CmS28_uk
+ 3509              		.section	.rodata.F2_1,"a",%progbits
+ 3510              		.align	2
+ 3513              	F2_1:
+ 3514 0000 0A       		.byte	10
+ 3515 0001 0E       		.byte	14
+ 3516 0002 0C       		.byte	12
+ 3517 0003 00       		.byte	0
+ 3518 0004 0C       		.byte	12
+ 3519 0005 00       		.byte	0
+ 3520 0006 1C       		.byte	28
+ 3521 0007 00       		.byte	0
+ 3522 0008 3C       		.byte	60
+ 3523 0009 00       		.byte	0
+ 3524 000a 3C       		.byte	60
+ 3525 000b 00       		.byte	0
+ 3526 000c 0C       		.byte	12
+ 3527 000d 00       		.byte	0
+ 3528 000e 0C       		.byte	12
+ 3529 000f 00       		.byte	0
+ 3530 0010 0C       		.byte	12
+ 3531 0011 00       		.byte	0
+ 3532 0012 0C       		.byte	12
+ 3533 0013 00       		.byte	0
+ 3534 0014 0C       		.byte	12
+ 3535 0015 00       		.byte	0
+ 3536 0016 0C       		.byte	12
+ 3537 0017 00       		.byte	0
+ 3538 0018 0C       		.byte	12
+ 3539 0019 00       		.byte	0
+ 3540 001a 3F       		.byte	63
+ 3541 001b 00       		.byte	0
+ 3542 001c 3F       		.byte	63
+ 3543 001d 00       		.byte	0
+ 3544 001e 0000     		.section	.rodata.CmS26_7,"a",%progbits
+ 3545              		.align	2
+ 3548              	CmS26_7:
+ 3549 0000 14       		.byte	20
+ 3550 0001 1A       		.byte	26
+ 3551 0002 FF       		.byte	-1
+ 3552 0003 FF       		.byte	-1
+ 3553 0004 F0       		.byte	-16
+ 3554 0005 FF       		.byte	-1
+ 3555 0006 FF       		.byte	-1
+ 3556 0007 F0       		.byte	-16
+ 3557 0008 7F       		.byte	127
+ 3558 0009 FF       		.byte	-1
+ 3559 000a E0       		.byte	-32
+ 3560 000b 00       		.byte	0
+ 3561 000c 03       		.byte	3
+ 3562 000d E0       		.byte	-32
+ 3563 000e 00       		.byte	0
+ 3564 000f 07       		.byte	7
+ 3565 0010 C0       		.byte	-64
+ 3566 0011 00       		.byte	0
+ 3567 0012 0F       		.byte	15
+ 3568 0013 80       		.byte	-128
+ 3569 0014 00       		.byte	0
+ 3570 0015 0F       		.byte	15
+ 3571 0016 00       		.byte	0
+ 3572 0017 00       		.byte	0
+ 3573 0018 1E       		.byte	30
+ 3574 0019 00       		.byte	0
+ 3575 001a 00       		.byte	0
+ 3576 001b 1E       		.byte	30
+ 3577 001c 00       		.byte	0
+ 3578 001d 00       		.byte	0
+ 3579 001e 3C       		.byte	60
+ 3580 001f 00       		.byte	0
+ 3581 0020 00       		.byte	0
+ 3582 0021 3C       		.byte	60
+ 3583 0022 00       		.byte	0
+ 3584 0023 00       		.byte	0
+ 3585 0024 78       		.byte	120
+ 3586 0025 00       		.byte	0
+ 3587 0026 00       		.byte	0
+ 3588 0027 78       		.byte	120
+ 3589 0028 00       		.byte	0
+ 3590 0029 00       		.byte	0
+ 3591 002a F0       		.byte	-16
+ 3592 002b 00       		.byte	0
+ 3593 002c 00       		.byte	0
+ 3594 002d F0       		.byte	-16
+ 3595 002e 00       		.byte	0
+ 3596 002f 01       		.byte	1
+ 3597 0030 E0       		.byte	-32
+ 3598 0031 00       		.byte	0
+ 3599 0032 01       		.byte	1
+ 3600 0033 E0       		.byte	-32
+ 3601 0034 00       		.byte	0
+ 3602 0035 01       		.byte	1
+ 3603 0036 C0       		.byte	-64
+ 3604 0037 00       		.byte	0
+ 3605 0038 03       		.byte	3
+ 3606 0039 C0       		.byte	-64
+ 3607 003a 00       		.byte	0
+ 3608 003b 03       		.byte	3
+ 3609 003c 80       		.byte	-128
+ 3610 003d 00       		.byte	0
+ 3611 003e 07       		.byte	7
+ 3612 003f 80       		.byte	-128
+ 3613 0040 00       		.byte	0
+ 3614 0041 07       		.byte	7
+ 3615 0042 80       		.byte	-128
+ 3616 0043 00       		.byte	0
+ 3617 0044 07       		.byte	7
+ 3618 0045 00       		.byte	0
+ 3619 0046 00       		.byte	0
+ 3620 0047 0F       		.byte	15
+ 3621 0048 00       		.byte	0
+ 3622 0049 00       		.byte	0
+ 3623 004a 0E       		.byte	14
+ 3624 004b 00       		.byte	0
+ 3625 004c 00       		.byte	0
+ 3626 004d 0E       		.byte	14
+ 3627 004e 00       		.byte	0
+ 3628 004f 00       		.byte	0
+ 3629              		.section	.rodata.F2_2,"a",%progbits
+ 3630              		.align	2
+ 3633              	F2_2:
+ 3634 0000 0A       		.byte	10
+ 3635 0001 0E       		.byte	14
+ 3636 0002 3F       		.byte	63
+ 3637 0003 00       		.byte	0
+ 3638 0004 7F       		.byte	127
+ 3639 0005 80       		.byte	-128
+ 3640 0006 E1       		.byte	-31
+ 3641 0007 C0       		.byte	-64
+ 3642 0008 C0       		.byte	-64
+ 3643 0009 C0       		.byte	-64
+ 3644 000a 00       		.byte	0
+ 3645 000b C0       		.byte	-64
+ 3646 000c 01       		.byte	1
+ 3647 000d C0       		.byte	-64
+ 3648 000e 03       		.byte	3
+ 3649 000f 80       		.byte	-128
+ 3650 0010 07       		.byte	7
+ 3651 0011 00       		.byte	0
+ 3652 0012 0E       		.byte	14
+ 3653 0013 00       		.byte	0
+ 3654 0014 1C       		.byte	28
+ 3655 0015 00       		.byte	0
+ 3656 0016 38       		.byte	56
+ 3657 0017 00       		.byte	0
+ 3658 0018 70       		.byte	112
+ 3659 0019 00       		.byte	0
+ 3660 001a FF       		.byte	-1
+ 3661 001b C0       		.byte	-64
+ 3662 001c FF       		.byte	-1
+ 3663 001d C0       		.byte	-64
+ 3664 001e 0000     		.section	.rodata.CmS26_0,"a",%progbits
+ 3665              		.align	2
+ 3668              	CmS26_0:
+ 3669 0000 13       		.byte	19
+ 3670 0001 1A       		.byte	26
+ 3671 0002 01       		.byte	1
+ 3672 0003 F8       		.byte	-8
+ 3673 0004 00       		.byte	0
+ 3674 0005 07       		.byte	7
+ 3675 0006 FE       		.byte	-2
+ 3676 0007 00       		.byte	0
+ 3677 0008 0F       		.byte	15
+ 3678 0009 FF       		.byte	-1
+ 3679 000a 00       		.byte	0
+ 3680 000b 1E       		.byte	30
+ 3681 000c 0F       		.byte	15
+ 3682 000d 80       		.byte	-128
+ 3683 000e 3C       		.byte	60
+ 3684 000f 03       		.byte	3
+ 3685 0010 80       		.byte	-128
+ 3686 0011 38       		.byte	56
+ 3687 0012 01       		.byte	1
+ 3688 0013 C0       		.byte	-64
+ 3689 0014 70       		.byte	112
+ 3690 0015 01       		.byte	1
+ 3691 0016 C0       		.byte	-64
+ 3692 0017 70       		.byte	112
+ 3693 0018 01       		.byte	1
+ 3694 0019 E0       		.byte	-32
+ 3695 001a F0       		.byte	-16
+ 3696 001b 00       		.byte	0
+ 3697 001c E0       		.byte	-32
+ 3698 001d E0       		.byte	-32
+ 3699 001e 00       		.byte	0
+ 3700 001f E0       		.byte	-32
+ 3701 0020 E0       		.byte	-32
+ 3702 0021 00       		.byte	0
+ 3703 0022 E0       		.byte	-32
+ 3704 0023 E0       		.byte	-32
+ 3705 0024 00       		.byte	0
+ 3706 0025 E0       		.byte	-32
+ 3707 0026 E0       		.byte	-32
+ 3708 0027 00       		.byte	0
+ 3709 0028 E0       		.byte	-32
+ 3710 0029 E0       		.byte	-32
+ 3711 002a 00       		.byte	0
+ 3712 002b E0       		.byte	-32
+ 3713 002c E0       		.byte	-32
+ 3714 002d 00       		.byte	0
+ 3715 002e E0       		.byte	-32
+ 3716 002f E0       		.byte	-32
+ 3717 0030 00       		.byte	0
+ 3718 0031 E0       		.byte	-32
+ 3719 0032 E0       		.byte	-32
+ 3720 0033 00       		.byte	0
+ 3721 0034 E0       		.byte	-32
+ 3722 0035 F0       		.byte	-16
+ 3723 0036 01       		.byte	1
+ 3724 0037 C0       		.byte	-64
+ 3725 0038 70       		.byte	112
+ 3726 0039 01       		.byte	1
+ 3727 003a C0       		.byte	-64
+ 3728 003b 70       		.byte	112
+ 3729 003c 01       		.byte	1
+ 3730 003d C0       		.byte	-64
+ 3731 003e 78       		.byte	120
+ 3732 003f 03       		.byte	3
+ 3733 0040 C0       		.byte	-64
+ 3734 0041 3C       		.byte	60
+ 3735 0042 07       		.byte	7
+ 3736 0043 80       		.byte	-128
+ 3737 0044 3E       		.byte	62
+ 3738 0045 0F       		.byte	15
+ 3739 0046 00       		.byte	0
+ 3740 0047 1F       		.byte	31
+ 3741 0048 FF       		.byte	-1
+ 3742 0049 00       		.byte	0
+ 3743 004a 0F       		.byte	15
+ 3744 004b FE       		.byte	-2
+ 3745 004c 00       		.byte	0
+ 3746 004d 03       		.byte	3
+ 3747 004e F8       		.byte	-8
+ 3748 004f 00       		.byte	0
+ 3749              		.section	.rodata.CmS26_1,"a",%progbits
+ 3750              		.align	2
+ 3753              	CmS26_1:
+ 3754 0000 09       		.byte	9
+ 3755 0001 1A       		.byte	26
+ 3756 0002 0C       		.byte	12
+ 3757 0003 00       		.byte	0
+ 3758 0004 1C       		.byte	28
+ 3759 0005 00       		.byte	0
+ 3760 0006 3C       		.byte	60
+ 3761 0007 00       		.byte	0
+ 3762 0008 7C       		.byte	124
+ 3763 0009 00       		.byte	0
+ 3764 000a FC       		.byte	-4
+ 3765 000b 00       		.byte	0
+ 3766 000c FC       		.byte	-4
+ 3767 000d 00       		.byte	0
+ 3768 000e DC       		.byte	-36
+ 3769 000f 00       		.byte	0
+ 3770 0010 1C       		.byte	28
+ 3771 0011 00       		.byte	0
+ 3772 0012 1C       		.byte	28
+ 3773 0013 00       		.byte	0
+ 3774 0014 1C       		.byte	28
+ 3775 0015 00       		.byte	0
+ 3776 0016 1C       		.byte	28
+ 3777 0017 00       		.byte	0
+ 3778 0018 1C       		.byte	28
+ 3779 0019 00       		.byte	0
+ 3780 001a 1C       		.byte	28
+ 3781 001b 00       		.byte	0
+ 3782 001c 1C       		.byte	28
+ 3783 001d 00       		.byte	0
+ 3784 001e 1C       		.byte	28
+ 3785 001f 00       		.byte	0
+ 3786 0020 1C       		.byte	28
+ 3787 0021 00       		.byte	0
+ 3788 0022 1C       		.byte	28
+ 3789 0023 00       		.byte	0
+ 3790 0024 1C       		.byte	28
+ 3791 0025 00       		.byte	0
+ 3792 0026 1C       		.byte	28
+ 3793 0027 00       		.byte	0
+ 3794 0028 1C       		.byte	28
+ 3795 0029 00       		.byte	0
+ 3796 002a 1C       		.byte	28
+ 3797 002b 00       		.byte	0
+ 3798 002c 1C       		.byte	28
+ 3799 002d 00       		.byte	0
+ 3800 002e 1C       		.byte	28
+ 3801 002f 00       		.byte	0
+ 3802 0030 FF       		.byte	-1
+ 3803 0031 80       		.byte	-128
+ 3804 0032 FF       		.byte	-1
+ 3805 0033 80       		.byte	-128
+ 3806 0034 FF       		.byte	-1
+ 3807 0035 80       		.byte	-128
+ 3808 0036 0000     		.section	.rodata.CmS26_2,"a",%progbits
+ 3809              		.align	2
+ 3812              	CmS26_2:
+ 3813 0000 0F       		.byte	15
+ 3814 0001 1A       		.byte	26
+ 3815 0002 07       		.byte	7
+ 3816 0003 E0       		.byte	-32
+ 3817 0004 1F       		.byte	31
+ 3818 0005 F8       		.byte	-8
+ 3819 0006 3F       		.byte	63
+ 3820 0007 FC       		.byte	-4
+ 3821 0008 7C       		.byte	124
+ 3822 0009 3C       		.byte	60
+ 3823 000a F0       		.byte	-16
+ 3824 000b 0E       		.byte	14
+ 3825 000c E0       		.byte	-32
+ 3826 000d 0E       		.byte	14
+ 3827 000e 00       		.byte	0
+ 3828 000f 0E       		.byte	14
+ 3829 0010 00       		.byte	0
+ 3830 0011 0E       		.byte	14
+ 3831 0012 00       		.byte	0
+ 3832 0013 1E       		.byte	30
+ 3833 0014 00       		.byte	0
+ 3834 0015 1C       		.byte	28
+ 3835 0016 00       		.byte	0
+ 3836 0017 3C       		.byte	60
+ 3837 0018 00       		.byte	0
+ 3838 0019 F8       		.byte	-8
+ 3839 001a 01       		.byte	1
+ 3840 001b F0       		.byte	-16
+ 3841 001c 07       		.byte	7
+ 3842 001d E0       		.byte	-32
+ 3843 001e 0F       		.byte	15
+ 3844 001f C0       		.byte	-64
+ 3845 0020 1F       		.byte	31
+ 3846 0021 00       		.byte	0
+ 3847 0022 3E       		.byte	62
+ 3848 0023 00       		.byte	0
+ 3849 0024 7C       		.byte	124
+ 3850 0025 00       		.byte	0
+ 3851 0026 78       		.byte	120
+ 3852 0027 00       		.byte	0
+ 3853 0028 F0       		.byte	-16
+ 3854 0029 00       		.byte	0
+ 3855 002a E0       		.byte	-32
+ 3856 002b 00       		.byte	0
+ 3857 002c E0       		.byte	-32
+ 3858 002d 00       		.byte	0
+ 3859 002e E3       		.byte	-29
+ 3860 002f FC       		.byte	-4
+ 3861 0030 FF       		.byte	-1
+ 3862 0031 FE       		.byte	-2
+ 3863 0032 FF       		.byte	-1
+ 3864 0033 FE       		.byte	-2
+ 3865 0034 78       		.byte	120
+ 3866 0035 0E       		.byte	14
+ 3867 0036 0000     		.section	.rodata.CmS26_3,"a",%progbits
+ 3868              		.align	2
+ 3871              	CmS26_3:
+ 3872 0000 10       		.byte	16
+ 3873 0001 1A       		.byte	26
+ 3874 0002 07       		.byte	7
+ 3875 0003 E0       		.byte	-32
+ 3876 0004 1F       		.byte	31
+ 3877 0005 F8       		.byte	-8
+ 3878 0006 7F       		.byte	127
+ 3879 0007 FC       		.byte	-4
+ 3880 0008 78       		.byte	120
+ 3881 0009 3C       		.byte	60
+ 3882 000a 70       		.byte	112
+ 3883 000b 1E       		.byte	30
+ 3884 000c 00       		.byte	0
+ 3885 000d 0E       		.byte	14
+ 3886 000e 00       		.byte	0
+ 3887 000f 0E       		.byte	14
+ 3888 0010 00       		.byte	0
+ 3889 0011 0E       		.byte	14
+ 3890 0012 00       		.byte	0
+ 3891 0013 1E       		.byte	30
+ 3892 0014 00       		.byte	0
+ 3893 0015 FE       		.byte	-2
+ 3894 0016 07       		.byte	7
+ 3895 0017 FC       		.byte	-4
+ 3896 0018 0F       		.byte	15
+ 3897 0019 F8       		.byte	-8
+ 3898 001a 0F       		.byte	15
+ 3899 001b E0       		.byte	-32
+ 3900 001c 00       		.byte	0
+ 3901 001d F8       		.byte	-8
+ 3902 001e 00       		.byte	0
+ 3903 001f 3C       		.byte	60
+ 3904 0020 00       		.byte	0
+ 3905 0021 0E       		.byte	14
+ 3906 0022 00       		.byte	0
+ 3907 0023 0F       		.byte	15
+ 3908 0024 00       		.byte	0
+ 3909 0025 07       		.byte	7
+ 3910 0026 00       		.byte	0
+ 3911 0027 07       		.byte	7
+ 3912 0028 00       		.byte	0
+ 3913 0029 07       		.byte	7
+ 3914 002a E0       		.byte	-32
+ 3915 002b 07       		.byte	7
+ 3916 002c F0       		.byte	-16
+ 3917 002d 0E       		.byte	14
+ 3918 002e F8       		.byte	-8
+ 3919 002f 3E       		.byte	62
+ 3920 0030 7F       		.byte	127
+ 3921 0031 FC       		.byte	-4
+ 3922 0032 3F       		.byte	63
+ 3923 0033 F8       		.byte	-8
+ 3924 0034 0F       		.byte	15
+ 3925 0035 E0       		.byte	-32
+ 3926 0036 0000     		.section	.rodata.CmS26_4,"a",%progbits
+ 3927              		.align	2
+ 3930              	CmS26_4:
+ 3931 0000 13       		.byte	19
+ 3932 0001 1A       		.byte	26
+ 3933 0002 00       		.byte	0
+ 3934 0003 1E       		.byte	30
+ 3935 0004 00       		.byte	0
+ 3936 0005 00       		.byte	0
+ 3937 0006 3E       		.byte	62
+ 3938 0007 00       		.byte	0
+ 3939 0008 00       		.byte	0
+ 3940 0009 3E       		.byte	62
+ 3941 000a 00       		.byte	0
+ 3942 000b 00       		.byte	0
+ 3943 000c 7E       		.byte	126
+ 3944 000d 00       		.byte	0
+ 3945 000e 00       		.byte	0
+ 3946 000f 7E       		.byte	126
+ 3947 0010 00       		.byte	0
+ 3948 0011 00       		.byte	0
+ 3949 0012 EE       		.byte	-18
+ 3950 0013 00       		.byte	0
+ 3951 0014 01       		.byte	1
+ 3952 0015 EE       		.byte	-18
+ 3953 0016 00       		.byte	0
+ 3954 0017 01       		.byte	1
+ 3955 0018 CE       		.byte	-50
+ 3956 0019 00       		.byte	0
+ 3957 001a 03       		.byte	3
+ 3958 001b CE       		.byte	-50
+ 3959 001c 00       		.byte	0
+ 3960 001d 03       		.byte	3
+ 3961 001e 8E       		.byte	-114
+ 3962 001f 00       		.byte	0
+ 3963 0020 07       		.byte	7
+ 3964 0021 8E       		.byte	-114
+ 3965 0022 00       		.byte	0
+ 3966 0023 0F       		.byte	15
+ 3967 0024 0E       		.byte	14
+ 3968 0025 00       		.byte	0
+ 3969 0026 0F       		.byte	15
+ 3970 0027 0E       		.byte	14
+ 3971 0028 00       		.byte	0
+ 3972 0029 1E       		.byte	30
+ 3973 002a 0E       		.byte	14
+ 3974 002b 00       		.byte	0
+ 3975 002c 3C       		.byte	60
+ 3976 002d 0E       		.byte	14
+ 3977 002e 00       		.byte	0
+ 3978 002f 3C       		.byte	60
+ 3979 0030 0E       		.byte	14
+ 3980 0031 00       		.byte	0
+ 3981 0032 78       		.byte	120
+ 3982 0033 0E       		.byte	14
+ 3983 0034 00       		.byte	0
+ 3984 0035 FF       		.byte	-1
+ 3985 0036 FF       		.byte	-1
+ 3986 0037 E0       		.byte	-32
+ 3987 0038 FF       		.byte	-1
+ 3988 0039 FF       		.byte	-1
+ 3989 003a E0       		.byte	-32
+ 3990 003b FF       		.byte	-1
+ 3991 003c FF       		.byte	-1
+ 3992 003d E0       		.byte	-32
+ 3993 003e 00       		.byte	0
+ 3994 003f 0E       		.byte	14
+ 3995 0040 00       		.byte	0
+ 3996 0041 00       		.byte	0
+ 3997 0042 0E       		.byte	14
+ 3998 0043 00       		.byte	0
+ 3999 0044 00       		.byte	0
+ 4000 0045 0E       		.byte	14
+ 4001 0046 00       		.byte	0
+ 4002 0047 00       		.byte	0
+ 4003 0048 0E       		.byte	14
+ 4004 0049 00       		.byte	0
+ 4005 004a 00       		.byte	0
+ 4006 004b 0E       		.byte	14
+ 4007 004c 00       		.byte	0
+ 4008 004d 00       		.byte	0
+ 4009 004e 0E       		.byte	14
+ 4010 004f 00       		.byte	0
+ 4011              		.section	.rodata.CmS26_5,"a",%progbits
+ 4012              		.align	2
+ 4015              	CmS26_5:
+ 4016 0000 11       		.byte	17
+ 4017 0001 1A       		.byte	26
+ 4018 0002 FF       		.byte	-1
+ 4019 0003 FF       		.byte	-1
+ 4020 0004 00       		.byte	0
+ 4021 0005 FF       		.byte	-1
+ 4022 0006 FF       		.byte	-1
+ 4023 0007 00       		.byte	0
+ 4024 0008 7F       		.byte	127
+ 4025 0009 FE       		.byte	-2
+ 4026 000a 00       		.byte	0
+ 4027 000b 70       		.byte	112
+ 4028 000c 00       		.byte	0
+ 4029 000d 00       		.byte	0
+ 4030 000e 70       		.byte	112
+ 4031 000f 00       		.byte	0
+ 4032 0010 00       		.byte	0
+ 4033 0011 70       		.byte	112
+ 4034 0012 00       		.byte	0
+ 4035 0013 00       		.byte	0
+ 4036 0014 70       		.byte	112
+ 4037 0015 00       		.byte	0
+ 4038 0016 00       		.byte	0
+ 4039 0017 73       		.byte	115
+ 4040 0018 F8       		.byte	-8
+ 4041 0019 00       		.byte	0
+ 4042 001a FF       		.byte	-1
+ 4043 001b FC       		.byte	-4
+ 4044 001c 00       		.byte	0
+ 4045 001d FF       		.byte	-1
+ 4046 001e FE       		.byte	-2
+ 4047 001f 00       		.byte	0
+ 4048 0020 FE       		.byte	-2
+ 4049 0021 0F       		.byte	15
+ 4050 0022 00       		.byte	0
+ 4051 0023 FC       		.byte	-4
+ 4052 0024 07       		.byte	7
+ 4053 0025 00       		.byte	0
+ 4054 0026 F8       		.byte	-8
+ 4055 0027 07       		.byte	7
+ 4056 0028 80       		.byte	-128
+ 4057 0029 F0       		.byte	-16
+ 4058 002a 03       		.byte	3
+ 4059 002b 80       		.byte	-128
+ 4060 002c E0       		.byte	-32
+ 4061 002d 03       		.byte	3
+ 4062 002e 80       		.byte	-128
+ 4063 002f 00       		.byte	0
+ 4064 0030 03       		.byte	3
+ 4065 0031 80       		.byte	-128
+ 4066 0032 00       		.byte	0
+ 4067 0033 03       		.byte	3
+ 4068 0034 80       		.byte	-128
+ 4069 0035 00       		.byte	0
+ 4070 0036 03       		.byte	3
+ 4071 0037 80       		.byte	-128
+ 4072 0038 00       		.byte	0
+ 4073 0039 03       		.byte	3
+ 4074 003a 80       		.byte	-128
+ 4075 003b 00       		.byte	0
+ 4076 003c 07       		.byte	7
+ 4077 003d 00       		.byte	0
+ 4078 003e E0       		.byte	-32
+ 4079 003f 0F       		.byte	15
+ 4080 0040 00       		.byte	0
+ 4081 0041 F0       		.byte	-16
+ 4082 0042 1F       		.byte	31
+ 4083 0043 00       		.byte	0
+ 4084 0044 F8       		.byte	-8
+ 4085 0045 3E       		.byte	62
+ 4086 0046 00       		.byte	0
+ 4087 0047 7F       		.byte	127
+ 4088 0048 FC       		.byte	-4
+ 4089 0049 00       		.byte	0
+ 4090 004a 3F       		.byte	63
+ 4091 004b F8       		.byte	-8
+ 4092 004c 00       		.byte	0
+ 4093 004d 0F       		.byte	15
+ 4094 004e E0       		.byte	-32
+ 4095 004f 00       		.byte	0
+ 4096              		.section	.rodata.CmS26_6,"a",%progbits
+ 4097              		.align	2
+ 4100              	CmS26_6:
+ 4101 0000 11       		.byte	17
+ 4102 0001 1A       		.byte	26
+ 4103 0002 00       		.byte	0
+ 4104 0003 70       		.byte	112
+ 4105 0004 00       		.byte	0
+ 4106 0005 00       		.byte	0
+ 4107 0006 F0       		.byte	-16
+ 4108 0007 00       		.byte	0
+ 4109 0008 01       		.byte	1
+ 4110 0009 F0       		.byte	-16
+ 4111 000a 00       		.byte	0
+ 4112 000b 03       		.byte	3
+ 4113 000c E0       		.byte	-32
+ 4114 000d 00       		.byte	0
+ 4115 000e 07       		.byte	7
+ 4116 000f 80       		.byte	-128
+ 4117 0010 00       		.byte	0
+ 4118 0011 0F       		.byte	15
+ 4119 0012 00       		.byte	0
+ 4120 0013 00       		.byte	0
+ 4121 0014 1E       		.byte	30
+ 4122 0015 00       		.byte	0
+ 4123 0016 00       		.byte	0
+ 4124 0017 1C       		.byte	28
+ 4125 0018 00       		.byte	0
+ 4126 0019 00       		.byte	0
+ 4127 001a 38       		.byte	56
+ 4128 001b 00       		.byte	0
+ 4129 001c 00       		.byte	0
+ 4130 001d 78       		.byte	120
+ 4131 001e 00       		.byte	0
+ 4132 001f 00       		.byte	0
+ 4133 0020 73       		.byte	115
+ 4134 0021 F0       		.byte	-16
+ 4135 0022 00       		.byte	0
+ 4136 0023 7F       		.byte	127
+ 4137 0024 FC       		.byte	-4
+ 4138 0025 00       		.byte	0
+ 4139 0026 FF       		.byte	-1
+ 4140 0027 FE       		.byte	-2
+ 4141 0028 00       		.byte	0
+ 4142 0029 F8       		.byte	-8
+ 4143 002a 0F       		.byte	15
+ 4144 002b 00       		.byte	0
+ 4145 002c E0       		.byte	-32
+ 4146 002d 07       		.byte	7
+ 4147 002e 80       		.byte	-128
+ 4148 002f E0       		.byte	-32
+ 4149 0030 03       		.byte	3
+ 4150 0031 80       		.byte	-128
+ 4151 0032 E0       		.byte	-32
+ 4152 0033 03       		.byte	3
+ 4153 0034 80       		.byte	-128
+ 4154 0035 E0       		.byte	-32
+ 4155 0036 03       		.byte	3
+ 4156 0037 80       		.byte	-128
+ 4157 0038 E0       		.byte	-32
+ 4158 0039 03       		.byte	3
+ 4159 003a 80       		.byte	-128
+ 4160 003b E0       		.byte	-32
+ 4161 003c 03       		.byte	3
+ 4162 003d 80       		.byte	-128
+ 4163 003e 70       		.byte	112
+ 4164 003f 07       		.byte	7
+ 4165 0040 80       		.byte	-128
+ 4166 0041 78       		.byte	120
+ 4167 0042 0F       		.byte	15
+ 4168 0043 00       		.byte	0
+ 4169 0044 7C       		.byte	124
+ 4170 0045 1F       		.byte	31
+ 4171 0046 00       		.byte	0
+ 4172 0047 3F       		.byte	63
+ 4173 0048 FE       		.byte	-2
+ 4174 0049 00       		.byte	0
+ 4175 004a 1F       		.byte	31
+ 4176 004b FC       		.byte	-4
+ 4177 004c 00       		.byte	0
+ 4178 004d 07       		.byte	7
+ 4179 004e F0       		.byte	-16
+ 4180 004f 00       		.byte	0
+ 4181              		.section	.rodata.CmS28_mi,"a",%progbits
+ 4182              		.align	2
+ 4185              	CmS28_mi:
+ 4186 0000 0C       		.byte	12
+ 4187 0001 11       		.byte	17
+ 4188 0002 00       		.byte	0
+ 4189 0003 00       		.byte	0
+ 4190 0004 00       		.byte	0
+ 4191 0005 00       		.byte	0
+ 4192 0006 00       		.byte	0
+ 4193 0007 00       		.byte	0
+ 4194 0008 00       		.byte	0
+ 4195 0009 00       		.byte	0
+ 4196 000a 00       		.byte	0
+ 4197 000b 00       		.byte	0
+ 4198 000c 00       		.byte	0
+ 4199 000d 00       		.byte	0
+ 4200 000e 00       		.byte	0
+ 4201 000f 00       		.byte	0
+ 4202 0010 00       		.byte	0
+ 4203 0011 00       		.byte	0
+ 4204 0012 00       		.byte	0
+ 4205 0013 00       		.byte	0
+ 4206 0014 00       		.byte	0
+ 4207 0015 00       		.byte	0
+ 4208 0016 00       		.byte	0
+ 4209 0017 00       		.byte	0
+ 4210 0018 00       		.byte	0
+ 4211 0019 00       		.byte	0
+ 4212 001a 00       		.byte	0
+ 4213 001b 00       		.byte	0
+ 4214 001c 00       		.byte	0
+ 4215 001d 00       		.byte	0
+ 4216 001e FF       		.byte	-1
+ 4217 001f F0       		.byte	-16
+ 4218 0020 FF       		.byte	-1
+ 4219 0021 F0       		.byte	-16
+ 4220 0022 FF       		.byte	-1
+ 4221 0023 E0       		.byte	-32
+ 4222              		.section	.rodata.CmS26_8,"a",%progbits
+ 4223              		.align	2
+ 4226              	CmS26_8:
+ 4227 0000 11       		.byte	17
+ 4228 0001 1A       		.byte	26
+ 4229 0002 07       		.byte	7
+ 4230 0003 F0       		.byte	-16
+ 4231 0004 00       		.byte	0
+ 4232 0005 1F       		.byte	31
+ 4233 0006 FC       		.byte	-4
+ 4234 0007 00       		.byte	0
+ 4235 0008 3F       		.byte	63
+ 4236 0009 FE       		.byte	-2
+ 4237 000a 00       		.byte	0
+ 4238 000b 78       		.byte	120
+ 4239 000c 1E       		.byte	30
+ 4240 000d 00       		.byte	0
+ 4241 000e F0       		.byte	-16
+ 4242 000f 07       		.byte	7
+ 4243 0010 00       		.byte	0
+ 4244 0011 E0       		.byte	-32
+ 4245 0012 07       		.byte	7
+ 4246 0013 00       		.byte	0
+ 4247 0014 E0       		.byte	-32
+ 4248 0015 07       		.byte	7
+ 4249 0016 00       		.byte	0
+ 4250 0017 E0       		.byte	-32
+ 4251 0018 07       		.byte	7
+ 4252 0019 00       		.byte	0
+ 4253 001a F0       		.byte	-16
+ 4254 001b 0F       		.byte	15
+ 4255 001c 00       		.byte	0
+ 4256 001d 7C       		.byte	124
+ 4257 001e 3E       		.byte	62
+ 4258 001f 00       		.byte	0
+ 4259 0020 7F       		.byte	127
+ 4260 0021 FC       		.byte	-4
+ 4261 0022 00       		.byte	0
+ 4262 0023 3F       		.byte	63
+ 4263 0024 F8       		.byte	-8
+ 4264 0025 00       		.byte	0
+ 4265 0026 3F       		.byte	63
+ 4266 0027 FE       		.byte	-2
+ 4267 0028 00       		.byte	0
+ 4268 0029 7E       		.byte	126
+ 4269 002a 3F       		.byte	63
+ 4270 002b 00       		.byte	0
+ 4271 002c 78       		.byte	120
+ 4272 002d 0F       		.byte	15
+ 4273 002e 00       		.byte	0
+ 4274 002f F0       		.byte	-16
+ 4275 0030 07       		.byte	7
+ 4276 0031 80       		.byte	-128
+ 4277 0032 E0       		.byte	-32
+ 4278 0033 03       		.byte	3
+ 4279 0034 80       		.byte	-128
+ 4280 0035 E0       		.byte	-32
+ 4281 0036 03       		.byte	3
+ 4282 0037 80       		.byte	-128
+ 4283 0038 E0       		.byte	-32
+ 4284 0039 03       		.byte	3
+ 4285 003a 80       		.byte	-128
+ 4286 003b E0       		.byte	-32
+ 4287 003c 03       		.byte	3
+ 4288 003d 80       		.byte	-128
+ 4289 003e E0       		.byte	-32
+ 4290 003f 03       		.byte	3
+ 4291 0040 80       		.byte	-128
+ 4292 0041 F0       		.byte	-16
+ 4293 0042 07       		.byte	7
+ 4294 0043 80       		.byte	-128
+ 4295 0044 7C       		.byte	124
+ 4296 0045 0F       		.byte	15
+ 4297 0046 00       		.byte	0
+ 4298 0047 7F       		.byte	127
+ 4299 0048 FE       		.byte	-2
+ 4300 0049 00       		.byte	0
+ 4301 004a 1F       		.byte	31
+ 4302 004b FC       		.byte	-4
+ 4303 004c 00       		.byte	0
+ 4304 004d 07       		.byte	7
+ 4305 004e F0       		.byte	-16
+ 4306 004f 00       		.byte	0
+ 4307              		.section	.rodata.CmS26_9,"a",%progbits
+ 4308              		.align	2
+ 4311              	CmS26_9:
+ 4312 0000 12       		.byte	18
+ 4313 0001 1A       		.byte	26
+ 4314 0002 03       		.byte	3
+ 4315 0003 F0       		.byte	-16
+ 4316 0004 00       		.byte	0
+ 4317 0005 0F       		.byte	15
+ 4318 0006 FC       		.byte	-4
+ 4319 0007 00       		.byte	0
+ 4320 0008 3F       		.byte	63
+ 4321 0009 FE       		.byte	-2
+ 4322 000a 00       		.byte	0
+ 4323 000b 3C       		.byte	60
+ 4324 000c 1F       		.byte	31
+ 4325 000d 00       		.byte	0
+ 4326 000e 78       		.byte	120
+ 4327 000f 07       		.byte	7
+ 4328 0010 80       		.byte	-128
+ 4329 0011 70       		.byte	112
+ 4330 0012 03       		.byte	3
+ 4331 0013 80       		.byte	-128
+ 4332 0014 E0       		.byte	-32
+ 4333 0015 03       		.byte	3
+ 4334 0016 C0       		.byte	-64
+ 4335 0017 E0       		.byte	-32
+ 4336 0018 01       		.byte	1
+ 4337 0019 C0       		.byte	-64
+ 4338 001a E0       		.byte	-32
+ 4339 001b 01       		.byte	1
+ 4340 001c C0       		.byte	-64
+ 4341 001d F0       		.byte	-16
+ 4342 001e 01       		.byte	1
+ 4343 001f C0       		.byte	-64
+ 4344 0020 78       		.byte	120
+ 4345 0021 07       		.byte	7
+ 4346 0022 C0       		.byte	-64
+ 4347 0023 7C       		.byte	124
+ 4348 0024 1F       		.byte	31
+ 4349 0025 C0       		.byte	-64
+ 4350 0026 3F       		.byte	63
+ 4351 0027 FF       		.byte	-1
+ 4352 0028 80       		.byte	-128
+ 4353 0029 1F       		.byte	31
+ 4354 002a FF       		.byte	-1
+ 4355 002b 80       		.byte	-128
+ 4356 002c 07       		.byte	7
+ 4357 002d E7       		.byte	-25
+ 4358 002e 80       		.byte	-128
+ 4359 002f 00       		.byte	0
+ 4360 0030 07       		.byte	7
+ 4361 0031 00       		.byte	0
+ 4362 0032 00       		.byte	0
+ 4363 0033 0F       		.byte	15
+ 4364 0034 00       		.byte	0
+ 4365 0035 00       		.byte	0
+ 4366 0036 0E       		.byte	14
+ 4367 0037 00       		.byte	0
+ 4368 0038 00       		.byte	0
+ 4369 0039 1E       		.byte	30
+ 4370 003a 00       		.byte	0
+ 4371 003b 00       		.byte	0
+ 4372 003c 3C       		.byte	60
+ 4373 003d 00       		.byte	0
+ 4374 003e 00       		.byte	0
+ 4375 003f F8       		.byte	-8
+ 4376 0040 00       		.byte	0
+ 4377 0041 03       		.byte	3
+ 4378 0042 F0       		.byte	-16
+ 4379 0043 00       		.byte	0
+ 4380 0044 1F       		.byte	31
+ 4381 0045 E0       		.byte	-32
+ 4382 0046 00       		.byte	0
+ 4383 0047 7F       		.byte	127
+ 4384 0048 80       		.byte	-128
+ 4385 0049 00       		.byte	0
+ 4386 004a 7E       		.byte	126
+ 4387 004b 00       		.byte	0
+ 4388 004c 00       		.byte	0
+ 4389 004d 38       		.byte	56
+ 4390 004e 00       		.byte	0
+ 4391 004f 00       		.byte	0
+ 4392              		.section	.rodata.F0_9,"a",%progbits
+ 4393              		.align	2
+ 4396              	F0_9:
+ 4397 0000 04       		.byte	4
+ 4398 0001 07       		.byte	7
+ 4399 0002 60       		.byte	96
+ 4400 0003 90       		.byte	-112
+ 4401 0004 90       		.byte	-112
+ 4402 0005 70       		.byte	112
+ 4403 0006 10       		.byte	16
+ 4404 0007 90       		.byte	-112
+ 4405 0008 60       		.byte	96
+ 4406 0009 000000   		.section	.rodata.F2_8,"a",%progbits
+ 4407              		.align	2
+ 4410              	F2_8:
+ 4411 0000 0A       		.byte	10
+ 4412 0001 0E       		.byte	14
+ 4413 0002 3F       		.byte	63
+ 4414 0003 00       		.byte	0
+ 4415 0004 7F       		.byte	127
+ 4416 0005 80       		.byte	-128
+ 4417 0006 E1       		.byte	-31
+ 4418 0007 C0       		.byte	-64
+ 4419 0008 C0       		.byte	-64
+ 4420 0009 C0       		.byte	-64
+ 4421 000a C0       		.byte	-64
+ 4422 000b C0       		.byte	-64
+ 4423 000c E1       		.byte	-31
+ 4424 000d C0       		.byte	-64
+ 4425 000e 7F       		.byte	127
+ 4426 000f 80       		.byte	-128
+ 4427 0010 7F       		.byte	127
+ 4428 0011 80       		.byte	-128
+ 4429 0012 E1       		.byte	-31
+ 4430 0013 C0       		.byte	-64
+ 4431 0014 C0       		.byte	-64
+ 4432 0015 C0       		.byte	-64
+ 4433 0016 C0       		.byte	-64
+ 4434 0017 C0       		.byte	-64
+ 4435 0018 E1       		.byte	-31
+ 4436 0019 C0       		.byte	-64
+ 4437 001a 7F       		.byte	127
+ 4438 001b 80       		.byte	-128
+ 4439 001c 3F       		.byte	63
+ 4440 001d 00       		.byte	0
+ 4441 001e 0000     		.section	.rodata.RDSfnt2,"a",%progbits
+ 4442              		.align	2
+ 4445              	RDSfnt2:
+ 4446 0000 03       		.byte	3
+ 4447 0001 0E       		.byte	14
+ 4448 0002 0000     		.space	2
+ 4449 0004 00000000 		.word	F2_0
+ 4450 0008 00000000 		.word	F2_1
+ 4451 000c 00000000 		.word	F2_2
+ 4452 0010 00000000 		.word	F2_3
+ 4453 0014 00000000 		.word	F2_4
+ 4454 0018 00000000 		.word	F2_5
+ 4455 001c 00000000 		.word	F2_6
+ 4456 0020 00000000 		.word	F2_7
+ 4457 0024 00000000 		.word	F2_8
+ 4458 0028 00000000 		.word	F2_9
+ 4459 002c 00000000 		.word	F2_dp
+ 4460 0030 00000000 		.word	F2_pl
+ 4461 0034 00000000 		.word	F2_mi
+ 4462 0038 00000000 		.word	F2_uk
+ 4463              		.text
+ 4464              	.Letext0:
+ 4465              		.file 1 "./include/task.h"
+ 4466              		.file 2 "./include/queue.h"
+ 4467              		.file 3 "./include/semphr.h"
+ 4468              		.file 4 "Board.h"
+ 4469              		.file 5 "bm_num.c"
+ 4470              		.file 6 "bm_f1all.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 bm_num.c
+  C:\Temp\ccMmT7g2.s:3491   .rodata.ComicSans28:00000000 ComicSans28
+  C:\Temp\ccMmT7g2.s:3317   .rodata.CmS28_uk:00000000 CmS28_uk
+  C:\Temp\ccMmT7g2.s:4185   .rodata.CmS28_mi:00000000 CmS28_mi
+  C:\Temp\ccMmT7g2.s:1300   .rodata.CmS28_pl:00000000 CmS28_pl
+  C:\Temp\ccMmT7g2.s:959    .rodata.CmS28_dp:00000000 CmS28_dp
+  C:\Temp\ccMmT7g2.s:2681   .rodata.CmS28_9:00000000 CmS28_9
+  C:\Temp\ccMmT7g2.s:2590   .rodata.CmS28_8:00000000 CmS28_8
+  C:\Temp\ccMmT7g2.s:2499   .rodata.CmS28_7:00000000 CmS28_7
+  C:\Temp\ccMmT7g2.s:2408   .rodata.CmS28_6:00000000 CmS28_6
+  C:\Temp\ccMmT7g2.s:2870   .rodata.CmS28_5:00000000 CmS28_5
+  C:\Temp\ccMmT7g2.s:2300   .rodata.CmS28_4:00000000 CmS28_4
+  C:\Temp\ccMmT7g2.s:2209   .rodata.CmS28_3:00000000 CmS28_3
+  C:\Temp\ccMmT7g2.s:2118   .rodata.CmS28_2:00000000 CmS28_2
+  C:\Temp\ccMmT7g2.s:2055   .rodata.CmS28_1:00000000 CmS28_1
+  C:\Temp\ccMmT7g2.s:1964   .rodata.CmS28_0:00000000 CmS28_0
+  C:\Temp\ccMmT7g2.s:3434   .rodata.ComicSans26:00000000 ComicSans26
+  C:\Temp\ccMmT7g2.s:1245   .rodata.CmS26_uk:00000000 CmS26_uk
+  C:\Temp\ccMmT7g2.s:585    .rodata.CmS26_mi:00000000 CmS26_mi
+  C:\Temp\ccMmT7g2.s:159    .rodata.CmS26_pl:00000000 CmS26_pl
+  C:\Temp\ccMmT7g2.s:3235   .rodata.CmS26_dp:00000000 CmS26_dp
+  C:\Temp\ccMmT7g2.s:4311   .rodata.CmS26_9:00000000 CmS26_9
+  C:\Temp\ccMmT7g2.s:4226   .rodata.CmS26_8:00000000 CmS26_8
+  C:\Temp\ccMmT7g2.s:3548   .rodata.CmS26_7:00000000 CmS26_7
+  C:\Temp\ccMmT7g2.s:4100   .rodata.CmS26_6:00000000 CmS26_6
+  C:\Temp\ccMmT7g2.s:4015   .rodata.CmS26_5:00000000 CmS26_5
+  C:\Temp\ccMmT7g2.s:3930   .rodata.CmS26_4:00000000 CmS26_4
+  C:\Temp\ccMmT7g2.s:3871   .rodata.CmS26_3:00000000 CmS26_3
+  C:\Temp\ccMmT7g2.s:3812   .rodata.CmS26_2:00000000 CmS26_2
+  C:\Temp\ccMmT7g2.s:3753   .rodata.CmS26_1:00000000 CmS26_1
+  C:\Temp\ccMmT7g2.s:3668   .rodata.CmS26_0:00000000 CmS26_0
+  C:\Temp\ccMmT7g2.s:626    .rodata.ComicSansBold10:00000000 ComicSansBold10
+  C:\Temp\ccMmT7g2.s:3419   .rodata.CS10B_uk:00000000 CS10B_uk
+  C:\Temp\ccMmT7g2.s:2856   .rodata.CS10B_mi:00000000 CS10B_mi
+  C:\Temp\ccMmT7g2.s:1396   .rodata.CS10B_pl:00000000 CS10B_pl
+  C:\Temp\ccMmT7g2.s:1022   .rodata.CS10B_dp:00000000 CS10B_dp
+  C:\Temp\ccMmT7g2.s:928    .rodata.CS10B_9:00000000 CS10B_9
+  C:\Temp\ccMmT7g2.s:911    .rodata.CS10B_8:00000000 CS10B_8
+  C:\Temp\ccMmT7g2.s:894    .rodata.CS10B_7:00000000 CS10B_7
+  C:\Temp\ccMmT7g2.s:877    .rodata.CS10B_6:00000000 CS10B_6
+  C:\Temp\ccMmT7g2.s:860    .rodata.CS10B_5:00000000 CS10B_5
+  C:\Temp\ccMmT7g2.s:843    .rodata.CS10B_4:00000000 CS10B_4
+  C:\Temp\ccMmT7g2.s:826    .rodata.CS10B_3:00000000 CS10B_3
+  C:\Temp\ccMmT7g2.s:809    .rodata.CS10B_2:00000000 CS10B_2
+  C:\Temp\ccMmT7g2.s:1171   .rodata.CS10B_1:00000000 CS10B_1
+  C:\Temp\ccMmT7g2.s:774    .rodata.CS10B_0:00000000 CS10B_0
+  C:\Temp\ccMmT7g2.s:3063   .rodata.ComicSansBold12:00000000 ComicSansBold12
+  C:\Temp\ccMmT7g2.s:1590   .rodata.CS12B_uk:00000000 CS12B_uk
+  C:\Temp\ccMmT7g2.s:1133   .rodata.CS12B_mi:00000000 CS12B_mi
+  C:\Temp\ccMmT7g2.s:702    .rodata.CS12B_pl:00000000 CS12B_pl
+  C:\Temp\ccMmT7g2.s:226    .rodata.CS12B_dp:00000000 CS12B_dp
+  C:\Temp\ccMmT7g2.s:3216   .rodata.CS12B_9:00000000 CS12B_9
+  C:\Temp\ccMmT7g2.s:3197   .rodata.CS12B_8:00000000 CS12B_8
+  C:\Temp\ccMmT7g2.s:3166   .rodata.CS12B_7:00000000 CS12B_7
+  C:\Temp\ccMmT7g2.s:3147   .rodata.CS12B_6:00000000 CS12B_6
+  C:\Temp\ccMmT7g2.s:3116   .rodata.CS12B_5:00000000 CS12B_5
+  C:\Temp\ccMmT7g2.s:3085   .rodata.CS12B_4:00000000 CS12B_4
+  C:\Temp\ccMmT7g2.s:2961   .rodata.CS12B_3:00000000 CS12B_3
+  C:\Temp\ccMmT7g2.s:3032   .rodata.CS12B_2:00000000 CS12B_2
+  C:\Temp\ccMmT7g2.s:3013   .rodata.CS12B_1:00000000 CS12B_1
+  C:\Temp\ccMmT7g2.s:2994   .rodata.CS12B_0:00000000 CS12B_0
+  C:\Temp\ccMmT7g2.s:1223   .rodata.RDS7x11:00000000 RDS7x11
+  C:\Temp\ccMmT7g2.s:2391   .rodata.RDS7x11_uk:00000000 RDS7x11_uk
+  C:\Temp\ccMmT7g2.s:1412   .rodata.RDS7x11_mi:00000000 RDS7x11_mi
+  C:\Temp\ccMmT7g2.s:1039   .rodata.RDS7x11_pl:00000000 RDS7x11_pl
+  C:\Temp\ccMmT7g2.s:567    .rodata.RDS7x11_dp:00000000 RDS7x11_dp
+  C:\Temp\ccMmT7g2.s:1901   .rodata.RDS7x11_9:00000000 RDS7x11_9
+  C:\Temp\ccMmT7g2.s:791    .rodata.RDS7x11_8:00000000 RDS7x11_8
+  C:\Temp\ccMmT7g2.s:1754   .rodata.RDS7x11_7:00000000 RDS7x11_7
+  C:\Temp\ccMmT7g2.s:756    .rodata.RDS7x11_6:00000000 RDS7x11_6
+  C:\Temp\ccMmT7g2.s:738    .rodata.RDS7x11_5:00000000 RDS7x11_5
+  C:\Temp\ccMmT7g2.s:720    .rodata.RDS7x11_4:00000000 RDS7x11_4
+  C:\Temp\ccMmT7g2.s:1425   .rodata.RDS7x11_3:00000000 RDS7x11_3
+  C:\Temp\ccMmT7g2.s:684    .rodata.RDS7x11_2:00000000 RDS7x11_2
+  C:\Temp\ccMmT7g2.s:666    .rodata.RDS7x11_1:00000000 RDS7x11_1
+  C:\Temp\ccMmT7g2.s:648    .rodata.RDS7x11_0:00000000 RDS7x11_0
+  C:\Temp\ccMmT7g2.s:1149   .rodata.RDSfnt3:00000000 RDSfnt3
+  C:\Temp\ccMmT7g2.s:3376   .rodata.F3_uk:00000000 F3_uk
+  C:\Temp\ccMmT7g2.s:2807   .rodata.F3_mi:00000000 F3_mi
+  C:\Temp\ccMmT7g2.s:1355   .rodata.F3_pl:00000000 F3_pl
+  C:\Temp\ccMmT7g2.s:994    .rodata.F3_dp:00000000 F3_dp
+  C:\Temp\ccMmT7g2.s:1821   .rodata.F3_9:00000000 F3_9
+  C:\Temp\ccMmT7g2.s:1772   .rodata.F3_8:00000000 F3_8
+  C:\Temp\ccMmT7g2.s:364    .rodata.F3_7:00000000 F3_7
+  C:\Temp\ccMmT7g2.s:1705   .rodata.F3_6:00000000 F3_6
+  C:\Temp\ccMmT7g2.s:1656   .rodata.F3_5:00000000 F3_5
+  C:\Temp\ccMmT7g2.s:1607   .rodata.F3_4:00000000 F3_4
+  C:\Temp\ccMmT7g2.s:3268   .rodata.F3_3:00000000 F3_3
+  C:\Temp\ccMmT7g2.s:1541   .rodata.F3_2:00000000 F3_2
+  C:\Temp\ccMmT7g2.s:1492   .rodata.F3_1:00000000 F3_1
+  C:\Temp\ccMmT7g2.s:1443   .rodata.F3_0:00000000 F3_0
+  C:\Temp\ccMmT7g2.s:4445   .rodata.RDSfnt2:00000000 RDSfnt2
+  C:\Temp\ccMmT7g2.s:1870   .rodata.F2_uk:00000000 F2_uk
+  C:\Temp\ccMmT7g2.s:1188   .rodata.F2_mi:00000000 F2_mi
+  C:\Temp\ccMmT7g2.s:1919   .rodata.F2_pl:00000000 F2_pl
+  C:\Temp\ccMmT7g2.s:301    .rodata.F2_dp:00000000 F2_dp
+  C:\Temp\ccMmT7g2.s:2772   .rodata.F2_9:00000000 F2_9
+  C:\Temp\ccMmT7g2.s:4410   .rodata.F2_8:00000000 F2_8
+  C:\Temp\ccMmT7g2.s:1054   .rodata.F2_7:00000000 F2_7
+  C:\Temp\ccMmT7g2.s:532    .rodata.F2_6:00000000 F2_6
+  C:\Temp\ccMmT7g2.s:497    .rodata.F2_5:00000000 F2_5
+  C:\Temp\ccMmT7g2.s:462    .rodata.F2_4:00000000 F2_4
+  C:\Temp\ccMmT7g2.s:427    .rodata.F2_3:00000000 F2_3
+  C:\Temp\ccMmT7g2.s:3633   .rodata.F2_2:00000000 F2_2
+  C:\Temp\ccMmT7g2.s:3513   .rodata.F2_1:00000000 F2_1
+  C:\Temp\ccMmT7g2.s:3456   .rodata.F2_0:00000000 F2_0
+  C:\Temp\ccMmT7g2.s:1111   .rodata.RDSfnt1:00000000 RDSfnt1
+  C:\Temp\ccMmT7g2.s:1089   .rodata.RDSfnt0:00000000 RDSfnt0
+  C:\Temp\ccMmT7g2.s:212    .rodata.F0_uk:00000000 F0_uk
+  C:\Temp\ccMmT7g2.s:145    .rodata.F0_mi:00000000 F0_mi
+  C:\Temp\ccMmT7g2.s:2980   .rodata.F0_pl:00000000 F0_pl
+  C:\Temp\ccMmT7g2.s:945    .rodata.F0_dp:00000000 F0_dp
+  C:\Temp\ccMmT7g2.s:4396   .rodata.F0_9:00000000 F0_9
+  C:\Temp\ccMmT7g2.s:413    .rodata.F0_8:00000000 F0_8
+  C:\Temp\ccMmT7g2.s:1950   .rodata.F0_7:00000000 F0_7
+  C:\Temp\ccMmT7g2.s:350    .rodata.F0_6:00000000 F0_6
+  C:\Temp\ccMmT7g2.s:336    .rodata.F0_5:00000000 F0_5
+  C:\Temp\ccMmT7g2.s:322    .rodata.F0_4:00000000 F0_4
+  C:\Temp\ccMmT7g2.s:259    .rodata.F0_3:00000000 F0_3
+  C:\Temp\ccMmT7g2.s:287    .rodata.F0_2:00000000 F0_2
+  C:\Temp\ccMmT7g2.s:273    .rodata.F0_1:00000000 F0_1
+  C:\Temp\ccMmT7g2.s:245    .rodata.F0_0:00000000 F0_0
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\ccMmT7g2.s:142    .rodata.F0_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:156    .rodata.CmS26_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:209    .rodata.F0_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:223    .rodata.CS12B_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:242    .rodata.F0_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:256    .rodata.F0_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:270    .rodata.F0_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:284    .rodata.F0_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:298    .rodata.F2_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:319    .rodata.F0_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:333    .rodata.F0_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:347    .rodata.F0_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:361    .rodata.F3_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:410    .rodata.F0_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:424    .rodata.F2_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:459    .rodata.F2_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:494    .rodata.F2_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:529    .rodata.F2_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:564    .rodata.RDS7x11_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:582    .rodata.CmS26_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:623    .rodata.ComicSansBold10:00000000 $d
+  C:\Temp\ccMmT7g2.s:645    .rodata.RDS7x11_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:663    .rodata.RDS7x11_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:681    .rodata.RDS7x11_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:699    .rodata.CS12B_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:717    .rodata.RDS7x11_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:735    .rodata.RDS7x11_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:753    .rodata.RDS7x11_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:771    .rodata.CS10B_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:788    .rodata.RDS7x11_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:806    .rodata.CS10B_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:823    .rodata.CS10B_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:840    .rodata.CS10B_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:857    .rodata.CS10B_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:874    .rodata.CS10B_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:891    .rodata.CS10B_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:908    .rodata.CS10B_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:925    .rodata.CS10B_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:942    .rodata.F0_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:956    .rodata.CmS28_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:991    .rodata.F3_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:1019   .rodata.CS10B_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:1036   .rodata.RDS7x11_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:1051   .rodata.F2_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:1086   .rodata.RDSfnt0:00000000 $d
+  C:\Temp\ccMmT7g2.s:1108   .rodata.RDSfnt1:00000000 $d
+  C:\Temp\ccMmT7g2.s:1130   .rodata.CS12B_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:1146   .rodata.RDSfnt3:00000000 $d
+  C:\Temp\ccMmT7g2.s:1168   .rodata.CS10B_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:1185   .rodata.F2_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:1220   .rodata.RDS7x11:00000000 $d
+  C:\Temp\ccMmT7g2.s:1242   .rodata.CmS26_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:1297   .rodata.CmS28_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:1352   .rodata.F3_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:1393   .rodata.CS10B_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:1409   .rodata.RDS7x11_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:1422   .rodata.RDS7x11_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:1440   .rodata.F3_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:1489   .rodata.F3_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:1538   .rodata.F3_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:1587   .rodata.CS12B_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:1604   .rodata.F3_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:1653   .rodata.F3_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:1702   .rodata.F3_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:1751   .rodata.RDS7x11_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:1769   .rodata.F3_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:1818   .rodata.F3_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:1867   .rodata.F2_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:1898   .rodata.RDS7x11_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:1916   .rodata.F2_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:1947   .rodata.F0_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:1961   .rodata.CmS28_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:2052   .rodata.CmS28_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:2115   .rodata.CmS28_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:2206   .rodata.CmS28_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:2297   .rodata.CmS28_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:2388   .rodata.RDS7x11_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:2405   .rodata.CmS28_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:2496   .rodata.CmS28_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:2587   .rodata.CmS28_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:2678   .rodata.CmS28_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:2769   .rodata.F2_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:2804   .rodata.F3_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:2853   .rodata.CS10B_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:2867   .rodata.CmS28_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:2958   .rodata.CS12B_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:2977   .rodata.F0_pl:00000000 $d
+  C:\Temp\ccMmT7g2.s:2991   .rodata.CS12B_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:3010   .rodata.CS12B_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:3029   .rodata.CS12B_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:3060   .rodata.ComicSansBold12:00000000 $d
+  C:\Temp\ccMmT7g2.s:3082   .rodata.CS12B_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:3113   .rodata.CS12B_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:3144   .rodata.CS12B_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:3163   .rodata.CS12B_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:3194   .rodata.CS12B_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:3213   .rodata.CS12B_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:3232   .rodata.CmS26_dp:00000000 $d
+  C:\Temp\ccMmT7g2.s:3265   .rodata.F3_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:3314   .rodata.CmS28_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:3373   .rodata.F3_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:3416   .rodata.CS10B_uk:00000000 $d
+  C:\Temp\ccMmT7g2.s:3431   .rodata.ComicSans26:00000000 $d
+  C:\Temp\ccMmT7g2.s:3453   .rodata.F2_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:3488   .rodata.ComicSans28:00000000 $d
+  C:\Temp\ccMmT7g2.s:3510   .rodata.F2_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:3545   .rodata.CmS26_7:00000000 $d
+  C:\Temp\ccMmT7g2.s:3630   .rodata.F2_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:3665   .rodata.CmS26_0:00000000 $d
+  C:\Temp\ccMmT7g2.s:3750   .rodata.CmS26_1:00000000 $d
+  C:\Temp\ccMmT7g2.s:3809   .rodata.CmS26_2:00000000 $d
+  C:\Temp\ccMmT7g2.s:3868   .rodata.CmS26_3:00000000 $d
+  C:\Temp\ccMmT7g2.s:3927   .rodata.CmS26_4:00000000 $d
+  C:\Temp\ccMmT7g2.s:4012   .rodata.CmS26_5:00000000 $d
+  C:\Temp\ccMmT7g2.s:4097   .rodata.CmS26_6:00000000 $d
+  C:\Temp\ccMmT7g2.s:4182   .rodata.CmS28_mi:00000000 $d
+  C:\Temp\ccMmT7g2.s:4223   .rodata.CmS26_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:4308   .rodata.CmS26_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:4393   .rodata.F0_9:00000000 $d
+  C:\Temp\ccMmT7g2.s:4407   .rodata.F2_8:00000000 $d
+  C:\Temp\ccMmT7g2.s:4442   .rodata.RDSfnt2:00000000 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+UNDEFINED SYMBOLS
+F1_I130
+F1_I131
+F1_I132
+F1_I133
+F1_I134
+F1_I135
+F1_I136
+F1_I137
+F1_I138
+F1_I139
+F1_I12E
+F1_I12B
+F1_I12D
+F1_FILL

@@ -1,0 +1,132 @@
+/*---------------------------------------------------------------------------*/
+/*-         ATMEL Microcontroller Software Support  -  ROUSSET  -            */
+/*---------------------------------------------------------------------------*/
+/* The software is delivered "AS IS" without warranty or condition of any    */
+/* kind, either express, implied or statutory. This includes without	     */
+/* limitation any warranty or condition with respect to merchantability or   */
+/* fitness for any particular purpose, or against the infringements of	     */
+/* intellectual property rights of others.				     */
+/*---------------------------------------------------------------------------*/
+/*- File source          : GCC_FLASH.ld                                      */
+/*- Object               : Linker Script File for Flash Workspace            */
+/*- Compilation flag     : None                                              */
+/*-                                                                          */
+/*- 1.1 20081030 CIP     : SAM7A3 - GCC 4.3.2                                */
+/*---------------------------------------------------------------------------*/
+
+/* Memory Definitions */
+MEMORY
+{
+  CODE (rx) : ORIGIN = 0x00101000, LENGTH = 0x00040000
+  DATA (rw) : ORIGIN = 0x00200000, LENGTH = 0x00008000
+  STACK (rw) : ORIGIN = 0x00208000,LENGTH = 0x00000000
+}
+
+/* Section Definitions */
+SECTIONS
+{
+  /* first section is .text which is used for code */
+  . = 0x0000000;
+  
+  .vectROM :
+  {
+    KEEP(*(.vectROM))
+  } >CODE
+    
+  . = ALIGN(4);
+  
+  .text :
+  {
+    *(.text)
+    *(.glue_7t)
+    *(.glue_7)
+    *(.rodata) /* section is used for read-only data (constants) */
+  } >CODE
+
+/* .ARM.exidx is sorted, so has to go in its own output section */
+    .ARM.exidx : {
+		__exidx_start = .;
+		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
+		__exidx_end = .;
+	} >CODE
+
+  . = ALIGN(4);
+
+  _etext = . ;
+  PROVIDE (etext = .);
+
+  /* .data section which is used for initialized data */
+  .data : AT (_etext)
+  {
+    _data = . ;
+    KEEP(*(.vectRAM))
+    *(.data)
+    SORT(CONSTRUCTORS)
+    KEEP(*(.ramsection)) /* location of ramsection */
+  } >DATA
+  . = ALIGN(4);
+
+  _edata = . ;
+   PROVIDE (edata = .);
+
+  /* .bss section which is used for uninitialized data */
+  .bss :
+  {
+    __bss_start = . ;
+    __bss_start__ = . ;
+    *(.bss)
+    *(COMMON)
+  } 
+  . = ALIGN(4);
+  __bss_end__ = . ;
+ 
+  .IRamNV (NOLOAD) :
+  {
+  *(.IRamNV)
+  }
+  . = ALIGN(4);
+  
+  _end = .;
+  PROVIDE (end = .);
+  
+    . = ALIGN(4);
+   .int_data :  
+   { 
+   *(.internal_ram_top) 
+   }> STACK 
+
+  /* Stabs debugging sections.  */
+  .stab          0 : { *(.stab) }
+  .stabstr       0 : { *(.stabstr) }
+  .stab.excl     0 : { *(.stab.excl) }
+  .stab.exclstr  0 : { *(.stab.exclstr) }
+  .stab.index    0 : { *(.stab.index) }
+  .stab.indexstr 0 : { *(.stab.indexstr) }
+  .comment       0 : { *(.comment) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) }
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) }
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) }
+
+}

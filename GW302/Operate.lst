@@ -1,0 +1,446 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Operate.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_ui2f
+  18              		.global	__aeabi_f2d
+  19              		.global	__aeabi_dmul
+  20              		.global	__aeabi_d2f
+  21              		.section	.text.vOperateTask,"ax",%progbits
+  22              		.align	2
+  23              		.code	16
+  24              		.thumb_func
+  26              	vOperateTask:
+  27              	.LFB376:
+  28              		.file 1 "Operate.c"
+   1:Operate.c     **** // -----------------------------------------------------------
+   2:Operate.c     **** // Software:         GW302 - McHale V6 Fixed Chamber Round Baler
+   3:Operate.c     **** // C Source File:    Operate.c
+   4:Operate.c     **** // Description:      Graphic Wizard Operate File
+   5:Operate.c     **** // -----------------------------------------------------------
+   6:Operate.c     ****  
+   7:Operate.c     **** 
+   8:Operate.c     **** // Include Standard files
+   9:Operate.c     **** #include "Board.h"
+  10:Operate.c     **** 
+  11:Operate.c     **** 
+  12:Operate.c     **** // global variables
+  13:Operate.c     **** // -----------------------------------------------------------
+  14:Operate.c     **** 
+  15:Operate.c     **** 
+  16:Operate.c     **** // -----------------------------------------------------------
+  17:Operate.c     **** // Function Name       : vOperateTask
+  18:Operate.c     **** // Object              : General Operation Code Run Here
+  19:Operate.c     **** // Output Parameters   :
+  20:Operate.c     **** // -----------------------------------------------------------
+  21:Operate.c     **** static void vOperateTask( void *pvParameters )
+  22:Operate.c     **** {
+  29              		.loc 1 22 0
+  30              		.cfi_startproc
+  31              	.LVL0:
+  32 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 20
+  35              		.cfi_offset 4, -20
+  36              		.cfi_offset 5, -16
+  37              		.cfi_offset 6, -12
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 4746     		mov	r7, r8
+  41 0004 80B4     		push	{r7}
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 24
+  44              		.cfi_offset 8, -24
+  45 0006 82B0     		sub	sp, sp, #8
+  46              	.LCFI2:
+  47              		.cfi_def_cfa_offset 32
+  23:Operate.c     **** 
+  24:Operate.c     **** 	portTickType xLastWakeTime;
+  25:Operate.c     **** 
+  26:Operate.c     **** 	/*
+  27:Operate.c     **** 	AT91C_BASE_PIOA->PIO_CODR = INHIBIT1; // Enable Output1 & 2
+  28:Operate.c     **** 	AT91C_BASE_PIOA->PIO_CODR = INHIBIT2; // Enable Output3 & 4
+  29:Operate.c     **** 	 */
+  30:Operate.c     **** 
+  31:Operate.c     **** 	// turn on MCM module
+  32:Operate.c     **** 	//AT91C_BASE_PIOA->PIO_CODR = OP_NET_ON;
+  33:Operate.c     **** 
+  34:Operate.c     **** 	// wait 3 seconds for MCM to power on
+  35:Operate.c     **** 	vTaskDelay( (3000 / portTICK_RATE_MS) );
+  48              		.loc 1 35 0
+  49 0008 3548     		ldr	r0, .L4+8
+  50              	.LVL1:
+  51 000a FFF7FEFF 		bl	vTaskDelay
+  52              	.LVL2:
+  36:Operate.c     **** 
+  37:Operate.c     **** 	// Enable the clock & Start timer0 (need both)
+  38:Operate.c     **** 	AT91C_BASE_TC0->TC_CCR = AT91C_TC_CLKEN | AT91C_TC_SWTRG;
+  53              		.loc 1 38 0
+  54 000e 3549     		ldr	r1, .L4+12
+  55 0010 0522     		mov	r2, #5
+  56 0012 0A60     		str	r2, [r1]
+  39:Operate.c     **** 	AT91C_BASE_TC0->TC_IER = AT91C_TC_COVFS | AT91C_TC_LDRAS; // enable overflow & capture
+  57              		.loc 1 39 0
+  58 0014 2123     		mov	r3, #33
+  59 0016 4B62     		str	r3, [r1, #36]
+  40:Operate.c     **** 
+  41:Operate.c     **** 	// Enable the clock & Start timer4 (need both)
+  42:Operate.c     **** 	AT91C_BASE_TC4->TC_CCR = AT91C_TC_CLKEN | AT91C_TC_SWTRG;
+  60              		.loc 1 42 0
+  61 0018 3349     		ldr	r1, .L4+16
+  62 001a 0A60     		str	r2, [r1]
+  43:Operate.c     **** 	AT91C_BASE_TC4->TC_IER = AT91C_TC_COVFS | AT91C_TC_LDRAS; // enable overflow & capture
+  63              		.loc 1 43 0
+  64 001c 4B62     		str	r3, [r1, #36]
+  44:Operate.c     **** 
+  45:Operate.c     **** 	// Enable the clock & Start timer5 (need both)
+  46:Operate.c     **** 	AT91C_BASE_TC5->TC_CCR = AT91C_TC_CLKEN | AT91C_TC_SWTRG;
+  65              		.loc 1 46 0
+  66 001e 3349     		ldr	r1, .L4+20
+  67 0020 0A60     		str	r2, [r1]
+  47:Operate.c     **** 	AT91C_BASE_TC5->TC_IER = AT91C_TC_COVFS | AT91C_TC_LDRAS; // enable overflow & capture
+  68              		.loc 1 47 0
+  69 0022 4B62     		str	r3, [r1, #36]
+  48:Operate.c     **** 
+  49:Operate.c     **** 	// Enable the clock & Start timer6 (need both)
+  50:Operate.c     **** 	AT91C_BASE_TC6->TC_CCR = AT91C_TC_CLKEN | AT91C_TC_SWTRG;
+  70              		.loc 1 50 0
+  71 0024 3249     		ldr	r1, .L4+24
+  72 0026 0A60     		str	r2, [r1]
+  51:Operate.c     **** 	AT91C_BASE_TC6->TC_IER = AT91C_TC_COVFS | AT91C_TC_LDRAS; // enable overflow & capture
+  73              		.loc 1 51 0
+  74 0028 4B62     		str	r3, [r1, #36]
+  52:Operate.c     **** 
+  53:Operate.c     **** 	// enable timer interrupts on timer 0/4/5/6
+  54:Operate.c     **** 	AT91C_BASE_AIC->AIC_IECR = (0x1 << AT91C_ID_TC0) | (0x1 << AT91C_ID_TC4) | (0x1 << AT91C_ID_TC5) |
+  75              		.loc 1 54 0
+  76 002a E221     		mov	r1, #226
+  77 002c 8903     		lsl	r1, r1, #14
+  78 002e 9023     		mov	r3, #144
+  79 0030 5B00     		lsl	r3, r3, #1
+  80 0032 304A     		ldr	r2, .L4+28
+  81 0034 D150     		str	r1, [r2, r3]
+  55:Operate.c     **** 
+  56:Operate.c     **** 	savecal = 0;
+  82              		.loc 1 56 0
+  83 0036 0023     		mov	r3, #0
+  84 0038 2F4A     		ldr	r2, .L4+32
+  85 003a 1370     		strb	r3, [r2]
+  57:Operate.c     **** 
+  58:Operate.c     **** 	SavecalDelayWithinMenus = 0;
+  86              		.loc 1 58 0
+  87 003c 2F4A     		ldr	r2, .L4+36
+  88 003e 1370     		strb	r3, [r2]
+  59:Operate.c     **** 	SavecalDelayOnMainDisplay = 0;
+  89              		.loc 1 59 0
+  90 0040 2F4A     		ldr	r2, .L4+40
+  91 0042 1370     		strb	r3, [r2]
+  60:Operate.c     **** 
+  61:Operate.c     **** 
+  62:Operate.c     **** 	// Resetting IP4 pulse count for Net applied (in metres)
+  63:Operate.c     **** 	NetMetresPulseCount = 0UL; 
+  92              		.loc 1 63 0
+  93 0044 2F4A     		ldr	r2, .L4+44
+  94 0046 1360     		str	r3, [r2]
+  64:Operate.c     **** 
+  65:Operate.c     **** 
+  66:Operate.c     **** 	// Initialise for calculation of Analogue Input Rolling Averages
+  67:Operate.c     **** 	BaleDiaVoltsTotAccumMultSamples     = 0UL;  // Bale Diameter 
+  95              		.loc 1 67 0
+  96 0048 2F4A     		ldr	r2, .L4+48
+  97 004a 1360     		str	r3, [r2]
+  68:Operate.c     **** 	DensityPresVoltsTotAccumMultSamples = 0UL;  // (Bale) Density Pressure  
+  98              		.loc 1 68 0
+  99 004c 2F4A     		ldr	r2, .L4+52
+ 100 004e 1360     		str	r3, [r2]
+  69:Operate.c     **** 	BaleShapeVoltsTotAccumMultSamples   = 0UL;  // Bale Shape Indicator 
+ 101              		.loc 1 69 0
+ 102 0050 2F4A     		ldr	r2, .L4+56
+ 103 0052 1360     		str	r3, [r2]
+  70:Operate.c     **** 	KnifePresVoltsTotAccumMultSamples   = 0UL;  // Knife Pressure
+ 104              		.loc 1 70 0
+ 105 0054 2F4A     		ldr	r2, .L4+60
+ 106 0056 1360     		str	r3, [r2]
+  71:Operate.c     **** 
+  72:Operate.c     **** #if 0 // Removed	
+  73:Operate.c     **** 	// clear status so mcm will initialize
+  74:Operate.c     **** 	for( i = 0; i < MAX_MCM; i++ )
+  75:Operate.c     **** 	{
+  76:Operate.c     **** 		mcm[i].status = 0;
+  77:Operate.c     **** 	}
+  78:Operate.c     **** #endif	
+  79:Operate.c     **** 
+  80:Operate.c     **** 	xLastWakeTime = xTaskGetTickCount();
+ 107              		.loc 1 80 0
+ 108 0058 FFF7FEFF 		bl	xTaskGetTickCount
+ 109              	.LVL3:
+ 110 005c 0190     		str	r0, [sp, #4]
+  81:Operate.c     **** 
+  82:Operate.c     **** 	while( 1 )
+  83:Operate.c     **** 	{
+  84:Operate.c     **** 		// every 500ms
+  85:Operate.c     **** 		vTaskDelayUntil( &xLastWakeTime, (500 / portTICK_RATE_MS) );
+  86:Operate.c     **** 
+  87:Operate.c     **** 		if( savecal )
+  88:Operate.c     **** 		{
+  89:Operate.c     **** 			savecal = 0;
+  90:Operate.c     **** 
+  91:Operate.c     **** 			// write factor to flash if needed
+  92:Operate.c     **** 			pFac.pf.CheckSum = CheckSumIt( &(pFac.ch[0]), (unsigned char *)&(pFac.pf.CheckSum) );
+ 111              		.loc 1 92 0
+ 112 005e 2E4E     		ldr	r6, .L4+64
+ 113 0060 8E23     		mov	r3, #142
+ 114 0062 5B00     		lsl	r3, r3, #1
+ 115 0064 9B19     		add	r3, r3, r6
+ 116 0066 9846     		mov	r8, r3
+  93:Operate.c     **** #ifndef WINDOWS
+  94:Operate.c     **** 			// write main factors to SPI1 Flash @ 0x000000
+  95:Operate.c     **** 			SPI1FlashWrite( SFC_PW, pFac_BASEADDRESS, &(pFac.ch[0]), sizeof(pFac.pf) );
+  96:Operate.c     **** 
+  97:Operate.c     **** 			// write backup factors to SPI1 Flash @ 0x000000 + 800h
+  98:Operate.c     **** 			SPI1FlashWrite( SFC_PW, pFac_BASEADDRESS + 0x800, &(pFac.ch[0]), sizeof(pFac.pf) );
+  99:Operate.c     **** #endif 
+ 100:Operate.c     **** 		}
+ 101:Operate.c     **** 
+ 102:Operate.c     **** 
+ 103:Operate.c     **** 		// Every 500 ms
+ 104:Operate.c     **** 
+ 105:Operate.c     **** 		// Length of Net applied (in metres) for the current IP4 pulse count indicating Net applied (yet 
+ 106:Operate.c     **** 		NetMetresAppliedForCount = NET_METERS_PER_PULSE * (float)NetMetresPulseCount;
+ 117              		.loc 1 106 0
+ 118 0068 1C4D     		ldr	r5, .L4+4
+ 119 006a 1B4C     		ldr	r4, .L4
+ 120              	.L3:
+  85:Operate.c     **** 		vTaskDelayUntil( &xLastWakeTime, (500 / portTICK_RATE_MS) );
+ 121              		.loc 1 85 0
+ 122 006c 01A8     		add	r0, sp, #4
+ 123 006e FA21     		mov	r1, #250
+ 124 0070 4900     		lsl	r1, r1, #1
+ 125 0072 FFF7FEFF 		bl	vTaskDelayUntil
+ 126              	.LVL4:
+  87:Operate.c     **** 		if( savecal )
+ 127              		.loc 1 87 0
+ 128 0076 204B     		ldr	r3, .L4+32
+ 129 0078 1B78     		ldrb	r3, [r3]
+ 130 007a 002B     		cmp	r3, #0
+ 131 007c 18D0     		beq	.L2
+  89:Operate.c     **** 			savecal = 0;
+ 132              		.loc 1 89 0
+ 133 007e 0022     		mov	r2, #0
+ 134 0080 1D4B     		ldr	r3, .L4+32
+ 135 0082 1A70     		strb	r2, [r3]
+  92:Operate.c     **** 			pFac.pf.CheckSum = CheckSumIt( &(pFac.ch[0]), (unsigned char *)&(pFac.pf.CheckSum) );
+ 136              		.loc 1 92 0
+ 137 0084 301C     		mov	r0, r6
+ 138 0086 4146     		mov	r1, r8
+ 139 0088 FFF7FEFF 		bl	CheckSumIt
+ 140              	.LVL5:
+ 141 008c 8E23     		mov	r3, #142
+ 142 008e 5B00     		lsl	r3, r3, #1
+ 143 0090 F050     		str	r0, [r6, r3]
+  95:Operate.c     **** 			SPI1FlashWrite( SFC_PW, pFac_BASEADDRESS, &(pFac.ch[0]), sizeof(pFac.pf) );
+ 144              		.loc 1 95 0
+ 145 0092 9023     		mov	r3, #144
+ 146 0094 5F00     		lsl	r7, r3, #1
+ 147 0096 0A20     		mov	r0, #10
+ 148 0098 0021     		mov	r1, #0
+ 149 009a 321C     		mov	r2, r6
+ 150 009c 3B1C     		mov	r3, r7
+ 151 009e FFF7FEFF 		bl	SPI1FlashWrite
+ 152              	.LVL6:
+  98:Operate.c     **** 			SPI1FlashWrite( SFC_PW, pFac_BASEADDRESS + 0x800, &(pFac.ch[0]), sizeof(pFac.pf) );
+ 153              		.loc 1 98 0
+ 154 00a2 0A20     		mov	r0, #10
+ 155 00a4 8021     		mov	r1, #128
+ 156 00a6 0901     		lsl	r1, r1, #4
+ 157 00a8 321C     		mov	r2, r6
+ 158 00aa 3B1C     		mov	r3, r7
+ 159 00ac FFF7FEFF 		bl	SPI1FlashWrite
+ 160              	.LVL7:
+ 161              	.L2:
+ 162              		.loc 1 106 0
+ 163 00b0 144B     		ldr	r3, .L4+44
+ 164 00b2 1868     		ldr	r0, [r3]
+ 165 00b4 FFF7FEFF 		bl	__aeabi_ui2f
+ 166              	.LVL8:
+ 167 00b8 FFF7FEFF 		bl	__aeabi_f2d
+ 168              	.LVL9:
+ 169 00bc 221C     		mov	r2, r4
+ 170 00be 2B1C     		mov	r3, r5
+ 171 00c0 FFF7FEFF 		bl	__aeabi_dmul
+ 172              	.LVL10:
+ 173 00c4 FFF7FEFF 		bl	__aeabi_d2f
+ 174              	.LVL11:
+ 175 00c8 144B     		ldr	r3, .L4+68
+ 176 00ca 1860     		str	r0, [r3]
+ 107:Operate.c     **** 
+ 108:Operate.c     **** 		// Calculating Net Pulse Frequency (Hz)
+ 109:Operate.c     **** 		CalculateNetPulseFrequency();
+ 177              		.loc 1 109 0
+ 178 00cc FFF7FEFF 		bl	CalculateNetPulseFrequency
+ 179              	.LVL12:
+ 110:Operate.c     **** 
+ 111:Operate.c     **** 
+ 112:Operate.c     **** 	} // end of while( 1 )
+ 180              		.loc 1 112 0
+ 181 00d0 CCE7     		b	.L3
+ 182              	.L5:
+ 183 00d2 C046C046 		.align	3
+ 183      C046
+ 184              	.L4:
+ 185 00d8 AAF1D24D 		.word	1305670058
+ 186 00dc 6210A83F 		.word	1067978850
+ 187 00e0 B80B0000 		.word	3000
+ 188 00e4 0000FAFF 		.word	-393216
+ 189 00e8 4040FAFF 		.word	-376768
+ 190 00ec 8040FAFF 		.word	-376704
+ 191 00f0 0080FAFF 		.word	-360448
+ 192 00f4 00F0FFFF 		.word	-4096
+ 193 00f8 00000000 		.word	savecal
+ 194 00fc 00000000 		.word	SavecalDelayWithinMenus
+ 195 0100 00000000 		.word	SavecalDelayOnMainDisplay
+ 196 0104 00000000 		.word	NetMetresPulseCount
+ 197 0108 00000000 		.word	BaleDiaVoltsTotAccumMultSamples
+ 198 010c 00000000 		.word	DensityPresVoltsTotAccumMultSamples
+ 199 0110 00000000 		.word	BaleShapeVoltsTotAccumMultSamples
+ 200 0114 00000000 		.word	KnifePresVoltsTotAccumMultSamples
+ 201 0118 00000000 		.word	pFac
+ 202 011c 00000000 		.word	NetMetresAppliedForCount
+ 203              		.cfi_endproc
+ 204              	.LFE376:
+ 206              		.section	.text.vStartOperateTask,"ax",%progbits
+ 207              		.align	2
+ 208              		.global	vStartOperateTask
+ 209              		.code	16
+ 210              		.thumb_func
+ 212              	vStartOperateTask:
+ 213              	.LFB377:
+ 113:Operate.c     **** }
+ 114:Operate.c     **** // -----------------------------------------------------------
+ 115:Operate.c     **** 
+ 116:Operate.c     **** 
+ 117:Operate.c     **** // -----------------------------------------------------------
+ 118:Operate.c     **** // Function Name       : vStartOperateTask
+ 119:Operate.c     **** // -----------------------------------------------------------
+ 120:Operate.c     **** void vStartOperateTask( unsigned portBASE_TYPE uxPriority )
+ 121:Operate.c     **** {
+ 214              		.loc 1 121 0
+ 215              		.cfi_startproc
+ 216              	.LVL13:
+ 217 0000 00B5     		push	{lr}
+ 218              	.LCFI3:
+ 219              		.cfi_def_cfa_offset 4
+ 220              		.cfi_offset 14, -4
+ 221 0002 85B0     		sub	sp, sp, #20
+ 222              	.LCFI4:
+ 223              		.cfi_def_cfa_offset 24
+ 122:Operate.c     **** 
+ 123:Operate.c     **** 	/* Spawn the task. */
+ 124:Operate.c     **** 	xTaskCreate( vOperateTask, "OPERATE", configOPERATE_STACK_SIZE, (void *)NULL, uxPriority, (xTaskHa
+ 224              		.loc 1 124 0
+ 225 0004 0090     		str	r0, [sp]
+ 226 0006 0023     		mov	r3, #0
+ 227 0008 0193     		str	r3, [sp, #4]
+ 228 000a 0293     		str	r3, [sp, #8]
+ 229 000c 0393     		str	r3, [sp, #12]
+ 230 000e 0448     		ldr	r0, .L7
+ 231              	.LVL14:
+ 232 0010 0449     		ldr	r1, .L7+4
+ 233 0012 6422     		mov	r2, #100
+ 234 0014 FFF7FEFF 		bl	xTaskGenericCreate
+ 235              	.LVL15:
+ 125:Operate.c     **** }
+ 236              		.loc 1 125 0
+ 237 0018 05B0     		add	sp, sp, #20
+ 238              		@ sp needed for prologue
+ 239 001a 01BC     		pop	{r0}
+ 240 001c 0047     		bx	r0
+ 241              	.L8:
+ 242 001e C046     		.align	2
+ 243              	.L7:
+ 244 0020 00000000 		.word	vOperateTask
+ 245 0024 00000000 		.word	.LC12
+ 246              		.cfi_endproc
+ 247              	.LFE377:
+ 249              		.comm	POWERtaskhandle,4,4
+ 250              		.comm	TWItaskhandle,4,4
+ 251              		.comm	SetTime,4,4
+ 252              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 253              		.align	2
+ 254              	.LC12:
+ 255 0000 4F504552 		.ascii	"OPERATE\000"
+ 255      41544500 
+ 256              		.text
+ 257              	.Letext0:
+ 258              		.file 2 "./include/AT91SAM7A3.h"
+ 259              		.file 3 "./include/projdefs.h"
+ 260              		.file 4 "./portmacro.h"
+ 261              		.file 5 "./include/task.h"
+ 262              		.file 6 "./include/queue.h"
+ 263              		.file 7 "./include/semphr.h"
+ 264              		.file 8 "Board.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Operate.c
+  C:\Temp\ccURkR0X.s:22     .text.vOperateTask:00000000 $t
+  C:\Temp\ccURkR0X.s:26     .text.vOperateTask:00000000 vOperateTask
+  C:\Temp\ccURkR0X.s:185    .text.vOperateTask:000000d8 $d
+  C:\Temp\ccURkR0X.s:207    .text.vStartOperateTask:00000000 $t
+  C:\Temp\ccURkR0X.s:212    .text.vStartOperateTask:00000000 vStartOperateTask
+  C:\Temp\ccURkR0X.s:244    .text.vStartOperateTask:00000020 $d
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\ccURkR0X.s:253    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+UNDEFINED SYMBOLS
+__aeabi_ui2f
+__aeabi_f2d
+__aeabi_dmul
+__aeabi_d2f
+vTaskDelay
+xTaskGetTickCount
+vTaskDelayUntil
+CheckSumIt
+SPI1FlashWrite
+CalculateNetPulseFrequency
+savecal
+SavecalDelayWithinMenus
+SavecalDelayOnMainDisplay
+NetMetresPulseCount
+BaleDiaVoltsTotAccumMultSamples
+DensityPresVoltsTotAccumMultSamples
+BaleShapeVoltsTotAccumMultSamples
+KnifePresVoltsTotAccumMultSamples
+pFac
+NetMetresAppliedForCount
+xTaskGenericCreate

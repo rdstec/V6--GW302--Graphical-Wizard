@@ -1,0 +1,428 @@
+ARM GAS  Cstartup.s 			page 1
+
+
+   1              	/*------------------------------------------------------------------------------
+   2              	//*-         ATMEL Microcontroller Software Support  -  ROUSSET  -
+   3              	//*------------------------------------------------------------------------------
+   4              	//* The software is delivered "AS IS" without warranty or condition of any
+   5              	//* kind, either express, implied or statutory. This includes without
+   6              	//* limitation any warranty or condition with respect to merchantability or
+   7              	//* fitness for any particular purpose, or against the infringements of
+   8              	//* intellectual property rights of others.
+   9              	//*-----------------------------------------------------------------------------
+  10              	//*- File source          : Cstartup.s
+  11              	//*- Object               : Generic CStartup for KEIL and GCC No Use REMAP
+  12              	//*- Compilation flag     : None
+  13              	//*-
+  14              	//*- 1.0 10/Mar/05 JPP    : Creation
+  15              	//*- 1.1 01/Apr/05 JPP    : save SPSR 
+  16              	//*-----------------------------------------------------------------------------*/
+  17              	
+  18              	#;------------------------------------------------------------------------------
+  19              	#;- Section Definition
+  20              	#;-----------------
+  21              	#;-  Section    
+  22              	#;- .internal_ram_top 	Top_Stack: used by the cstartup for vector initalisation 
+  23              	#;-			management defined by ld and affect from ldscript 
+  24              	#;------------------------------------------------------------------------------
+  25              		.section .internal_ram_top
+  26              		.code 32
+  27              		.align 	0
+  28              		.global	Top_Stack
+  29              	Top_Stack:
+  30              		
+  31              	/*-----------------------------------------------------------------------------
+  32              	  Define RAM Vector Table 
+  33              	------------------------------------------------------------------------------*/
+  34              		.text
+  35              		.arm
+  36              		.section .vectRAM, "ax"
+  37              	
+  38              	reset_RAM:/* 0x00 Reset handler */
+  39 0000 3CF09FE5 		LDR		PC, reset_RAM_add        
+  40              	undef_RAM:	/* 0x04 Undefined Instruction */
+  41 0004 3CF09FE5 		LDR		PC, undef_RAM_add
+  42              	swint_RAM:	/* 0x08 Software Interrupt */
+  43 0008 3CF09FE5 		LDR		PC, swint_RAM_add
+  44              	preab_RAM:	/* 0x0C Prefetch Abort */
+  45 000c 3CF09FE5 		LDR		PC, preab_RAM_add
+  46              	datab_RAM:	/* 0x10 Data Abort */
+  47 0010 3CF09FE5 		LDR		PC, datab_RAM_add
+  48              	rsrvd_RAM:	/* 0x14 Reserved */
+  49 0014 3CF09FE5 		LDR		PC,	rsrvd_RAM_add
+  50              	irqvc_RAM:	/* 0x18 IRQ - Jump directly to the address given by the AIC */
+  51 0018 20FF1FE5 		LDR		PC,[PC, #-0xF20]
+  52              	fiqvc_RAM:	/* 0x1c FIQ	*/
+  53              		/* Switch in SVC/User Mode to allow User Stack access for C code */
+  54              		/*  because the FIQ is not yet acknowledged*/
+  55              		/* Save and r0 in FIQ_Register */
+  56 001c 0090A0E1 		mov		r9,r0
+  57 0020 040198E5 		ldr		r0 , [r8, #AIC_FVR]
+ARM GAS  Cstartup.s 			page 2
+
+
+  58 0024 D3F021E3 		msr		CPSR_c,#I_BIT | F_BIT | ARM_MODE_SVC
+  59              	
+  60              		/* Save scratch/used registers and LR in User Stack */
+  61 0028 0E502DE9 		stmfd	sp!, { r1-r3, r12, lr}
+  62              	
+  63              		/* Branch to the routine pointed by the AIC_FVR */
+  64 002c 0FE0A0E1 		mov		r14, pc
+  65 0030 10FF2FE1 		bx		r0
+  66              	
+  67              		/*- Restore scratch/used registers and LR from User Stack */
+  68 0034 0E50BDE8 		ldmia	sp!, { r1-r3, r12, lr}
+  69              	
+  70              		/*- Leave Interrupts disabled and switch back in FIQ mode */
+  71 0038 D1F021E3 		msr		CPSR_c, #I_BIT | F_BIT | ARM_MODE_FIQ
+  72              	
+  73              		/*- Restore the R0 ARM_MODE_SVC register */
+  74 003c 0900A0E1 		mov		r0,r9
+  75              	
+  76              		/*- Restore the Program Counter using the LR_fiq directly in the PC */
+  77 0040 04F05EE2 		subs	pc,lr,#4
+  78              		/* end of FIQ_Handler_Entry */
+  79              	
+  80              	/* fix up external exception vector addresses */	
+  81 0044 04000000 	reset_RAM_add:	.word	InitReset         
+  82 0048 00000000 	undef_RAM_add:	.word	AT91F_Undefined_Instruction_handler
+  83 004c 00000000 	swint_RAM_add:	.word	vPortYieldProcessor
+  84 0050 00000000 	preab_RAM_add:	.word	AT91F_Prefetch_Abort_handler
+  85 0054 00000000 	datab_RAM_add:	.word	AT91F_Data_Abort_handler
+  86 0058 00000000 	rsrvd_RAM_add:	.word	AT91F_Reserved_handler
+  87              		
+  88              	/* end of RAM vector table */
+  89              	/*------------------------------------------------------------------------------*/
+  90              	
+  91              	
+  92              	/*-----------------------------------------------------------------------------
+  93              	  Define ROM Vector Table 
+  94              	------------------------------------------------------------------------------*/
+  95              		.text
+  96              		.arm
+  97              		.section .vectROM, "ax"
+  98              	
+  99              	reset_ROM:/* 0x00 Reset handler */
+ 100 0000 3CF09FE5 		LDR		PC, reset_ROM_add        
+ 101              	undef_ROM:	/* 0x04 Undefined Instruction */
+ 102 0004 3CF09FE5 		LDR		PC, undef_ROM_add
+ 103              	swint_ROM:	/* 0x08 Software Interrupt */
+ 104 0008 3CF09FE5 		LDR		PC, swint_ROM_add
+ 105              	preab_ROM:	/* 0x0C Prefetch Abort */
+ 106 000c 3CF09FE5 		LDR		PC, preab_ROM_add
+ 107              	datab_ROM:	/* 0x10 Data Abort */
+ 108 0010 3CF09FE5 		LDR		PC, datab_ROM_add
+ 109              	rsrvd_ROM:	/* 0x14 Reserved */
+ 110 0014 3CF09FE5 		LDR		PC,	rsrvd_ROM_add
+ 111              	irqvc_ROM:	/* 0x18 IRQ - Jump directly to the address given by the AIC */
+ 112 0018 20FF1FE5 		LDR		PC,[PC, #-0xF20]
+ 113              	fiqvc_ROM:	/* 0x1c FIQ	*/
+ 114              		/* Switch in SVC/User Mode to allow User Stack access for C code */
+ARM GAS  Cstartup.s 			page 3
+
+
+ 115              		/*  because the FIQ is not yet acknowledged*/
+ 116              		/* Save and r0 in FIQ_Register */
+ 117 001c 0090A0E1 		mov		r9,r0
+ 118 0020 040198E5 		ldr		r0 , [r8, #AIC_FVR]
+ 119 0024 D3F021E3 		msr		CPSR_c,#I_BIT | F_BIT | ARM_MODE_SVC
+ 120              	
+ 121              		/* Save scratch/used registers and LR in User Stack */
+ 122 0028 0E502DE9 		stmfd	sp!, { r1-r3, r12, lr}
+ 123              	
+ 124              		/* Branch to the routine pointed by the AIC_FVR */
+ 125 002c 0FE0A0E1 		mov		r14, pc
+ 126 0030 10FF2FE1 		bx		r0
+ 127              	
+ 128              		/*- Restore scratch/used registers and LR from User Stack */
+ 129 0034 0E50BDE8 		ldmia	sp!, { r1-r3, r12, lr}
+ 130              	
+ 131              		/*- Leave Interrupts disabled and switch back in FIQ mode */
+ 132 0038 D1F021E3 		msr		CPSR_c, #I_BIT | F_BIT | ARM_MODE_FIQ
+ 133              	
+ 134              		/*- Restore the R0 ARM_MODE_SVC register */
+ 135 003c 0900A0E1 		mov		r0,r9
+ 136              	
+ 137              		/*- Restore the Program Counter using the LR_fiq directly in the PC */
+ 138 0040 04F05EE2 		subs	pc,lr,#4
+ 139              		/* end of FIQ_Handler_Entry */
+ 140              	
+ 141              	/* fix up external exception vector addresses */	
+ 142 0044 04000000 	reset_ROM_add:	.word	InitReset         
+ 143 0048 00000000 	undef_ROM_add:	.word	AT91F_Undefined_Instruction_handler
+ 144 004c 00000000 	swint_ROM_add:	.word	vPortYieldProcessor
+ 145 0050 00000000 	preab_ROM_add:	.word	AT91F_Prefetch_Abort_handler
+ 146 0054 00000000 	datab_ROM_add:	.word	AT91F_Data_Abort_handler
+ 147 0058 00000000 	rsrvd_ROM_add:	.word	AT91F_Reserved_handler
+ 148              		
+ 149              	/* end of ROM vector table */
+ 150              	/*------------------------------------------------------------------------------*/
+ 151              	
+ 152              		.section	.reset
+ 153              		.text
+ 154              		.global _startup
+ 155              		.func   _startup
+ 156              	_startup:
+ 157              	
+ 158              		.align 0
+ 159 0000 00000000 	.RAM_TOP:	.word	Top_Stack
+ 160              	
+ 161              	InitReset:
+ 162              	/*------------------------------------------------------------------------------
+ 163              	/*- Low level Init (PMC, AIC, ? ....) by C function AT91F_LowLevelInit
+ 164              	/*------------------------------------------------------------------------------*/
+ 165              		.extern   AT91F_LowLevelInit
+ 166              		/*- minumum C initialization */
+ 167              		/*- call  AT91F_LowLevelInit( void) */
+ 168              	
+ 169 0004 0CD01FE5 		ldr		r13,.RAM_TOP /* temporary stack in internal RAM */
+ 170              		/*--Call Low level init function in ABSOLUTE through the Interworking */
+ 171 0008 B4009FE5 		ldr		r0,=AT91F_LowLevelInit
+ARM GAS  Cstartup.s 			page 4
+
+
+ 172 000c 0FE0A0E1 		mov		lr, pc
+ 173 0010 10FF2FE1 		bx		r0
+ 174              		
+ 175              	/*------------------------------------------------------------------------------
+ 176              	//*- Stack Sizes Definition
+ 177              	//*------------------------
+ 178              	//*- Interrupt Stack requires 2 words x 8 priority level x 4 bytes when using
+ 179              	//*- the vectoring. This assume that the IRQ management.
+ 180              	//*- The Interrupt Stack must be adjusted depending on the interrupt handlers.
+ 181              	//*- Fast Interrupt not requires stack If in your application it required you must
+ 182              	//*- be definehere.
+ 183              	//*- The System stack size is not defined and is limited by the free internal
+ 184              	//*- SRAM.
+ 185              	//*------------------------------------------------------------------------------*/
+ 186              	
+ 187              	/*------------------------------------------------------------------------------
+ 188              	//*- Top of Stack Definition
+ 189              	//*-------------------------
+ 190              	//*- Interrupt and Supervisor Stack are located at the top of internal memory in 
+ 191              	//*- order to speed the exception handling context saving and restoring.
+ 192              	//*- ARM_MODE_SVC (Application, C) Stack is located at the top of the external memory.
+ 193              	//*------------------------------------------------------------------------------*/
+ 194              	/* #include "AT91SAM7A3_inc.h"	  */
+ 195              	
+ 196              	/* (3 x 8 x 4) */
+ 197              		.equ UND_STACK_SIZE, 0x00000004
+ 198              	    .equ ABT_STACK_SIZE, 0x00000004
+ 199              	    .equ FIQ_STACK_SIZE, 0x00000004
+ 200              	    .equ IRQ_STACK_SIZE, 0X00000060
+ 201              	    .equ SVC_STACK_SIZE, 0x00000054
+ 202              	
+ 203              	    .equ ARM_MODE_USR, 0x10 /* User Mode */
+ 204              	    .equ ARM_MODE_FIQ, 0x11 /* FIQ Mode */
+ 205              	    .equ ARM_MODE_IRQ, 0x12 /* IRQ Mode */
+ 206              	    .equ ARM_MODE_SVC, 0x13 /* Supervisor Mode */
+ 207              	    .equ ARM_MODE_ABT, 0x17 /* Abort Mode */
+ 208              	    .equ ARM_MODE_UND, 0x1B /* Undefined Mode */
+ 209              	    .equ ARM_MODE_SYS, 0x1F /* System Mode */
+ 210              	
+ 211              	    .equ I_BIT, 0x80
+ 212              	    .equ F_BIT, 0x40
+ 213              	
+ 214              		.equ AIC_IVR,         (256) 
+ 215              		.equ AIC_FVR,         (260) 
+ 216              		.equ AIC_EOICR,       (304)
+ 217              		.equ AT91C_BASE_AIC,  (0xFFFFF000)
+ 218              	
+ 219              	/*------------------------------------------------------------------------------
+ 220              	//*- Setup the stack for each mode
+ 221              	//*-------------------------------*/
+ 222 0014 0D00A0E1 		mov		r0,r13
+ 223 0018 DBF021E3 	    msr		CPSR_c, #ARM_MODE_UND | I_BIT | F_BIT /* Undefined Instruction Mode */
+ 224 001c 00D0A0E1 	    mov		sp, r0
+ 225 0020 040040E2 	    sub		r0, r0, #UND_STACK_SIZE
+ 226              	    
+ 227 0024 D7F021E3 	    msr		CPSR_c, #ARM_MODE_ABT | I_BIT | F_BIT /* Abort Mode */
+ 228 0028 00D0A0E1 	    mov		sp, r0
+ARM GAS  Cstartup.s 			page 5
+
+
+ 229 002c 040040E2 	    sub		r0, r0, #ABT_STACK_SIZE
+ 230              	    
+ 231 0030 D1F021E3 	    msr		CPSR_c, #ARM_MODE_FIQ | I_BIT | F_BIT /* FIQ Mode */
+ 232 0034 00D0A0E1 	    mov		sp, r0
+ 233 0038 88809FE5 	   	ldr		r8, =AT91C_BASE_AIC
+ 234 003c 040040E2 	    sub		r0, r0, #FIQ_STACK_SIZE
+ 235              	    
+ 236 0040 D2F021E3 	    msr		CPSR_c, #ARM_MODE_IRQ | I_BIT | F_BIT /* IRQ Mode */
+ 237 0044 00D0A0E1 	    mov		sp, r0
+ 238 0048 600040E2 	    sub		r0, r0, #IRQ_STACK_SIZE
+ 239              	    
+ 240 004c D3F021E3 	    msr		CPSR_c, #ARM_MODE_SVC | I_BIT | F_BIT /* Supervisor Mode */
+ 241 0050 00D0A0E1 	    mov		sp, r0
+ 242 0054 540040E2 	    sub		r0, r0, #SVC_STACK_SIZE
+ 243              	    
+ 244 0058 DFF021E3 	    msr		CPSR_c, #ARM_MODE_SYS | I_BIT | F_BIT /* System Mode */
+ 245 005c 00D0A0E1 	    mov		sp, r0
+ 246              	
+ 247              		/* We want to start in supervisor mode.  Operation will switch to system
+ 248              		mode when the first task starts. */
+ 249 0060 D3F021E3 		msr		CPSR_c, #ARM_MODE_SVC | I_BIT | F_BIT
+ 250              	
+ 251              	# Relocate .data section (Copy from ROM to RAM)
+ 252 0064 60109FE5 		LDR		R1, =_etext
+ 253 0068 60209FE5 	    LDR		R2, =_data
+ 254 006c 60309FE5 	    LDR		R3, =_edata
+ 255              	LoopRel:
+ 256 0070 030052E1 		CMP		R2, R3
+ 257 0074 04009134 		LDRLO	R0, [R1], #4
+ 258 0078 04008234 		STRLO	R0, [R2], #4
+ 259 007c FBFFFF3A 		BLO		LoopRel
+ 260              	
+ 261              	# Clear .bss section (Zero init)
+ 262 0080 0000A0E3 		MOV     R0, #0
+ 263 0084 4C109FE5 		LDR     R1, =__bss_start__
+ 264 0088 4C209FE5 		LDR     R2, =__bss_end__
+ 265              	LoopZI:
+ 266 008c 020051E1 		CMP     R1, R2
+ 267 0090 04008134 		STRLO   R0, [R1], #4
+ 268 0094 FCFFFF3A 		BLO     LoopZI
+ 269              	
+ 270              	# Remap 
+ 271              	    .equ    MC_BASE,0xFFFFFF00  /* MC Base Address */
+ 272              	    .equ    MC_RCR, 0x00        /* MC_RCR Offset */
+ 273              	
+ 274 0098 FF00E0E3 	    LDR     R0, =MC_BASE
+ 275 009c 0110A0E3 	    MOV     R1, #1
+ 276 00a0 001080E5 	    STR     R1, [R0, #MC_RCR]   /* Remap */
+ 277              	
+ 278 00a4 34E09FE5 		ldr		lr,=exit
+ 279 00a8 34009FE5 		ldr		r0,=main
+ 280 00ac 10FF2FE1 	    bx		r0
+ 281              	
+ 282              	/* 
+ 283              	   *** Remap ***
+ 284              	   ROM_RUN: exception vectors for RAM have been already copied 
+ 285              	     to 0x00200000 by the .data copy-loop 
+ARM GAS  Cstartup.s 			page 6
+
+
+ 286              	   RAM_RUN: exception vectors are already placed at 0x0020000 by
+ 287              	     linker settings
+ 288              	*/
+ 289              	
+ 290              		.size   _startup, . - _startup
+ 291              		.endfunc
+ 292              		
+ 293              	/* get end of flash aligned to next 256 byte block */	
+ 294              		.global freeFlash
+ 295              		.thumb_func
+ 296              		.func	freeFlash
+ 297              		.align	2
+ 298              	freeFlash:
+ 299 00b0 0848     	    ldr		r0, =_edata		/* end of data to initialize */
+ 300 00b2 0749     	    ldr		r1, =_data		/* start of data to initialize */
+ 301 00b4 401A     		sub		r0, r0, r1		/* length of initialized data block */
+ 302 00b6 0549     	    ldr		r1, =_etext		/* first byte of initilization data in flash */
+ 303 00b8 4018     		add		r0, r0, r1 		/* first byte of free flash */
+ 304 00ba FF30     		add		r0, r0, #255	/* r0 = r3 + 255 */
+ 305 00bc 000A     		lsr		r0,#8			/* r0 = r0 >> 8 */
+ 306 00be 0002     		lsl		r0,#8			/* r0 = r0 << 8 */
+ 307 00c0 7047     		bx		lr				/* return, r0 contains first free 256 byte block of flash */
+ 308              		
+ 309              		.size   freeFlash, . - freeFlash
+ 310              		.endfunc
+ 311              		
+ 312              	/* library exit function causes sbrk/read/write etc to be linked in, even if not used */
+ 313              		.global exit
+ 314              		.func   exit
+ 315              	exit:
+ 316 00c2 FEE7     		b    .
+ 317              		.size   exit, . - exit
+ 318              		.endfunc
+ 319              		
+ 320              	
+ 321 00c4 00000000 		.end
+ 321      00F0FFFF 
+ 321      00000000 
+ 321      00000000 
+ 321      00000000 
+ARM GAS  Cstartup.s 			page 7
+
+
+DEFINED SYMBOLS
+          Cstartup.s:29     .internal_ram_top:00000000 Top_Stack
+          Cstartup.s:38     .vectRAM:00000000 reset_RAM
+          Cstartup.s:81     .vectRAM:00000044 reset_RAM_add
+          Cstartup.s:39     .vectRAM:00000000 $a
+          Cstartup.s:40     .vectRAM:00000004 undef_RAM
+          Cstartup.s:82     .vectRAM:00000048 undef_RAM_add
+          Cstartup.s:42     .vectRAM:00000008 swint_RAM
+          Cstartup.s:83     .vectRAM:0000004c swint_RAM_add
+          Cstartup.s:44     .vectRAM:0000000c preab_RAM
+          Cstartup.s:84     .vectRAM:00000050 preab_RAM_add
+          Cstartup.s:46     .vectRAM:00000010 datab_RAM
+          Cstartup.s:85     .vectRAM:00000054 datab_RAM_add
+          Cstartup.s:48     .vectRAM:00000014 rsrvd_RAM
+          Cstartup.s:86     .vectRAM:00000058 rsrvd_RAM_add
+          Cstartup.s:50     .vectRAM:00000018 irqvc_RAM
+          Cstartup.s:52     .vectRAM:0000001c fiqvc_RAM
+                            *ABS*:00000104 AIC_FVR
+                            *ABS*:00000080 I_BIT
+                            *ABS*:00000040 F_BIT
+                            *ABS*:00000013 ARM_MODE_SVC
+                            *ABS*:00000011 ARM_MODE_FIQ
+          Cstartup.s:81     .vectRAM:00000044 $d
+          Cstartup.s:161    .text:00000004 InitReset
+          Cstartup.s:99     .vectROM:00000000 reset_ROM
+          Cstartup.s:142    .vectROM:00000044 reset_ROM_add
+          Cstartup.s:100    .vectROM:00000000 $a
+          Cstartup.s:101    .vectROM:00000004 undef_ROM
+          Cstartup.s:143    .vectROM:00000048 undef_ROM_add
+          Cstartup.s:103    .vectROM:00000008 swint_ROM
+          Cstartup.s:144    .vectROM:0000004c swint_ROM_add
+          Cstartup.s:105    .vectROM:0000000c preab_ROM
+          Cstartup.s:145    .vectROM:00000050 preab_ROM_add
+          Cstartup.s:107    .vectROM:00000010 datab_ROM
+          Cstartup.s:146    .vectROM:00000054 datab_ROM_add
+          Cstartup.s:109    .vectROM:00000014 rsrvd_ROM
+          Cstartup.s:147    .vectROM:00000058 rsrvd_ROM_add
+          Cstartup.s:111    .vectROM:00000018 irqvc_ROM
+          Cstartup.s:113    .vectROM:0000001c fiqvc_ROM
+          Cstartup.s:142    .vectROM:00000044 $d
+          Cstartup.s:156    .text:00000000 _startup
+          Cstartup.s:159    .text:00000000 .RAM_TOP
+          Cstartup.s:159    .text:00000000 $d
+          Cstartup.s:169    .text:00000004 $a
+          Cstartup.s:197    *ABS*:00000004 UND_STACK_SIZE
+          Cstartup.s:198    *ABS*:00000004 ABT_STACK_SIZE
+          Cstartup.s:199    *ABS*:00000004 FIQ_STACK_SIZE
+          Cstartup.s:200    *ABS*:00000060 IRQ_STACK_SIZE
+          Cstartup.s:201    *ABS*:00000054 SVC_STACK_SIZE
+          Cstartup.s:203    *ABS*:00000010 ARM_MODE_USR
+          Cstartup.s:205    *ABS*:00000012 ARM_MODE_IRQ
+          Cstartup.s:207    *ABS*:00000017 ARM_MODE_ABT
+          Cstartup.s:208    *ABS*:0000001b ARM_MODE_UND
+          Cstartup.s:209    *ABS*:0000001f ARM_MODE_SYS
+          Cstartup.s:214    *ABS*:00000100 AIC_IVR
+          Cstartup.s:216    *ABS*:00000130 AIC_EOICR
+          Cstartup.s:217    *ABS*:fffff000 AT91C_BASE_AIC
+ARM GAS  Cstartup.s 			page 8
+
+
+          Cstartup.s:255    .text:00000070 LoopRel
+          Cstartup.s:265    .text:0000008c LoopZI
+          Cstartup.s:271    *ABS*:ffffff00 MC_BASE
+          Cstartup.s:272    *ABS*:00000000 MC_RCR
+          Cstartup.s:315    .text:000000c2 exit
+          Cstartup.s:298    .text:000000b0 freeFlash
+          Cstartup.s:297    .text:000000b0 $t
+          Cstartup.s:321    .text:000000c4 $d
+
+UNDEFINED SYMBOLS
+AT91F_Undefined_Instruction_handler
+vPortYieldProcessor
+AT91F_Prefetch_Abort_handler
+AT91F_Data_Abort_handler
+AT91F_Reserved_handler
+AT91F_LowLevelInit
+_etext
+_data
+_edata
+__bss_start__
+__bss_end__
+main

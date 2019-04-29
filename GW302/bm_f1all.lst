@@ -1,0 +1,1612 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"bm_f1all.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	F1_I17E
+  18              		.global	F1_I17D
+  19              		.global	F1_I17C
+  20              		.global	F1_I17B
+  21              		.global	F1_I17A
+  22              		.global	F1_I179
+  23              		.global	F1_I178
+  24              		.global	F1_I177
+  25              		.global	F1_I176
+  26              		.global	F1_I175
+  27              		.global	F1_I174
+  28              		.global	F1_I173
+  29              		.global	F1_I172
+  30              		.global	F1_I171
+  31              		.global	F1_I170
+  32              		.global	F1_I16F
+  33              		.global	F1_I16E
+  34              		.global	F1_I16D
+  35              		.global	F1_I16C
+  36              		.global	F1_I16B
+  37              		.global	F1_I16A
+  38              		.global	F1_I169
+  39              		.global	F1_I168
+  40              		.global	F1_I167
+  41              		.global	F1_I166
+  42              		.global	F1_I165
+  43              		.global	F1_I164
+  44              		.global	F1_I163
+  45              		.global	F1_I162
+  46              		.global	F1_I161
+  47              		.global	F1_I160
+  48              		.global	F1_I15F
+  49              		.global	F1_I15E
+  50              		.global	F1_I15D
+  51              		.global	F1_I15C
+  52              		.global	F1_I15B
+  53              		.global	F1_I15A
+  54              		.global	F1_I159
+  55              		.global	F1_I158
+  56              		.global	F1_I157
+  57              		.global	F1_I156
+  58              		.global	F1_I155
+  59              		.global	F1_I154
+  60              		.global	F1_I153
+  61              		.global	F1_I152
+  62              		.global	F1_I151
+  63              		.global	F1_I150
+  64              		.global	F1_I14F
+  65              		.global	F1_I14E
+  66              		.global	F1_I14D
+  67              		.global	F1_I14C
+  68              		.global	F1_I14B
+  69              		.global	F1_I14A
+  70              		.global	F1_I149
+  71              		.global	F1_I148
+  72              		.global	F1_I147
+  73              		.global	F1_I146
+  74              		.global	F1_I145
+  75              		.global	F1_I144
+  76              		.global	F1_I143
+  77              		.global	F1_I142
+  78              		.global	F1_I141
+  79              		.global	F1_I140
+  80              		.global	F1_I13F
+  81              		.global	F1_I13E
+  82              		.global	F1_I13D
+  83              		.global	F1_I13C
+  84              		.global	F1_I13B
+  85              		.global	F1_I13A
+  86              		.global	F1_I139
+  87              		.global	F1_I138
+  88              		.global	F1_I137
+  89              		.global	F1_I136
+  90              		.global	F1_I135
+  91              		.global	F1_I134
+  92              		.global	F1_I133
+  93              		.global	F1_I132
+  94              		.global	F1_I131
+  95              		.global	F1_I130
+  96              		.global	F1_I12F
+  97              		.global	F1_I12E
+  98              		.global	F1_I12D
+  99              		.global	F1_I12C
+ 100              		.global	F1_I12B
+ 101              		.global	F1_I12A
+ 102              		.global	F1_I129
+ 103              		.global	F1_I128
+ 104              		.global	F1_I127
+ 105              		.global	F1_I126
+ 106              		.global	F1_I125
+ 107              		.global	F1_I124
+ 108              		.global	F1_I123
+ 109              		.global	F1_I122
+ 110              		.global	F1_I121
+ 111              		.global	F1_I120
+ 112              		.global	F1_POINT
+ 113              		.global	F1_CLK
+ 114              		.global	F1_RDS
+ 115              		.global	F1_DEG
+ 116              		.global	F1_ENT
+ 117              		.global	F1_FILL
+ 118              		.global	fnt1
+ 119              		.comm	POWERtaskhandle,4,4
+ 120              		.comm	TWItaskhandle,4,4
+ 121              		.comm	SetTime,4,4
+ 122              		.section	.rodata.F1_CLK,"a",%progbits
+ 123              		.align	2
+ 126              	F1_CLK:
+ 127 0000 07       		.byte	7
+ 128 0001 07       		.byte	7
+ 129 0002 38       		.byte	56
+ 130 0003 44       		.byte	68
+ 131 0004 92       		.byte	-110
+ 132 0005 9A       		.byte	-102
+ 133 0006 82       		.byte	-126
+ 134 0007 44       		.byte	68
+ 135 0008 38       		.byte	56
+ 136 0009 000000   		.section	.rodata.F1_I12F,"a",%progbits
+ 137              		.align	2
+ 140              	F1_I12F:
+ 141 0000 05       		.byte	5
+ 142 0001 07       		.byte	7
+ 143 0002 00       		.byte	0
+ 144 0003 08       		.byte	8
+ 145 0004 10       		.byte	16
+ 146 0005 20       		.byte	32
+ 147 0006 40       		.byte	64
+ 148 0007 80       		.byte	-128
+ 149 0008 00       		.byte	0
+ 150 0009 000000   		.section	.rodata.F1_I170,"a",%progbits
+ 151              		.align	2
+ 154              	F1_I170:
+ 155 0000 05       		.byte	5
+ 156 0001 07       		.byte	7
+ 157 0002 00       		.byte	0
+ 158 0003 B0       		.byte	-80
+ 159 0004 C8       		.byte	-56
+ 160 0005 C8       		.byte	-56
+ 161 0006 B0       		.byte	-80
+ 162 0007 80       		.byte	-128
+ 163 0008 80       		.byte	-128
+ 164 0009 000000   		.section	.rodata.F1_I171,"a",%progbits
+ 165              		.align	2
+ 168              	F1_I171:
+ 169 0000 05       		.byte	5
+ 170 0001 07       		.byte	7
+ 171 0002 00       		.byte	0
+ 172 0003 68       		.byte	104
+ 173 0004 98       		.byte	-104
+ 174 0005 98       		.byte	-104
+ 175 0006 68       		.byte	104
+ 176 0007 08       		.byte	8
+ 177 0008 08       		.byte	8
+ 178 0009 000000   		.section	.rodata.F1_I172,"a",%progbits
+ 179              		.align	2
+ 182              	F1_I172:
+ 183 0000 05       		.byte	5
+ 184 0001 07       		.byte	7
+ 185 0002 00       		.byte	0
+ 186 0003 00       		.byte	0
+ 187 0004 B0       		.byte	-80
+ 188 0005 C8       		.byte	-56
+ 189 0006 80       		.byte	-128
+ 190 0007 80       		.byte	-128
+ 191 0008 80       		.byte	-128
+ 192 0009 000000   		.section	.rodata.F1_I13D,"a",%progbits
+ 193              		.align	2
+ 196              	F1_I13D:
+ 197 0000 05       		.byte	5
+ 198 0001 07       		.byte	7
+ 199 0002 00       		.byte	0
+ 200 0003 00       		.byte	0
+ 201 0004 F8       		.byte	-8
+ 202 0005 00       		.byte	0
+ 203 0006 F8       		.byte	-8
+ 204 0007 00       		.byte	0
+ 205 0008 00       		.byte	0
+ 206 0009 000000   		.section	.rodata.F1_I13E,"a",%progbits
+ 207              		.align	2
+ 210              	F1_I13E:
+ 211 0000 04       		.byte	4
+ 212 0001 07       		.byte	7
+ 213 0002 80       		.byte	-128
+ 214 0003 40       		.byte	64
+ 215 0004 20       		.byte	32
+ 216 0005 10       		.byte	16
+ 217 0006 20       		.byte	32
+ 218 0007 40       		.byte	64
+ 219 0008 80       		.byte	-128
+ 220 0009 000000   		.section	.rodata.F1_I175,"a",%progbits
+ 221              		.align	2
+ 224              	F1_I175:
+ 225 0000 05       		.byte	5
+ 226 0001 07       		.byte	7
+ 227 0002 00       		.byte	0
+ 228 0003 00       		.byte	0
+ 229 0004 90       		.byte	-112
+ 230 0005 90       		.byte	-112
+ 231 0006 90       		.byte	-112
+ 232 0007 90       		.byte	-112
+ 233 0008 68       		.byte	104
+ 234 0009 000000   		.section	.rodata.F1_I176,"a",%progbits
+ 235              		.align	2
+ 238              	F1_I176:
+ 239 0000 05       		.byte	5
+ 240 0001 07       		.byte	7
+ 241 0002 00       		.byte	0
+ 242 0003 00       		.byte	0
+ 243 0004 88       		.byte	-120
+ 244 0005 88       		.byte	-120
+ 245 0006 88       		.byte	-120
+ 246 0007 50       		.byte	80
+ 247 0008 20       		.byte	32
+ 248 0009 000000   		.section	.rodata.F1_I177,"a",%progbits
+ 249              		.align	2
+ 252              	F1_I177:
+ 253 0000 05       		.byte	5
+ 254 0001 07       		.byte	7
+ 255 0002 00       		.byte	0
+ 256 0003 00       		.byte	0
+ 257 0004 88       		.byte	-120
+ 258 0005 88       		.byte	-120
+ 259 0006 A8       		.byte	-88
+ 260 0007 A8       		.byte	-88
+ 261 0008 50       		.byte	80
+ 262 0009 000000   		.section	.rodata.F1_I178,"a",%progbits
+ 263              		.align	2
+ 266              	F1_I178:
+ 267 0000 05       		.byte	5
+ 268 0001 07       		.byte	7
+ 269 0002 00       		.byte	0
+ 270 0003 00       		.byte	0
+ 271 0004 88       		.byte	-120
+ 272 0005 50       		.byte	80
+ 273 0006 20       		.byte	32
+ 274 0007 50       		.byte	80
+ 275 0008 88       		.byte	-120
+ 276 0009 000000   		.section	.rodata.F1_I179,"a",%progbits
+ 277              		.align	2
+ 280              	F1_I179:
+ 281 0000 05       		.byte	5
+ 282 0001 07       		.byte	7
+ 283 0002 00       		.byte	0
+ 284 0003 88       		.byte	-120
+ 285 0004 88       		.byte	-120
+ 286 0005 98       		.byte	-104
+ 287 0006 68       		.byte	104
+ 288 0007 08       		.byte	8
+ 289 0008 70       		.byte	112
+ 290 0009 000000   		.section	.rodata.F1_I17A,"a",%progbits
+ 291              		.align	2
+ 294              	F1_I17A:
+ 295 0000 05       		.byte	5
+ 296 0001 07       		.byte	7
+ 297 0002 00       		.byte	0
+ 298 0003 00       		.byte	0
+ 299 0004 F8       		.byte	-8
+ 300 0005 10       		.byte	16
+ 301 0006 20       		.byte	32
+ 302 0007 40       		.byte	64
+ 303 0008 F8       		.byte	-8
+ 304 0009 000000   		.section	.rodata.F1_I17B,"a",%progbits
+ 305              		.align	2
+ 308              	F1_I17B:
+ 309 0000 05       		.byte	5
+ 310 0001 07       		.byte	7
+ 311 0002 10       		.byte	16
+ 312 0003 20       		.byte	32
+ 313 0004 20       		.byte	32
+ 314 0005 40       		.byte	64
+ 315 0006 20       		.byte	32
+ 316 0007 20       		.byte	32
+ 317 0008 10       		.byte	16
+ 318 0009 000000   		.section	.rodata.F1_I17C,"a",%progbits
+ 319              		.align	2
+ 322              	F1_I17C:
+ 323 0000 05       		.byte	5
+ 324 0001 07       		.byte	7
+ 325 0002 20       		.byte	32
+ 326 0003 20       		.byte	32
+ 327 0004 20       		.byte	32
+ 328 0005 20       		.byte	32
+ 329 0006 20       		.byte	32
+ 330 0007 20       		.byte	32
+ 331 0008 20       		.byte	32
+ 332 0009 000000   		.section	.rodata.F1_I17D,"a",%progbits
+ 333              		.align	2
+ 336              	F1_I17D:
+ 337 0000 05       		.byte	5
+ 338 0001 07       		.byte	7
+ 339 0002 40       		.byte	64
+ 340 0003 20       		.byte	32
+ 341 0004 20       		.byte	32
+ 342 0005 10       		.byte	16
+ 343 0006 20       		.byte	32
+ 344 0007 20       		.byte	32
+ 345 0008 40       		.byte	64
+ 346 0009 000000   		.section	.rodata.F1_I17E,"a",%progbits
+ 347              		.align	2
+ 350              	F1_I17E:
+ 351 0000 05       		.byte	5
+ 352 0001 07       		.byte	7
+ 353 0002 40       		.byte	64
+ 354 0003 A8       		.byte	-88
+ 355 0004 10       		.byte	16
+ 356 0005 00       		.byte	0
+ 357 0006 00       		.byte	0
+ 358 0007 00       		.byte	0
+ 359 0008 00       		.byte	0
+ 360 0009 000000   		.section	.rodata.F1_FILL,"a",%progbits
+ 361              		.align	2
+ 364              	F1_FILL:
+ 365 0000 05       		.byte	5
+ 366 0001 07       		.byte	7
+ 367 0002 00       		.byte	0
+ 368 0003 70       		.byte	112
+ 369 0004 70       		.byte	112
+ 370 0005 70       		.byte	112
+ 371 0006 70       		.byte	112
+ 372 0007 70       		.byte	112
+ 373 0008 00       		.byte	0
+ 374 0009 000000   		.section	.rodata.F1_I140,"a",%progbits
+ 375              		.align	2
+ 378              	F1_I140:
+ 379 0000 05       		.byte	5
+ 380 0001 07       		.byte	7
+ 381 0002 70       		.byte	112
+ 382 0003 88       		.byte	-120
+ 383 0004 08       		.byte	8
+ 384 0005 68       		.byte	104
+ 385 0006 A8       		.byte	-88
+ 386 0007 A8       		.byte	-88
+ 387 0008 70       		.byte	112
+ 388 0009 000000   		.section	.rodata.F1_I141,"a",%progbits
+ 389              		.align	2
+ 392              	F1_I141:
+ 393 0000 05       		.byte	5
+ 394 0001 07       		.byte	7
+ 395 0002 70       		.byte	112
+ 396 0003 88       		.byte	-120
+ 397 0004 88       		.byte	-120
+ 398 0005 88       		.byte	-120
+ 399 0006 F8       		.byte	-8
+ 400 0007 88       		.byte	-120
+ 401 0008 88       		.byte	-120
+ 402 0009 000000   		.section	.rodata.F1_I142,"a",%progbits
+ 403              		.align	2
+ 406              	F1_I142:
+ 407 0000 05       		.byte	5
+ 408 0001 07       		.byte	7
+ 409 0002 F0       		.byte	-16
+ 410 0003 48       		.byte	72
+ 411 0004 48       		.byte	72
+ 412 0005 70       		.byte	112
+ 413 0006 48       		.byte	72
+ 414 0007 48       		.byte	72
+ 415 0008 F0       		.byte	-16
+ 416 0009 000000   		.section	.rodata.F1_I143,"a",%progbits
+ 417              		.align	2
+ 420              	F1_I143:
+ 421 0000 05       		.byte	5
+ 422 0001 07       		.byte	7
+ 423 0002 70       		.byte	112
+ 424 0003 88       		.byte	-120
+ 425 0004 80       		.byte	-128
+ 426 0005 80       		.byte	-128
+ 427 0006 80       		.byte	-128
+ 428 0007 88       		.byte	-120
+ 429 0008 70       		.byte	112
+ 430 0009 000000   		.section	.rodata.F1_I144,"a",%progbits
+ 431              		.align	2
+ 434              	F1_I144:
+ 435 0000 05       		.byte	5
+ 436 0001 07       		.byte	7
+ 437 0002 F0       		.byte	-16
+ 438 0003 48       		.byte	72
+ 439 0004 48       		.byte	72
+ 440 0005 48       		.byte	72
+ 441 0006 48       		.byte	72
+ 442 0007 48       		.byte	72
+ 443 0008 F0       		.byte	-16
+ 444 0009 000000   		.section	.rodata.F1_I145,"a",%progbits
+ 445              		.align	2
+ 448              	F1_I145:
+ 449 0000 05       		.byte	5
+ 450 0001 07       		.byte	7
+ 451 0002 F8       		.byte	-8
+ 452 0003 80       		.byte	-128
+ 453 0004 80       		.byte	-128
+ 454 0005 F8       		.byte	-8
+ 455 0006 80       		.byte	-128
+ 456 0007 80       		.byte	-128
+ 457 0008 F8       		.byte	-8
+ 458 0009 000000   		.section	.rodata.F1_I146,"a",%progbits
+ 459              		.align	2
+ 462              	F1_I146:
+ 463 0000 05       		.byte	5
+ 464 0001 07       		.byte	7
+ 465 0002 F8       		.byte	-8
+ 466 0003 80       		.byte	-128
+ 467 0004 80       		.byte	-128
+ 468 0005 F0       		.byte	-16
+ 469 0006 80       		.byte	-128
+ 470 0007 80       		.byte	-128
+ 471 0008 80       		.byte	-128
+ 472 0009 000000   		.section	.rodata.F1_I147,"a",%progbits
+ 473              		.align	2
+ 476              	F1_I147:
+ 477 0000 05       		.byte	5
+ 478 0001 07       		.byte	7
+ 479 0002 70       		.byte	112
+ 480 0003 88       		.byte	-120
+ 481 0004 80       		.byte	-128
+ 482 0005 98       		.byte	-104
+ 483 0006 88       		.byte	-120
+ 484 0007 88       		.byte	-120
+ 485 0008 78       		.byte	120
+ 486 0009 000000   		.section	.rodata.F1_I148,"a",%progbits
+ 487              		.align	2
+ 490              	F1_I148:
+ 491 0000 05       		.byte	5
+ 492 0001 07       		.byte	7
+ 493 0002 88       		.byte	-120
+ 494 0003 88       		.byte	-120
+ 495 0004 88       		.byte	-120
+ 496 0005 F8       		.byte	-8
+ 497 0006 88       		.byte	-120
+ 498 0007 88       		.byte	-120
+ 499 0008 88       		.byte	-120
+ 500 0009 000000   		.section	.rodata.F1_I149,"a",%progbits
+ 501              		.align	2
+ 504              	F1_I149:
+ 505 0000 05       		.byte	5
+ 506 0001 07       		.byte	7
+ 507 0002 70       		.byte	112
+ 508 0003 20       		.byte	32
+ 509 0004 20       		.byte	32
+ 510 0005 20       		.byte	32
+ 511 0006 20       		.byte	32
+ 512 0007 20       		.byte	32
+ 513 0008 70       		.byte	112
+ 514 0009 000000   		.section	.rodata.F1_POINT,"a",%progbits
+ 515              		.align	2
+ 518              	F1_POINT:
+ 519 0000 05       		.byte	5
+ 520 0001 07       		.byte	7
+ 521 0002 80       		.byte	-128
+ 522 0003 C0       		.byte	-64
+ 523 0004 F0       		.byte	-16
+ 524 0005 F8       		.byte	-8
+ 525 0006 F0       		.byte	-16
+ 526 0007 C0       		.byte	-64
+ 527 0008 80       		.byte	-128
+ 528 0009 000000   		.section	.rodata.F1_I14A,"a",%progbits
+ 529              		.align	2
+ 532              	F1_I14A:
+ 533 0000 05       		.byte	5
+ 534 0001 07       		.byte	7
+ 535 0002 38       		.byte	56
+ 536 0003 10       		.byte	16
+ 537 0004 10       		.byte	16
+ 538 0005 10       		.byte	16
+ 539 0006 10       		.byte	16
+ 540 0007 90       		.byte	-112
+ 541 0008 60       		.byte	96
+ 542 0009 000000   		.section	.rodata.F1_I14B,"a",%progbits
+ 543              		.align	2
+ 546              	F1_I14B:
+ 547 0000 05       		.byte	5
+ 548 0001 07       		.byte	7
+ 549 0002 88       		.byte	-120
+ 550 0003 90       		.byte	-112
+ 551 0004 A0       		.byte	-96
+ 552 0005 C0       		.byte	-64
+ 553 0006 A0       		.byte	-96
+ 554 0007 90       		.byte	-112
+ 555 0008 88       		.byte	-120
+ 556 0009 000000   		.section	.rodata.F1_I14C,"a",%progbits
+ 557              		.align	2
+ 560              	F1_I14C:
+ 561 0000 05       		.byte	5
+ 562 0001 07       		.byte	7
+ 563 0002 80       		.byte	-128
+ 564 0003 80       		.byte	-128
+ 565 0004 80       		.byte	-128
+ 566 0005 80       		.byte	-128
+ 567 0006 80       		.byte	-128
+ 568 0007 80       		.byte	-128
+ 569 0008 F8       		.byte	-8
+ 570 0009 000000   		.section	.rodata.F1_I14D,"a",%progbits
+ 571              		.align	2
+ 574              	F1_I14D:
+ 575 0000 05       		.byte	5
+ 576 0001 07       		.byte	7
+ 577 0002 88       		.byte	-120
+ 578 0003 D8       		.byte	-40
+ 579 0004 A8       		.byte	-88
+ 580 0005 A8       		.byte	-88
+ 581 0006 88       		.byte	-120
+ 582 0007 88       		.byte	-120
+ 583 0008 88       		.byte	-120
+ 584 0009 000000   		.section	.rodata.F1_I14E,"a",%progbits
+ 585              		.align	2
+ 588              	F1_I14E:
+ 589 0000 05       		.byte	5
+ 590 0001 07       		.byte	7
+ 591 0002 88       		.byte	-120
+ 592 0003 C8       		.byte	-56
+ 593 0004 C8       		.byte	-56
+ 594 0005 A8       		.byte	-88
+ 595 0006 98       		.byte	-104
+ 596 0007 98       		.byte	-104
+ 597 0008 88       		.byte	-120
+ 598 0009 000000   		.section	.rodata.F1_I14F,"a",%progbits
+ 599              		.align	2
+ 602              	F1_I14F:
+ 603 0000 05       		.byte	5
+ 604 0001 07       		.byte	7
+ 605 0002 70       		.byte	112
+ 606 0003 88       		.byte	-120
+ 607 0004 88       		.byte	-120
+ 608 0005 88       		.byte	-120
+ 609 0006 88       		.byte	-120
+ 610 0007 88       		.byte	-120
+ 611 0008 70       		.byte	112
+ 612 0009 000000   		.section	.rodata.F1_I160,"a",%progbits
+ 613              		.align	2
+ 616              	F1_I160:
+ 617 0000 04       		.byte	4
+ 618 0001 07       		.byte	7
+ 619 0002 80       		.byte	-128
+ 620 0003 40       		.byte	64
+ 621 0004 20       		.byte	32
+ 622 0005 00       		.byte	0
+ 623 0006 00       		.byte	0
+ 624 0007 00       		.byte	0
+ 625 0008 00       		.byte	0
+ 626 0009 000000   		.section	.rodata.F1_I161,"a",%progbits
+ 627              		.align	2
+ 630              	F1_I161:
+ 631 0000 05       		.byte	5
+ 632 0001 07       		.byte	7
+ 633 0002 00       		.byte	0
+ 634 0003 00       		.byte	0
+ 635 0004 70       		.byte	112
+ 636 0005 08       		.byte	8
+ 637 0006 78       		.byte	120
+ 638 0007 88       		.byte	-120
+ 639 0008 78       		.byte	120
+ 640 0009 000000   		.section	.rodata.F1_I162,"a",%progbits
+ 641              		.align	2
+ 644              	F1_I162:
+ 645 0000 05       		.byte	5
+ 646 0001 07       		.byte	7
+ 647 0002 80       		.byte	-128
+ 648 0003 80       		.byte	-128
+ 649 0004 B0       		.byte	-80
+ 650 0005 C8       		.byte	-56
+ 651 0006 88       		.byte	-120
+ 652 0007 88       		.byte	-120
+ 653 0008 F0       		.byte	-16
+ 654 0009 000000   		.section	.rodata.F1_DEG,"a",%progbits
+ 655              		.align	2
+ 658              	F1_DEG:
+ 659 0000 05       		.byte	5
+ 660 0001 07       		.byte	7
+ 661 0002 60       		.byte	96
+ 662 0003 90       		.byte	-112
+ 663 0004 90       		.byte	-112
+ 664 0005 60       		.byte	96
+ 665 0006 00       		.byte	0
+ 666 0007 00       		.byte	0
+ 667 0008 00       		.byte	0
+ 668 0009 000000   		.section	.rodata.F1_I163,"a",%progbits
+ 669              		.align	2
+ 672              	F1_I163:
+ 673 0000 05       		.byte	5
+ 674 0001 07       		.byte	7
+ 675 0002 00       		.byte	0
+ 676 0003 00       		.byte	0
+ 677 0004 70       		.byte	112
+ 678 0005 88       		.byte	-120
+ 679 0006 80       		.byte	-128
+ 680 0007 88       		.byte	-120
+ 681 0008 70       		.byte	112
+ 682 0009 000000   		.section	.rodata.F1_I164,"a",%progbits
+ 683              		.align	2
+ 686              	F1_I164:
+ 687 0000 05       		.byte	5
+ 688 0001 07       		.byte	7
+ 689 0002 08       		.byte	8
+ 690 0003 08       		.byte	8
+ 691 0004 68       		.byte	104
+ 692 0005 98       		.byte	-104
+ 693 0006 88       		.byte	-120
+ 694 0007 88       		.byte	-120
+ 695 0008 78       		.byte	120
+ 696 0009 000000   		.section	.rodata.F1_I150,"a",%progbits
+ 697              		.align	2
+ 700              	F1_I150:
+ 701 0000 05       		.byte	5
+ 702 0001 07       		.byte	7
+ 703 0002 F0       		.byte	-16
+ 704 0003 88       		.byte	-120
+ 705 0004 88       		.byte	-120
+ 706 0005 F0       		.byte	-16
+ 707 0006 80       		.byte	-128
+ 708 0007 80       		.byte	-128
+ 709 0008 80       		.byte	-128
+ 710 0009 000000   		.section	.rodata.F1_I151,"a",%progbits
+ 711              		.align	2
+ 714              	F1_I151:
+ 715 0000 05       		.byte	5
+ 716 0001 07       		.byte	7
+ 717 0002 70       		.byte	112
+ 718 0003 88       		.byte	-120
+ 719 0004 88       		.byte	-120
+ 720 0005 88       		.byte	-120
+ 721 0006 A8       		.byte	-88
+ 722 0007 90       		.byte	-112
+ 723 0008 68       		.byte	104
+ 724 0009 000000   		.section	.rodata.F1_I152,"a",%progbits
+ 725              		.align	2
+ 728              	F1_I152:
+ 729 0000 05       		.byte	5
+ 730 0001 07       		.byte	7
+ 731 0002 F0       		.byte	-16
+ 732 0003 88       		.byte	-120
+ 733 0004 88       		.byte	-120
+ 734 0005 F0       		.byte	-16
+ 735 0006 A0       		.byte	-96
+ 736 0007 90       		.byte	-112
+ 737 0008 88       		.byte	-120
+ 738 0009 000000   		.section	.rodata.F1_I153,"a",%progbits
+ 739              		.align	2
+ 742              	F1_I153:
+ 743 0000 05       		.byte	5
+ 744 0001 07       		.byte	7
+ 745 0002 70       		.byte	112
+ 746 0003 88       		.byte	-120
+ 747 0004 80       		.byte	-128
+ 748 0005 70       		.byte	112
+ 749 0006 08       		.byte	8
+ 750 0007 88       		.byte	-120
+ 751 0008 70       		.byte	112
+ 752 0009 000000   		.section	.rodata.F1_I154,"a",%progbits
+ 753              		.align	2
+ 756              	F1_I154:
+ 757 0000 05       		.byte	5
+ 758 0001 07       		.byte	7
+ 759 0002 F8       		.byte	-8
+ 760 0003 20       		.byte	32
+ 761 0004 20       		.byte	32
+ 762 0005 20       		.byte	32
+ 763 0006 20       		.byte	32
+ 764 0007 20       		.byte	32
+ 765 0008 20       		.byte	32
+ 766 0009 000000   		.section	.rodata.F1_I155,"a",%progbits
+ 767              		.align	2
+ 770              	F1_I155:
+ 771 0000 05       		.byte	5
+ 772 0001 07       		.byte	7
+ 773 0002 88       		.byte	-120
+ 774 0003 88       		.byte	-120
+ 775 0004 88       		.byte	-120
+ 776 0005 88       		.byte	-120
+ 777 0006 88       		.byte	-120
+ 778 0007 88       		.byte	-120
+ 779 0008 70       		.byte	112
+ 780 0009 000000   		.section	.rodata.F1_I156,"a",%progbits
+ 781              		.align	2
+ 784              	F1_I156:
+ 785 0000 05       		.byte	5
+ 786 0001 07       		.byte	7
+ 787 0002 88       		.byte	-120
+ 788 0003 88       		.byte	-120
+ 789 0004 88       		.byte	-120
+ 790 0005 88       		.byte	-120
+ 791 0006 88       		.byte	-120
+ 792 0007 50       		.byte	80
+ 793 0008 20       		.byte	32
+ 794 0009 000000   		.section	.rodata.F1_I157,"a",%progbits
+ 795              		.align	2
+ 798              	F1_I157:
+ 799 0000 05       		.byte	5
+ 800 0001 07       		.byte	7
+ 801 0002 88       		.byte	-120
+ 802 0003 88       		.byte	-120
+ 803 0004 88       		.byte	-120
+ 804 0005 A8       		.byte	-88
+ 805 0006 A8       		.byte	-88
+ 806 0007 D8       		.byte	-40
+ 807 0008 88       		.byte	-120
+ 808 0009 000000   		.section	.rodata.F1_I158,"a",%progbits
+ 809              		.align	2
+ 812              	F1_I158:
+ 813 0000 05       		.byte	5
+ 814 0001 07       		.byte	7
+ 815 0002 88       		.byte	-120
+ 816 0003 88       		.byte	-120
+ 817 0004 50       		.byte	80
+ 818 0005 20       		.byte	32
+ 819 0006 50       		.byte	80
+ 820 0007 88       		.byte	-120
+ 821 0008 88       		.byte	-120
+ 822 0009 000000   		.section	.rodata.F1_I159,"a",%progbits
+ 823              		.align	2
+ 826              	F1_I159:
+ 827 0000 05       		.byte	5
+ 828 0001 07       		.byte	7
+ 829 0002 88       		.byte	-120
+ 830 0003 88       		.byte	-120
+ 831 0004 88       		.byte	-120
+ 832 0005 50       		.byte	80
+ 833 0006 20       		.byte	32
+ 834 0007 20       		.byte	32
+ 835 0008 20       		.byte	32
+ 836 0009 000000   		.section	.rodata.F1_I15A,"a",%progbits
+ 837              		.align	2
+ 840              	F1_I15A:
+ 841 0000 05       		.byte	5
+ 842 0001 07       		.byte	7
+ 843 0002 F8       		.byte	-8
+ 844 0003 08       		.byte	8
+ 845 0004 10       		.byte	16
+ 846 0005 20       		.byte	32
+ 847 0006 40       		.byte	64
+ 848 0007 80       		.byte	-128
+ 849 0008 F8       		.byte	-8
+ 850 0009 000000   		.section	.rodata.F1_I15B,"a",%progbits
+ 851              		.align	2
+ 854              	F1_I15B:
+ 855 0000 03       		.byte	3
+ 856 0001 07       		.byte	7
+ 857 0002 E0       		.byte	-32
+ 858 0003 80       		.byte	-128
+ 859 0004 80       		.byte	-128
+ 860 0005 80       		.byte	-128
+ 861 0006 80       		.byte	-128
+ 862 0007 80       		.byte	-128
+ 863 0008 E0       		.byte	-32
+ 864 0009 000000   		.section	.rodata.F1_I15C,"a",%progbits
+ 865              		.align	2
+ 868              	F1_I15C:
+ 869 0000 05       		.byte	5
+ 870 0001 07       		.byte	7
+ 871 0002 00       		.byte	0
+ 872 0003 80       		.byte	-128
+ 873 0004 40       		.byte	64
+ 874 0005 20       		.byte	32
+ 875 0006 10       		.byte	16
+ 876 0007 08       		.byte	8
+ 877 0008 00       		.byte	0
+ 878 0009 000000   		.section	.rodata.F1_I15D,"a",%progbits
+ 879              		.align	2
+ 882              	F1_I15D:
+ 883 0000 03       		.byte	3
+ 884 0001 07       		.byte	7
+ 885 0002 E0       		.byte	-32
+ 886 0003 20       		.byte	32
+ 887 0004 20       		.byte	32
+ 888 0005 20       		.byte	32
+ 889 0006 20       		.byte	32
+ 890 0007 20       		.byte	32
+ 891 0008 E0       		.byte	-32
+ 892 0009 000000   		.section	.rodata.F1_I15E,"a",%progbits
+ 893              		.align	2
+ 896              	F1_I15E:
+ 897 0000 05       		.byte	5
+ 898 0001 07       		.byte	7
+ 899 0002 20       		.byte	32
+ 900 0003 50       		.byte	80
+ 901 0004 88       		.byte	-120
+ 902 0005 00       		.byte	0
+ 903 0006 00       		.byte	0
+ 904 0007 00       		.byte	0
+ 905 0008 00       		.byte	0
+ 906 0009 000000   		.section	.rodata.F1_I15F,"a",%progbits
+ 907              		.align	2
+ 910              	F1_I15F:
+ 911 0000 05       		.byte	5
+ 912 0001 07       		.byte	7
+ 913 0002 00       		.byte	0
+ 914 0003 00       		.byte	0
+ 915 0004 00       		.byte	0
+ 916 0005 00       		.byte	0
+ 917 0006 00       		.byte	0
+ 918 0007 00       		.byte	0
+ 919 0008 F8       		.byte	-8
+ 920 0009 000000   		.section	.rodata.F1_ENT,"a",%progbits
+ 921              		.align	2
+ 924              	F1_ENT:
+ 925 0000 06       		.byte	6
+ 926 0001 06       		.byte	6
+ 927 0002 00       		.byte	0
+ 928 0003 24       		.byte	36
+ 929 0004 44       		.byte	68
+ 930 0005 FC       		.byte	-4
+ 931 0006 40       		.byte	64
+ 932 0007 20       		.byte	32
+ 933              		.section	.rodata.fnt1,"a",%progbits
+ 934              		.align	2
+ 937              	fnt1:
+ 938 0000 00000000 		.word	fnt1_EUR
+ 939 0004 00000000 		.word	fnt1_CYR
+ 940              		.section	.rodata.F1_RDS,"a",%progbits
+ 941              		.align	2
+ 944              	F1_RDS:
+ 945 0000 11       		.byte	17
+ 946 0001 0F       		.byte	15
+ 947 0002 FF       		.byte	-1
+ 948 0003 FF       		.byte	-1
+ 949 0004 80       		.byte	-128
+ 950 0005 C0       		.byte	-64
+ 951 0006 01       		.byte	1
+ 952 0007 80       		.byte	-128
+ 953 0008 00       		.byte	0
+ 954 0009 00       		.byte	0
+ 955 000a 00       		.byte	0
+ 956 000b F3       		.byte	-13
+ 957 000c C7       		.byte	-57
+ 958 000d 80       		.byte	-128
+ 959 000e FB       		.byte	-5
+ 960 000f EF       		.byte	-17
+ 961 0010 80       		.byte	-128
+ 962 0011 DB       		.byte	-37
+ 963 0012 6C       		.byte	108
+ 964 0013 00       		.byte	0
+ 965 0014 F3       		.byte	-13
+ 966 0015 6F       		.byte	111
+ 967 0016 80       		.byte	-128
+ 968 0017 F3       		.byte	-13
+ 969 0018 61       		.byte	97
+ 970 0019 80       		.byte	-128
+ 971 001a DB       		.byte	-37
+ 972 001b EF       		.byte	-17
+ 973 001c 80       		.byte	-128
+ 974 001d DB       		.byte	-37
+ 975 001e CF       		.byte	-49
+ 976 001f 00       		.byte	0
+ 977 0020 00       		.byte	0
+ 978 0021 00       		.byte	0
+ 979 0022 00       		.byte	0
+ 980 0023 C0       		.byte	-64
+ 981 0024 01       		.byte	1
+ 982 0025 80       		.byte	-128
+ 983 0026 F8       		.byte	-8
+ 984 0027 0F       		.byte	15
+ 985 0028 80       		.byte	-128
+ 986 0029 1F       		.byte	31
+ 987 002a FC       		.byte	-4
+ 988 002b 00       		.byte	0
+ 989 002c 01       		.byte	1
+ 990 002d C0       		.byte	-64
+ 991 002e 00       		.byte	0
+ 992 002f 00       		.section	.rodata.F1_I120,"a",%progbits
+ 993              		.align	2
+ 996              	F1_I120:
+ 997 0000 05       		.byte	5
+ 998 0001 07       		.byte	7
+ 999 0002 00       		.byte	0
+ 1000 0003 00       		.byte	0
+ 1001 0004 00       		.byte	0
+ 1002 0005 00       		.byte	0
+ 1003 0006 00       		.byte	0
+ 1004 0007 00       		.byte	0
+ 1005 0008 00       		.byte	0
+ 1006 0009 000000   		.section	.rodata.F1_I121,"a",%progbits
+ 1007              		.align	2
+ 1010              	F1_I121:
+ 1011 0000 05       		.byte	5
+ 1012 0001 07       		.byte	7
+ 1013 0002 20       		.byte	32
+ 1014 0003 20       		.byte	32
+ 1015 0004 20       		.byte	32
+ 1016 0005 20       		.byte	32
+ 1017 0006 00       		.byte	0
+ 1018 0007 00       		.byte	0
+ 1019 0008 20       		.byte	32
+ 1020 0009 000000   		.section	.rodata.F1_I122,"a",%progbits
+ 1021              		.align	2
+ 1024              	F1_I122:
+ 1025 0000 05       		.byte	5
+ 1026 0001 07       		.byte	7
+ 1027 0002 50       		.byte	80
+ 1028 0003 50       		.byte	80
+ 1029 0004 50       		.byte	80
+ 1030 0005 00       		.byte	0
+ 1031 0006 00       		.byte	0
+ 1032 0007 00       		.byte	0
+ 1033 0008 00       		.byte	0
+ 1034 0009 000000   		.section	.rodata.F1_I123,"a",%progbits
+ 1035              		.align	2
+ 1038              	F1_I123:
+ 1039 0000 05       		.byte	5
+ 1040 0001 07       		.byte	7
+ 1041 0002 50       		.byte	80
+ 1042 0003 50       		.byte	80
+ 1043 0004 F8       		.byte	-8
+ 1044 0005 50       		.byte	80
+ 1045 0006 F8       		.byte	-8
+ 1046 0007 50       		.byte	80
+ 1047 0008 50       		.byte	80
+ 1048 0009 000000   		.section	.rodata.F1_I124,"a",%progbits
+ 1049              		.align	2
+ 1052              	F1_I124:
+ 1053 0000 05       		.byte	5
+ 1054 0001 07       		.byte	7
+ 1055 0002 20       		.byte	32
+ 1056 0003 78       		.byte	120
+ 1057 0004 A0       		.byte	-96
+ 1058 0005 70       		.byte	112
+ 1059 0006 28       		.byte	40
+ 1060 0007 F0       		.byte	-16
+ 1061 0008 20       		.byte	32
+ 1062 0009 000000   		.section	.rodata.F1_I125,"a",%progbits
+ 1063              		.align	2
+ 1066              	F1_I125:
+ 1067 0000 05       		.byte	5
+ 1068 0001 07       		.byte	7
+ 1069 0002 C0       		.byte	-64
+ 1070 0003 C8       		.byte	-56
+ 1071 0004 10       		.byte	16
+ 1072 0005 20       		.byte	32
+ 1073 0006 40       		.byte	64
+ 1074 0007 98       		.byte	-104
+ 1075 0008 18       		.byte	24
+ 1076 0009 000000   		.section	.rodata.F1_I126,"a",%progbits
+ 1077              		.align	2
+ 1080              	F1_I126:
+ 1081 0000 05       		.byte	5
+ 1082 0001 07       		.byte	7
+ 1083 0002 60       		.byte	96
+ 1084 0003 90       		.byte	-112
+ 1085 0004 A0       		.byte	-96
+ 1086 0005 40       		.byte	64
+ 1087 0006 A8       		.byte	-88
+ 1088 0007 90       		.byte	-112
+ 1089 0008 68       		.byte	104
+ 1090 0009 000000   		.section	.rodata.F1_I127,"a",%progbits
+ 1091              		.align	2
+ 1094              	F1_I127:
+ 1095 0000 05       		.byte	5
+ 1096 0001 07       		.byte	7
+ 1097 0002 30       		.byte	48
+ 1098 0003 10       		.byte	16
+ 1099 0004 20       		.byte	32
+ 1100 0005 00       		.byte	0
+ 1101 0006 00       		.byte	0
+ 1102 0007 00       		.byte	0
+ 1103 0008 00       		.byte	0
+ 1104 0009 000000   		.section	.rodata.F1_I128,"a",%progbits
+ 1105              		.align	2
+ 1108              	F1_I128:
+ 1109 0000 03       		.byte	3
+ 1110 0001 07       		.byte	7
+ 1111 0002 20       		.byte	32
+ 1112 0003 40       		.byte	64
+ 1113 0004 80       		.byte	-128
+ 1114 0005 80       		.byte	-128
+ 1115 0006 80       		.byte	-128
+ 1116 0007 40       		.byte	64
+ 1117 0008 20       		.byte	32
+ 1118 0009 000000   		.section	.rodata.F1_I129,"a",%progbits
+ 1119              		.align	2
+ 1122              	F1_I129:
+ 1123 0000 03       		.byte	3
+ 1124 0001 07       		.byte	7
+ 1125 0002 80       		.byte	-128
+ 1126 0003 40       		.byte	64
+ 1127 0004 20       		.byte	32
+ 1128 0005 20       		.byte	32
+ 1129 0006 20       		.byte	32
+ 1130 0007 40       		.byte	64
+ 1131 0008 80       		.byte	-128
+ 1132 0009 000000   		.section	.rodata.F1_I12A,"a",%progbits
+ 1133              		.align	2
+ 1136              	F1_I12A:
+ 1137 0000 05       		.byte	5
+ 1138 0001 07       		.byte	7
+ 1139 0002 00       		.byte	0
+ 1140 0003 20       		.byte	32
+ 1141 0004 A8       		.byte	-88
+ 1142 0005 70       		.byte	112
+ 1143 0006 A8       		.byte	-88
+ 1144 0007 20       		.byte	32
+ 1145 0008 00       		.byte	0
+ 1146 0009 000000   		.section	.rodata.F1_I12B,"a",%progbits
+ 1147              		.align	2
+ 1150              	F1_I12B:
+ 1151 0000 05       		.byte	5
+ 1152 0001 07       		.byte	7
+ 1153 0002 00       		.byte	0
+ 1154 0003 20       		.byte	32
+ 1155 0004 20       		.byte	32
+ 1156 0005 F8       		.byte	-8
+ 1157 0006 20       		.byte	32
+ 1158 0007 20       		.byte	32
+ 1159 0008 00       		.byte	0
+ 1160 0009 000000   		.section	.rodata.F1_I12C,"a",%progbits
+ 1161              		.align	2
+ 1164              	F1_I12C:
+ 1165 0000 05       		.byte	5
+ 1166 0001 07       		.byte	7
+ 1167 0002 00       		.byte	0
+ 1168 0003 00       		.byte	0
+ 1169 0004 00       		.byte	0
+ 1170 0005 00       		.byte	0
+ 1171 0006 60       		.byte	96
+ 1172 0007 20       		.byte	32
+ 1173 0008 40       		.byte	64
+ 1174 0009 000000   		.section	.rodata.F1_I12D,"a",%progbits
+ 1175              		.align	2
+ 1178              	F1_I12D:
+ 1179 0000 05       		.byte	5
+ 1180 0001 07       		.byte	7
+ 1181 0002 00       		.byte	0
+ 1182 0003 00       		.byte	0
+ 1183 0004 00       		.byte	0
+ 1184 0005 F8       		.byte	-8
+ 1185 0006 00       		.byte	0
+ 1186 0007 00       		.byte	0
+ 1187 0008 00       		.byte	0
+ 1188 0009 000000   		.section	.rodata.F1_I12E,"a",%progbits
+ 1189              		.align	2
+ 1192              	F1_I12E:
+ 1193 0000 02       		.byte	2
+ 1194 0001 07       		.byte	7
+ 1195 0002 00       		.byte	0
+ 1196 0003 00       		.byte	0
+ 1197 0004 00       		.byte	0
+ 1198 0005 00       		.byte	0
+ 1199 0006 00       		.byte	0
+ 1200 0007 C0       		.byte	-64
+ 1201 0008 C0       		.byte	-64
+ 1202 0009 000000   		.section	.rodata.F1_I165,"a",%progbits
+ 1203              		.align	2
+ 1206              	F1_I165:
+ 1207 0000 05       		.byte	5
+ 1208 0001 07       		.byte	7
+ 1209 0002 00       		.byte	0
+ 1210 0003 00       		.byte	0
+ 1211 0004 70       		.byte	112
+ 1212 0005 88       		.byte	-120
+ 1213 0006 F8       		.byte	-8
+ 1214 0007 80       		.byte	-128
+ 1215 0008 70       		.byte	112
+ 1216 0009 000000   		.section	.rodata.F1_I166,"a",%progbits
+ 1217              		.align	2
+ 1220              	F1_I166:
+ 1221 0000 05       		.byte	5
+ 1222 0001 07       		.byte	7
+ 1223 0002 10       		.byte	16
+ 1224 0003 28       		.byte	40
+ 1225 0004 20       		.byte	32
+ 1226 0005 70       		.byte	112
+ 1227 0006 20       		.byte	32
+ 1228 0007 20       		.byte	32
+ 1229 0008 20       		.byte	32
+ 1230 0009 000000   		.section	.rodata.F1_I167,"a",%progbits
+ 1231              		.align	2
+ 1234              	F1_I167:
+ 1235 0000 05       		.byte	5
+ 1236 0001 07       		.byte	7
+ 1237 0002 00       		.byte	0
+ 1238 0003 68       		.byte	104
+ 1239 0004 98       		.byte	-104
+ 1240 0005 98       		.byte	-104
+ 1241 0006 68       		.byte	104
+ 1242 0007 08       		.byte	8
+ 1243 0008 70       		.byte	112
+ 1244 0009 000000   		.section	.rodata.F1_I168,"a",%progbits
+ 1245              		.align	2
+ 1248              	F1_I168:
+ 1249 0000 05       		.byte	5
+ 1250 0001 07       		.byte	7
+ 1251 0002 80       		.byte	-128
+ 1252 0003 80       		.byte	-128
+ 1253 0004 B0       		.byte	-80
+ 1254 0005 C8       		.byte	-56
+ 1255 0006 88       		.byte	-120
+ 1256 0007 88       		.byte	-120
+ 1257 0008 88       		.byte	-120
+ 1258 0009 000000   		.section	.rodata.F1_I169,"a",%progbits
+ 1259              		.align	2
+ 1262              	F1_I169:
+ 1263 0000 05       		.byte	5
+ 1264 0001 07       		.byte	7
+ 1265 0002 20       		.byte	32
+ 1266 0003 00       		.byte	0
+ 1267 0004 60       		.byte	96
+ 1268 0005 20       		.byte	32
+ 1269 0006 20       		.byte	32
+ 1270 0007 20       		.byte	32
+ 1271 0008 70       		.byte	112
+ 1272 0009 000000   		.section	.rodata.F1_I13F,"a",%progbits
+ 1273              		.align	2
+ 1276              	F1_I13F:
+ 1277 0000 05       		.byte	5
+ 1278 0001 07       		.byte	7
+ 1279 0002 70       		.byte	112
+ 1280 0003 88       		.byte	-120
+ 1281 0004 08       		.byte	8
+ 1282 0005 10       		.byte	16
+ 1283 0006 20       		.byte	32
+ 1284 0007 00       		.byte	0
+ 1285 0008 20       		.byte	32
+ 1286 0009 000000   		.section	.rodata.F1_I16A,"a",%progbits
+ 1287              		.align	2
+ 1290              	F1_I16A:
+ 1291 0000 05       		.byte	5
+ 1292 0001 07       		.byte	7
+ 1293 0002 10       		.byte	16
+ 1294 0003 00       		.byte	0
+ 1295 0004 30       		.byte	48
+ 1296 0005 10       		.byte	16
+ 1297 0006 10       		.byte	16
+ 1298 0007 90       		.byte	-112
+ 1299 0008 60       		.byte	96
+ 1300 0009 000000   		.section	.rodata.F1_I16B,"a",%progbits
+ 1301              		.align	2
+ 1304              	F1_I16B:
+ 1305 0000 05       		.byte	5
+ 1306 0001 07       		.byte	7
+ 1307 0002 40       		.byte	64
+ 1308 0003 40       		.byte	64
+ 1309 0004 48       		.byte	72
+ 1310 0005 50       		.byte	80
+ 1311 0006 60       		.byte	96
+ 1312 0007 50       		.byte	80
+ 1313 0008 48       		.byte	72
+ 1314 0009 000000   		.section	.rodata.F1_I16C,"a",%progbits
+ 1315              		.align	2
+ 1318              	F1_I16C:
+ 1319 0000 05       		.byte	5
+ 1320 0001 07       		.byte	7
+ 1321 0002 60       		.byte	96
+ 1322 0003 20       		.byte	32
+ 1323 0004 20       		.byte	32
+ 1324 0005 20       		.byte	32
+ 1325 0006 20       		.byte	32
+ 1326 0007 20       		.byte	32
+ 1327 0008 70       		.byte	112
+ 1328 0009 000000   		.section	.rodata.F1_I16D,"a",%progbits
+ 1329              		.align	2
+ 1332              	F1_I16D:
+ 1333 0000 05       		.byte	5
+ 1334 0001 07       		.byte	7
+ 1335 0002 00       		.byte	0
+ 1336 0003 00       		.byte	0
+ 1337 0004 D0       		.byte	-48
+ 1338 0005 A8       		.byte	-88
+ 1339 0006 A8       		.byte	-88
+ 1340 0007 A8       		.byte	-88
+ 1341 0008 A8       		.byte	-88
+ 1342 0009 000000   		.section	.rodata.F1_I16E,"a",%progbits
+ 1343              		.align	2
+ 1346              	F1_I16E:
+ 1347 0000 05       		.byte	5
+ 1348 0001 07       		.byte	7
+ 1349 0002 00       		.byte	0
+ 1350 0003 00       		.byte	0
+ 1351 0004 B0       		.byte	-80
+ 1352 0005 C8       		.byte	-56
+ 1353 0006 88       		.byte	-120
+ 1354 0007 88       		.byte	-120
+ 1355 0008 88       		.byte	-120
+ 1356 0009 000000   		.section	.rodata.F1_I16F,"a",%progbits
+ 1357              		.align	2
+ 1360              	F1_I16F:
+ 1361 0000 05       		.byte	5
+ 1362 0001 07       		.byte	7
+ 1363 0002 00       		.byte	0
+ 1364 0003 00       		.byte	0
+ 1365 0004 70       		.byte	112
+ 1366 0005 88       		.byte	-120
+ 1367 0006 88       		.byte	-120
+ 1368 0007 88       		.byte	-120
+ 1369 0008 70       		.byte	112
+ 1370 0009 000000   		.section	.rodata.F1_I13A,"a",%progbits
+ 1371              		.align	2
+ 1374              	F1_I13A:
+ 1375 0000 02       		.byte	2
+ 1376 0001 07       		.byte	7
+ 1377 0002 00       		.byte	0
+ 1378 0003 C0       		.byte	-64
+ 1379 0004 C0       		.byte	-64
+ 1380 0005 00       		.byte	0
+ 1381 0006 C0       		.byte	-64
+ 1382 0007 C0       		.byte	-64
+ 1383 0008 00       		.byte	0
+ 1384 0009 000000   		.section	.rodata.F1_I13B,"a",%progbits
+ 1385              		.align	2
+ 1388              	F1_I13B:
+ 1389 0000 05       		.byte	5
+ 1390 0001 07       		.byte	7
+ 1391 0002 00       		.byte	0
+ 1392 0003 60       		.byte	96
+ 1393 0004 60       		.byte	96
+ 1394 0005 00       		.byte	0
+ 1395 0006 60       		.byte	96
+ 1396 0007 20       		.byte	32
+ 1397 0008 40       		.byte	64
+ 1398 0009 000000   		.section	.rodata.F1_I13C,"a",%progbits
+ 1399              		.align	2
+ 1402              	F1_I13C:
+ 1403 0000 04       		.byte	4
+ 1404 0001 07       		.byte	7
+ 1405 0002 10       		.byte	16
+ 1406 0003 20       		.byte	32
+ 1407 0004 40       		.byte	64
+ 1408 0005 80       		.byte	-128
+ 1409 0006 40       		.byte	64
+ 1410 0007 20       		.byte	32
+ 1411 0008 10       		.byte	16
+ 1412 0009 000000   		.section	.rodata.F1_I173,"a",%progbits
+ 1413              		.align	2
+ 1416              	F1_I173:
+ 1417 0000 05       		.byte	5
+ 1418 0001 07       		.byte	7
+ 1419 0002 00       		.byte	0
+ 1420 0003 00       		.byte	0
+ 1421 0004 78       		.byte	120
+ 1422 0005 80       		.byte	-128
+ 1423 0006 F0       		.byte	-16
+ 1424 0007 08       		.byte	8
+ 1425 0008 F8       		.byte	-8
+ 1426 0009 000000   		.section	.rodata.F1_I174,"a",%progbits
+ 1427              		.align	2
+ 1430              	F1_I174:
+ 1431 0000 05       		.byte	5
+ 1432 0001 07       		.byte	7
+ 1433 0002 40       		.byte	64
+ 1434 0003 40       		.byte	64
+ 1435 0004 E0       		.byte	-32
+ 1436 0005 40       		.byte	64
+ 1437 0006 40       		.byte	64
+ 1438 0007 48       		.byte	72
+ 1439 0008 30       		.byte	48
+ 1440 0009 000000   		.section	.rodata.F1_I130,"a",%progbits
+ 1441              		.align	2
+ 1444              	F1_I130:
+ 1445 0000 05       		.byte	5
+ 1446 0001 07       		.byte	7
+ 1447 0002 70       		.byte	112
+ 1448 0003 88       		.byte	-120
+ 1449 0004 98       		.byte	-104
+ 1450 0005 A8       		.byte	-88
+ 1451 0006 C8       		.byte	-56
+ 1452 0007 88       		.byte	-120
+ 1453 0008 70       		.byte	112
+ 1454 0009 000000   		.section	.rodata.F1_I131,"a",%progbits
+ 1455              		.align	2
+ 1458              	F1_I131:
+ 1459 0000 05       		.byte	5
+ 1460 0001 07       		.byte	7
+ 1461 0002 20       		.byte	32
+ 1462 0003 60       		.byte	96
+ 1463 0004 20       		.byte	32
+ 1464 0005 20       		.byte	32
+ 1465 0006 20       		.byte	32
+ 1466 0007 20       		.byte	32
+ 1467 0008 70       		.byte	112
+ 1468 0009 000000   		.section	.rodata.F1_I132,"a",%progbits
+ 1469              		.align	2
+ 1472              	F1_I132:
+ 1473 0000 05       		.byte	5
+ 1474 0001 07       		.byte	7
+ 1475 0002 70       		.byte	112
+ 1476 0003 88       		.byte	-120
+ 1477 0004 08       		.byte	8
+ 1478 0005 10       		.byte	16
+ 1479 0006 20       		.byte	32
+ 1480 0007 40       		.byte	64
+ 1481 0008 F8       		.byte	-8
+ 1482 0009 000000   		.section	.rodata.F1_I133,"a",%progbits
+ 1483              		.align	2
+ 1486              	F1_I133:
+ 1487 0000 05       		.byte	5
+ 1488 0001 07       		.byte	7
+ 1489 0002 F8       		.byte	-8
+ 1490 0003 10       		.byte	16
+ 1491 0004 20       		.byte	32
+ 1492 0005 10       		.byte	16
+ 1493 0006 08       		.byte	8
+ 1494 0007 88       		.byte	-120
+ 1495 0008 70       		.byte	112
+ 1496 0009 000000   		.section	.rodata.F1_I134,"a",%progbits
+ 1497              		.align	2
+ 1500              	F1_I134:
+ 1501 0000 05       		.byte	5
+ 1502 0001 07       		.byte	7
+ 1503 0002 10       		.byte	16
+ 1504 0003 30       		.byte	48
+ 1505 0004 50       		.byte	80
+ 1506 0005 90       		.byte	-112
+ 1507 0006 F8       		.byte	-8
+ 1508 0007 10       		.byte	16
+ 1509 0008 10       		.byte	16
+ 1510 0009 000000   		.section	.rodata.F1_I135,"a",%progbits
+ 1511              		.align	2
+ 1514              	F1_I135:
+ 1515 0000 05       		.byte	5
+ 1516 0001 07       		.byte	7
+ 1517 0002 F8       		.byte	-8
+ 1518 0003 80       		.byte	-128
+ 1519 0004 F0       		.byte	-16
+ 1520 0005 08       		.byte	8
+ 1521 0006 08       		.byte	8
+ 1522 0007 88       		.byte	-120
+ 1523 0008 70       		.byte	112
+ 1524 0009 000000   		.section	.rodata.F1_I136,"a",%progbits
+ 1525              		.align	2
+ 1528              	F1_I136:
+ 1529 0000 05       		.byte	5
+ 1530 0001 07       		.byte	7
+ 1531 0002 30       		.byte	48
+ 1532 0003 40       		.byte	64
+ 1533 0004 80       		.byte	-128
+ 1534 0005 F0       		.byte	-16
+ 1535 0006 88       		.byte	-120
+ 1536 0007 88       		.byte	-120
+ 1537 0008 70       		.byte	112
+ 1538 0009 000000   		.section	.rodata.F1_I137,"a",%progbits
+ 1539              		.align	2
+ 1542              	F1_I137:
+ 1543 0000 05       		.byte	5
+ 1544 0001 07       		.byte	7
+ 1545 0002 F8       		.byte	-8
+ 1546 0003 08       		.byte	8
+ 1547 0004 10       		.byte	16
+ 1548 0005 20       		.byte	32
+ 1549 0006 20       		.byte	32
+ 1550 0007 20       		.byte	32
+ 1551 0008 20       		.byte	32
+ 1552 0009 000000   		.section	.rodata.F1_I138,"a",%progbits
+ 1553              		.align	2
+ 1556              	F1_I138:
+ 1557 0000 05       		.byte	5
+ 1558 0001 07       		.byte	7
+ 1559 0002 70       		.byte	112
+ 1560 0003 88       		.byte	-120
+ 1561 0004 88       		.byte	-120
+ 1562 0005 70       		.byte	112
+ 1563 0006 88       		.byte	-120
+ 1564 0007 88       		.byte	-120
+ 1565 0008 70       		.byte	112
+ 1566 0009 000000   		.section	.rodata.F1_I139,"a",%progbits
+ 1567              		.align	2
+ 1570              	F1_I139:
+ 1571 0000 05       		.byte	5
+ 1572 0001 07       		.byte	7
+ 1573 0002 70       		.byte	112
+ 1574 0003 88       		.byte	-120
+ 1575 0004 88       		.byte	-120
+ 1576 0005 78       		.byte	120
+ 1577 0006 08       		.byte	8
+ 1578 0007 10       		.byte	16
+ 1579 0008 60       		.byte	96
+ 1580 0009 000000   		.text
+ 1581              	.Letext0:
+ 1582              		.file 1 "./include/task.h"
+ 1583              		.file 2 "./include/queue.h"
+ 1584              		.file 3 "./include/semphr.h"
+ 1585              		.file 4 "Board.h"
+ 1586              		.file 5 "bm_f1all.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 bm_f1all.c
+  C:\Temp\ccPFXl9w.s:350    .rodata.F1_I17E:00000000 F1_I17E
+  C:\Temp\ccPFXl9w.s:336    .rodata.F1_I17D:00000000 F1_I17D
+  C:\Temp\ccPFXl9w.s:322    .rodata.F1_I17C:00000000 F1_I17C
+  C:\Temp\ccPFXl9w.s:308    .rodata.F1_I17B:00000000 F1_I17B
+  C:\Temp\ccPFXl9w.s:294    .rodata.F1_I17A:00000000 F1_I17A
+  C:\Temp\ccPFXl9w.s:280    .rodata.F1_I179:00000000 F1_I179
+  C:\Temp\ccPFXl9w.s:266    .rodata.F1_I178:00000000 F1_I178
+  C:\Temp\ccPFXl9w.s:252    .rodata.F1_I177:00000000 F1_I177
+  C:\Temp\ccPFXl9w.s:238    .rodata.F1_I176:00000000 F1_I176
+  C:\Temp\ccPFXl9w.s:224    .rodata.F1_I175:00000000 F1_I175
+  C:\Temp\ccPFXl9w.s:1430   .rodata.F1_I174:00000000 F1_I174
+  C:\Temp\ccPFXl9w.s:1416   .rodata.F1_I173:00000000 F1_I173
+  C:\Temp\ccPFXl9w.s:182    .rodata.F1_I172:00000000 F1_I172
+  C:\Temp\ccPFXl9w.s:168    .rodata.F1_I171:00000000 F1_I171
+  C:\Temp\ccPFXl9w.s:154    .rodata.F1_I170:00000000 F1_I170
+  C:\Temp\ccPFXl9w.s:1360   .rodata.F1_I16F:00000000 F1_I16F
+  C:\Temp\ccPFXl9w.s:1346   .rodata.F1_I16E:00000000 F1_I16E
+  C:\Temp\ccPFXl9w.s:1332   .rodata.F1_I16D:00000000 F1_I16D
+  C:\Temp\ccPFXl9w.s:1318   .rodata.F1_I16C:00000000 F1_I16C
+  C:\Temp\ccPFXl9w.s:1304   .rodata.F1_I16B:00000000 F1_I16B
+  C:\Temp\ccPFXl9w.s:1290   .rodata.F1_I16A:00000000 F1_I16A
+  C:\Temp\ccPFXl9w.s:1262   .rodata.F1_I169:00000000 F1_I169
+  C:\Temp\ccPFXl9w.s:1248   .rodata.F1_I168:00000000 F1_I168
+  C:\Temp\ccPFXl9w.s:1234   .rodata.F1_I167:00000000 F1_I167
+  C:\Temp\ccPFXl9w.s:1220   .rodata.F1_I166:00000000 F1_I166
+  C:\Temp\ccPFXl9w.s:1206   .rodata.F1_I165:00000000 F1_I165
+  C:\Temp\ccPFXl9w.s:686    .rodata.F1_I164:00000000 F1_I164
+  C:\Temp\ccPFXl9w.s:672    .rodata.F1_I163:00000000 F1_I163
+  C:\Temp\ccPFXl9w.s:644    .rodata.F1_I162:00000000 F1_I162
+  C:\Temp\ccPFXl9w.s:630    .rodata.F1_I161:00000000 F1_I161
+  C:\Temp\ccPFXl9w.s:616    .rodata.F1_I160:00000000 F1_I160
+  C:\Temp\ccPFXl9w.s:910    .rodata.F1_I15F:00000000 F1_I15F
+  C:\Temp\ccPFXl9w.s:896    .rodata.F1_I15E:00000000 F1_I15E
+  C:\Temp\ccPFXl9w.s:882    .rodata.F1_I15D:00000000 F1_I15D
+  C:\Temp\ccPFXl9w.s:868    .rodata.F1_I15C:00000000 F1_I15C
+  C:\Temp\ccPFXl9w.s:854    .rodata.F1_I15B:00000000 F1_I15B
+  C:\Temp\ccPFXl9w.s:840    .rodata.F1_I15A:00000000 F1_I15A
+  C:\Temp\ccPFXl9w.s:826    .rodata.F1_I159:00000000 F1_I159
+  C:\Temp\ccPFXl9w.s:812    .rodata.F1_I158:00000000 F1_I158
+  C:\Temp\ccPFXl9w.s:798    .rodata.F1_I157:00000000 F1_I157
+  C:\Temp\ccPFXl9w.s:784    .rodata.F1_I156:00000000 F1_I156
+  C:\Temp\ccPFXl9w.s:770    .rodata.F1_I155:00000000 F1_I155
+  C:\Temp\ccPFXl9w.s:756    .rodata.F1_I154:00000000 F1_I154
+  C:\Temp\ccPFXl9w.s:742    .rodata.F1_I153:00000000 F1_I153
+  C:\Temp\ccPFXl9w.s:728    .rodata.F1_I152:00000000 F1_I152
+  C:\Temp\ccPFXl9w.s:714    .rodata.F1_I151:00000000 F1_I151
+  C:\Temp\ccPFXl9w.s:700    .rodata.F1_I150:00000000 F1_I150
+  C:\Temp\ccPFXl9w.s:602    .rodata.F1_I14F:00000000 F1_I14F
+  C:\Temp\ccPFXl9w.s:588    .rodata.F1_I14E:00000000 F1_I14E
+  C:\Temp\ccPFXl9w.s:574    .rodata.F1_I14D:00000000 F1_I14D
+  C:\Temp\ccPFXl9w.s:560    .rodata.F1_I14C:00000000 F1_I14C
+  C:\Temp\ccPFXl9w.s:546    .rodata.F1_I14B:00000000 F1_I14B
+  C:\Temp\ccPFXl9w.s:532    .rodata.F1_I14A:00000000 F1_I14A
+  C:\Temp\ccPFXl9w.s:504    .rodata.F1_I149:00000000 F1_I149
+  C:\Temp\ccPFXl9w.s:490    .rodata.F1_I148:00000000 F1_I148
+  C:\Temp\ccPFXl9w.s:476    .rodata.F1_I147:00000000 F1_I147
+  C:\Temp\ccPFXl9w.s:462    .rodata.F1_I146:00000000 F1_I146
+  C:\Temp\ccPFXl9w.s:448    .rodata.F1_I145:00000000 F1_I145
+  C:\Temp\ccPFXl9w.s:434    .rodata.F1_I144:00000000 F1_I144
+  C:\Temp\ccPFXl9w.s:420    .rodata.F1_I143:00000000 F1_I143
+  C:\Temp\ccPFXl9w.s:406    .rodata.F1_I142:00000000 F1_I142
+  C:\Temp\ccPFXl9w.s:392    .rodata.F1_I141:00000000 F1_I141
+  C:\Temp\ccPFXl9w.s:378    .rodata.F1_I140:00000000 F1_I140
+  C:\Temp\ccPFXl9w.s:1276   .rodata.F1_I13F:00000000 F1_I13F
+  C:\Temp\ccPFXl9w.s:210    .rodata.F1_I13E:00000000 F1_I13E
+  C:\Temp\ccPFXl9w.s:196    .rodata.F1_I13D:00000000 F1_I13D
+  C:\Temp\ccPFXl9w.s:1402   .rodata.F1_I13C:00000000 F1_I13C
+  C:\Temp\ccPFXl9w.s:1388   .rodata.F1_I13B:00000000 F1_I13B
+  C:\Temp\ccPFXl9w.s:1374   .rodata.F1_I13A:00000000 F1_I13A
+  C:\Temp\ccPFXl9w.s:1570   .rodata.F1_I139:00000000 F1_I139
+  C:\Temp\ccPFXl9w.s:1556   .rodata.F1_I138:00000000 F1_I138
+  C:\Temp\ccPFXl9w.s:1542   .rodata.F1_I137:00000000 F1_I137
+  C:\Temp\ccPFXl9w.s:1528   .rodata.F1_I136:00000000 F1_I136
+  C:\Temp\ccPFXl9w.s:1514   .rodata.F1_I135:00000000 F1_I135
+  C:\Temp\ccPFXl9w.s:1500   .rodata.F1_I134:00000000 F1_I134
+  C:\Temp\ccPFXl9w.s:1486   .rodata.F1_I133:00000000 F1_I133
+  C:\Temp\ccPFXl9w.s:1472   .rodata.F1_I132:00000000 F1_I132
+  C:\Temp\ccPFXl9w.s:1458   .rodata.F1_I131:00000000 F1_I131
+  C:\Temp\ccPFXl9w.s:1444   .rodata.F1_I130:00000000 F1_I130
+  C:\Temp\ccPFXl9w.s:140    .rodata.F1_I12F:00000000 F1_I12F
+  C:\Temp\ccPFXl9w.s:1192   .rodata.F1_I12E:00000000 F1_I12E
+  C:\Temp\ccPFXl9w.s:1178   .rodata.F1_I12D:00000000 F1_I12D
+  C:\Temp\ccPFXl9w.s:1164   .rodata.F1_I12C:00000000 F1_I12C
+  C:\Temp\ccPFXl9w.s:1150   .rodata.F1_I12B:00000000 F1_I12B
+  C:\Temp\ccPFXl9w.s:1136   .rodata.F1_I12A:00000000 F1_I12A
+  C:\Temp\ccPFXl9w.s:1122   .rodata.F1_I129:00000000 F1_I129
+  C:\Temp\ccPFXl9w.s:1108   .rodata.F1_I128:00000000 F1_I128
+  C:\Temp\ccPFXl9w.s:1094   .rodata.F1_I127:00000000 F1_I127
+  C:\Temp\ccPFXl9w.s:1080   .rodata.F1_I126:00000000 F1_I126
+  C:\Temp\ccPFXl9w.s:1066   .rodata.F1_I125:00000000 F1_I125
+  C:\Temp\ccPFXl9w.s:1052   .rodata.F1_I124:00000000 F1_I124
+  C:\Temp\ccPFXl9w.s:1038   .rodata.F1_I123:00000000 F1_I123
+  C:\Temp\ccPFXl9w.s:1024   .rodata.F1_I122:00000000 F1_I122
+  C:\Temp\ccPFXl9w.s:1010   .rodata.F1_I121:00000000 F1_I121
+  C:\Temp\ccPFXl9w.s:996    .rodata.F1_I120:00000000 F1_I120
+  C:\Temp\ccPFXl9w.s:518    .rodata.F1_POINT:00000000 F1_POINT
+  C:\Temp\ccPFXl9w.s:126    .rodata.F1_CLK:00000000 F1_CLK
+  C:\Temp\ccPFXl9w.s:944    .rodata.F1_RDS:00000000 F1_RDS
+  C:\Temp\ccPFXl9w.s:658    .rodata.F1_DEG:00000000 F1_DEG
+  C:\Temp\ccPFXl9w.s:924    .rodata.F1_ENT:00000000 F1_ENT
+  C:\Temp\ccPFXl9w.s:364    .rodata.F1_FILL:00000000 F1_FILL
+  C:\Temp\ccPFXl9w.s:937    .rodata.fnt1:00000000 fnt1
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\ccPFXl9w.s:123    .rodata.F1_CLK:00000000 $d
+  C:\Temp\ccPFXl9w.s:137    .rodata.F1_I12F:00000000 $d
+  C:\Temp\ccPFXl9w.s:151    .rodata.F1_I170:00000000 $d
+  C:\Temp\ccPFXl9w.s:165    .rodata.F1_I171:00000000 $d
+  C:\Temp\ccPFXl9w.s:179    .rodata.F1_I172:00000000 $d
+  C:\Temp\ccPFXl9w.s:193    .rodata.F1_I13D:00000000 $d
+  C:\Temp\ccPFXl9w.s:207    .rodata.F1_I13E:00000000 $d
+  C:\Temp\ccPFXl9w.s:221    .rodata.F1_I175:00000000 $d
+  C:\Temp\ccPFXl9w.s:235    .rodata.F1_I176:00000000 $d
+  C:\Temp\ccPFXl9w.s:249    .rodata.F1_I177:00000000 $d
+  C:\Temp\ccPFXl9w.s:263    .rodata.F1_I178:00000000 $d
+  C:\Temp\ccPFXl9w.s:277    .rodata.F1_I179:00000000 $d
+  C:\Temp\ccPFXl9w.s:291    .rodata.F1_I17A:00000000 $d
+  C:\Temp\ccPFXl9w.s:305    .rodata.F1_I17B:00000000 $d
+  C:\Temp\ccPFXl9w.s:319    .rodata.F1_I17C:00000000 $d
+  C:\Temp\ccPFXl9w.s:333    .rodata.F1_I17D:00000000 $d
+  C:\Temp\ccPFXl9w.s:347    .rodata.F1_I17E:00000000 $d
+  C:\Temp\ccPFXl9w.s:361    .rodata.F1_FILL:00000000 $d
+  C:\Temp\ccPFXl9w.s:375    .rodata.F1_I140:00000000 $d
+  C:\Temp\ccPFXl9w.s:389    .rodata.F1_I141:00000000 $d
+  C:\Temp\ccPFXl9w.s:403    .rodata.F1_I142:00000000 $d
+  C:\Temp\ccPFXl9w.s:417    .rodata.F1_I143:00000000 $d
+  C:\Temp\ccPFXl9w.s:431    .rodata.F1_I144:00000000 $d
+  C:\Temp\ccPFXl9w.s:445    .rodata.F1_I145:00000000 $d
+  C:\Temp\ccPFXl9w.s:459    .rodata.F1_I146:00000000 $d
+  C:\Temp\ccPFXl9w.s:473    .rodata.F1_I147:00000000 $d
+  C:\Temp\ccPFXl9w.s:487    .rodata.F1_I148:00000000 $d
+  C:\Temp\ccPFXl9w.s:501    .rodata.F1_I149:00000000 $d
+  C:\Temp\ccPFXl9w.s:515    .rodata.F1_POINT:00000000 $d
+  C:\Temp\ccPFXl9w.s:529    .rodata.F1_I14A:00000000 $d
+  C:\Temp\ccPFXl9w.s:543    .rodata.F1_I14B:00000000 $d
+  C:\Temp\ccPFXl9w.s:557    .rodata.F1_I14C:00000000 $d
+  C:\Temp\ccPFXl9w.s:571    .rodata.F1_I14D:00000000 $d
+  C:\Temp\ccPFXl9w.s:585    .rodata.F1_I14E:00000000 $d
+  C:\Temp\ccPFXl9w.s:599    .rodata.F1_I14F:00000000 $d
+  C:\Temp\ccPFXl9w.s:613    .rodata.F1_I160:00000000 $d
+  C:\Temp\ccPFXl9w.s:627    .rodata.F1_I161:00000000 $d
+  C:\Temp\ccPFXl9w.s:641    .rodata.F1_I162:00000000 $d
+  C:\Temp\ccPFXl9w.s:655    .rodata.F1_DEG:00000000 $d
+  C:\Temp\ccPFXl9w.s:669    .rodata.F1_I163:00000000 $d
+  C:\Temp\ccPFXl9w.s:683    .rodata.F1_I164:00000000 $d
+  C:\Temp\ccPFXl9w.s:697    .rodata.F1_I150:00000000 $d
+  C:\Temp\ccPFXl9w.s:711    .rodata.F1_I151:00000000 $d
+  C:\Temp\ccPFXl9w.s:725    .rodata.F1_I152:00000000 $d
+  C:\Temp\ccPFXl9w.s:739    .rodata.F1_I153:00000000 $d
+  C:\Temp\ccPFXl9w.s:753    .rodata.F1_I154:00000000 $d
+  C:\Temp\ccPFXl9w.s:767    .rodata.F1_I155:00000000 $d
+  C:\Temp\ccPFXl9w.s:781    .rodata.F1_I156:00000000 $d
+  C:\Temp\ccPFXl9w.s:795    .rodata.F1_I157:00000000 $d
+  C:\Temp\ccPFXl9w.s:809    .rodata.F1_I158:00000000 $d
+  C:\Temp\ccPFXl9w.s:823    .rodata.F1_I159:00000000 $d
+  C:\Temp\ccPFXl9w.s:837    .rodata.F1_I15A:00000000 $d
+  C:\Temp\ccPFXl9w.s:851    .rodata.F1_I15B:00000000 $d
+  C:\Temp\ccPFXl9w.s:865    .rodata.F1_I15C:00000000 $d
+  C:\Temp\ccPFXl9w.s:879    .rodata.F1_I15D:00000000 $d
+  C:\Temp\ccPFXl9w.s:893    .rodata.F1_I15E:00000000 $d
+  C:\Temp\ccPFXl9w.s:907    .rodata.F1_I15F:00000000 $d
+  C:\Temp\ccPFXl9w.s:921    .rodata.F1_ENT:00000000 $d
+  C:\Temp\ccPFXl9w.s:934    .rodata.fnt1:00000000 $d
+  C:\Temp\ccPFXl9w.s:941    .rodata.F1_RDS:00000000 $d
+  C:\Temp\ccPFXl9w.s:993    .rodata.F1_I120:00000000 $d
+  C:\Temp\ccPFXl9w.s:1007   .rodata.F1_I121:00000000 $d
+  C:\Temp\ccPFXl9w.s:1021   .rodata.F1_I122:00000000 $d
+  C:\Temp\ccPFXl9w.s:1035   .rodata.F1_I123:00000000 $d
+  C:\Temp\ccPFXl9w.s:1049   .rodata.F1_I124:00000000 $d
+  C:\Temp\ccPFXl9w.s:1063   .rodata.F1_I125:00000000 $d
+  C:\Temp\ccPFXl9w.s:1077   .rodata.F1_I126:00000000 $d
+  C:\Temp\ccPFXl9w.s:1091   .rodata.F1_I127:00000000 $d
+  C:\Temp\ccPFXl9w.s:1105   .rodata.F1_I128:00000000 $d
+  C:\Temp\ccPFXl9w.s:1119   .rodata.F1_I129:00000000 $d
+  C:\Temp\ccPFXl9w.s:1133   .rodata.F1_I12A:00000000 $d
+  C:\Temp\ccPFXl9w.s:1147   .rodata.F1_I12B:00000000 $d
+  C:\Temp\ccPFXl9w.s:1161   .rodata.F1_I12C:00000000 $d
+  C:\Temp\ccPFXl9w.s:1175   .rodata.F1_I12D:00000000 $d
+  C:\Temp\ccPFXl9w.s:1189   .rodata.F1_I12E:00000000 $d
+  C:\Temp\ccPFXl9w.s:1203   .rodata.F1_I165:00000000 $d
+  C:\Temp\ccPFXl9w.s:1217   .rodata.F1_I166:00000000 $d
+  C:\Temp\ccPFXl9w.s:1231   .rodata.F1_I167:00000000 $d
+  C:\Temp\ccPFXl9w.s:1245   .rodata.F1_I168:00000000 $d
+  C:\Temp\ccPFXl9w.s:1259   .rodata.F1_I169:00000000 $d
+  C:\Temp\ccPFXl9w.s:1273   .rodata.F1_I13F:00000000 $d
+  C:\Temp\ccPFXl9w.s:1287   .rodata.F1_I16A:00000000 $d
+  C:\Temp\ccPFXl9w.s:1301   .rodata.F1_I16B:00000000 $d
+  C:\Temp\ccPFXl9w.s:1315   .rodata.F1_I16C:00000000 $d
+  C:\Temp\ccPFXl9w.s:1329   .rodata.F1_I16D:00000000 $d
+  C:\Temp\ccPFXl9w.s:1343   .rodata.F1_I16E:00000000 $d
+  C:\Temp\ccPFXl9w.s:1357   .rodata.F1_I16F:00000000 $d
+  C:\Temp\ccPFXl9w.s:1371   .rodata.F1_I13A:00000000 $d
+  C:\Temp\ccPFXl9w.s:1385   .rodata.F1_I13B:00000000 $d
+  C:\Temp\ccPFXl9w.s:1399   .rodata.F1_I13C:00000000 $d
+  C:\Temp\ccPFXl9w.s:1413   .rodata.F1_I173:00000000 $d
+  C:\Temp\ccPFXl9w.s:1427   .rodata.F1_I174:00000000 $d
+  C:\Temp\ccPFXl9w.s:1441   .rodata.F1_I130:00000000 $d
+  C:\Temp\ccPFXl9w.s:1455   .rodata.F1_I131:00000000 $d
+  C:\Temp\ccPFXl9w.s:1469   .rodata.F1_I132:00000000 $d
+  C:\Temp\ccPFXl9w.s:1483   .rodata.F1_I133:00000000 $d
+  C:\Temp\ccPFXl9w.s:1497   .rodata.F1_I134:00000000 $d
+  C:\Temp\ccPFXl9w.s:1511   .rodata.F1_I135:00000000 $d
+  C:\Temp\ccPFXl9w.s:1525   .rodata.F1_I136:00000000 $d
+  C:\Temp\ccPFXl9w.s:1539   .rodata.F1_I137:00000000 $d
+  C:\Temp\ccPFXl9w.s:1553   .rodata.F1_I138:00000000 $d
+  C:\Temp\ccPFXl9w.s:1567   .rodata.F1_I139:00000000 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+UNDEFINED SYMBOLS
+fnt1_EUR
+fnt1_CYR

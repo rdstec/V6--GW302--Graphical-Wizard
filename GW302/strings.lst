@@ -1,0 +1,1849 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"strings.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	TextString
+  18              		.global	Language00
+  19              		.global	s0178
+  20              		.global	s0168
+  21              		.global	s0164
+  22              		.global	s0162
+  23              		.global	s0161
+  24              		.global	s0153
+  25              		.global	s0145
+  26              		.global	s0144
+  27              		.global	s0140
+  28              		.global	s0139
+  29              		.global	s0129
+  30              		.global	s0125
+  31              		.global	s0111
+  32              		.global	s0105
+  33              		.global	s0097
+  34              		.global	s0082
+  35              		.global	s0074
+  36              		.global	s0069
+  37              		.global	s0065
+  38              		.global	s0063
+  39              		.global	s0060
+  40              		.global	s0058
+  41              		.global	s0057
+  42              		.global	s0035
+  43              		.global	s0000
+  44              		.global	s0182
+  45              		.global	s0181
+  46              		.global	s0180
+  47              		.global	s0179
+  48              		.global	s0177
+  49              		.global	s0176
+  50              		.global	s0175
+  51              		.global	s0174
+  52              		.global	s0173
+  53              		.global	s0172
+  54              		.global	s0171
+  55              		.global	s0170
+  56              		.global	s0169
+  57              		.global	s0167
+  58              		.global	s0166
+  59              		.global	s0165
+  60              		.global	s0163
+  61              		.global	s0160
+  62              		.global	s0159
+  63              		.global	s0158
+  64              		.global	s0157
+  65              		.global	s0156
+  66              		.global	s0155
+  67              		.global	s0154
+  68              		.global	s0152
+  69              		.global	s0151
+  70              		.global	s0150
+  71              		.global	s0149
+  72              		.global	s0148
+  73              		.global	s0147
+  74              		.global	s0146
+  75              		.global	s0143
+  76              		.global	s0142
+  77              		.global	s0141
+  78              		.global	s0138
+  79              		.global	s0137
+  80              		.global	s0136
+  81              		.global	s0135
+  82              		.global	s0134
+  83              		.global	s0133
+  84              		.global	s0132
+  85              		.global	s0131
+  86              		.global	s0130
+  87              		.global	s0128
+  88              		.global	s0127
+  89              		.global	s0126
+  90              		.global	s0124
+  91              		.global	s0123
+  92              		.global	s0122
+  93              		.global	s0121
+  94              		.global	s0120
+  95              		.global	s0119
+  96              		.global	s0118
+  97              		.global	s0117
+  98              		.global	s0116
+  99              		.global	s0115
+ 100              		.global	s0114
+ 101              		.global	s0113
+ 102              		.global	s0112
+ 103              		.global	s0110
+ 104              		.global	s0109
+ 105              		.global	s0108
+ 106              		.global	s0107
+ 107              		.global	s0106
+ 108              		.global	s0104
+ 109              		.global	s0103
+ 110              		.global	s0102
+ 111              		.global	s0101
+ 112              		.global	s0100
+ 113              		.global	s0099
+ 114              		.global	s0098
+ 115              		.global	s0096
+ 116              		.global	s0095
+ 117              		.global	s0094
+ 118              		.global	s0093
+ 119              		.global	s0092
+ 120              		.global	s0091
+ 121              		.global	s0090
+ 122              		.global	s0089
+ 123              		.global	s0088
+ 124              		.global	s0087
+ 125              		.global	s0086
+ 126              		.global	s0085
+ 127              		.global	s0084
+ 128              		.global	s0083
+ 129              		.global	s0081
+ 130              		.global	s0080
+ 131              		.global	s0079
+ 132              		.global	s0078
+ 133              		.global	s0077
+ 134              		.global	s0076
+ 135              		.global	s0075
+ 136              		.global	s0073
+ 137              		.global	s0072
+ 138              		.global	s0071
+ 139              		.global	s0070
+ 140              		.global	s0068
+ 141              		.global	s0067
+ 142              		.global	s0066
+ 143              		.global	s0064
+ 144              		.global	s0062
+ 145              		.global	s0061
+ 146              		.global	s0059
+ 147              		.global	s0056
+ 148              		.global	s0055
+ 149              		.global	s0054
+ 150              		.global	s0053
+ 151              		.global	s0052
+ 152              		.global	s0051
+ 153              		.global	s0050
+ 154              		.global	s0049
+ 155              		.global	s0048
+ 156              		.global	s0047
+ 157              		.global	s0046
+ 158              		.global	s0045
+ 159              		.global	s0044
+ 160              		.global	s0043
+ 161              		.global	s0042
+ 162              		.global	s0041
+ 163              		.global	s0040
+ 164              		.global	s0039
+ 165              		.global	s0038
+ 166              		.global	s0037
+ 167              		.global	s0036
+ 168              		.global	s0034
+ 169              		.global	s0033
+ 170              		.global	s0032
+ 171              		.global	s0031
+ 172              		.global	s0030
+ 173              		.global	s0029
+ 174              		.global	s0028
+ 175              		.global	s0027
+ 176              		.global	s0026
+ 177              		.global	s0025
+ 178              		.global	s0024
+ 179              		.global	s0023
+ 180              		.global	s0022
+ 181              		.global	s0021
+ 182              		.global	s0020
+ 183              		.global	s0019
+ 184              		.global	s0018
+ 185              		.global	s0017
+ 186              		.global	s0016
+ 187              		.global	s0015
+ 188              		.global	s0014
+ 189              		.global	s0013
+ 190              		.global	s0012
+ 191              		.global	s0011
+ 192              		.global	s0010
+ 193              		.global	s0009
+ 194              		.global	s0008
+ 195              		.global	s0007
+ 196              		.global	s0006
+ 197              		.global	s0005
+ 198              		.global	s0004
+ 199              		.global	s0003
+ 200              		.global	s0002
+ 201              		.global	s0001
+ 202              		.comm	POWERtaskhandle,4,4
+ 203              		.comm	TWItaskhandle,4,4
+ 204              		.comm	SetTime,4,4
+ 205              		.section	.rodata.s0054,"a",%progbits
+ 206              		.align	2
+ 209              	s0054:
+ 210 0000 416D7073 		.ascii	"Amps\000"
+ 210      00
+ 211 0005 000000   		.section	.rodata.s0055,"a",%progbits
+ 212              		.align	2
+ 215              	s0055:
+ 216 0000 45746573 		.ascii	"Etes-vous certain? OK\000"
+ 216      2D766F75 
+ 216      73206365 
+ 216      72746169 
+ 216      6E3F204F 
+ 217 0016 0000     		.section	.rodata.s0056,"a",%progbits
+ 218              		.align	2
+ 221              	s0056:
+ 222 0000 4200     		.ascii	"B\000"
+ 223 0002 0000     		.section	.rodata.s0057,"a",%progbits
+ 224              		.align	2
+ 227              	s0057:
+ 228 0000 00       		.space	1
+ 229 0001 000000   		.section	.rodata.s0058,"a",%progbits
+ 230              		.align	2
+ 233              	s0058:
+ 234 0000 00       		.space	1
+ 235 0001 000000   		.section	.rodata.s0059,"a",%progbits
+ 236              		.align	2
+ 239              	s0059:
+ 240 0000 43414C00 		.ascii	"CAL\000"
+ 241              		.section	.rodata.s0005,"a",%progbits
+ 242              		.align	2
+ 245              	s0005:
+ 246 0000 54656368 		.ascii	"Technician Setup\000"
+ 246      6E696369 
+ 246      616E2053 
+ 246      65747570 
+ 246      00
+ 247 0011 000000   		.section	.rodata.s0004,"a",%progbits
+ 248              		.align	2
+ 251              	s0004:
+ 252 0000 4F706572 		.ascii	"Operator Setup\000"
+ 252      61746F72 
+ 252      20536574 
+ 252      757000
+ 253 000f 00       		.section	.rodata.s0006,"a",%progbits
+ 254              		.align	2
+ 257              	s0006:
+ 258 0000 44696167 		.ascii	"Diagnostics\000"
+ 258      6E6F7374 
+ 258      69637300 
+ 259              		.section	.rodata.TextString,"a",%progbits
+ 260              		.align	2
+ 263              	TextString:
+ 264 0000 00000000 		.word	Language00
+ 265 0004 00000000 		.space	4
+ 266              		.section	.rodata.s0007,"a",%progbits
+ 267              		.align	2
+ 270              	s0007:
+ 271 0000 43524F50 		.ascii	"CROP :\000"
+ 271      203A00
+ 272 0007 00       		.section	.rodata.s0090,"a",%progbits
+ 273              		.align	2
+ 276              	s0090:
+ 277 0000 492F5020 		.ascii	"I/P 6 =\000"
+ 277      36203D00 
+ 278              		.section	.rodata.s0091,"a",%progbits
+ 279              		.align	2
+ 282              	s0091:
+ 283 0000 492F5020 		.ascii	"I/P 7 =\000"
+ 283      37203D00 
+ 284              		.section	.rodata.s0092,"a",%progbits
+ 285              		.align	2
+ 288              	s0092:
+ 289 0000 492F5020 		.ascii	"I/P 8 =\000"
+ 289      38203D00 
+ 290              		.section	.rodata.s0093,"a",%progbits
+ 291              		.align	2
+ 294              	s0093:
+ 295 0000 492F5020 		.ascii	"I/P 9 =\000"
+ 295      39203D00 
+ 296              		.section	.rodata.s0120,"a",%progbits
+ 297              		.align	2
+ 300              	s0120:
+ 301 0000 4F46464C 		.ascii	"OFFLINE\000"
+ 301      494E4500 
+ 302              		.section	.rodata.s0121,"a",%progbits
+ 303              		.align	2
+ 306              	s0121:
+ 307 0000 4F4B2070 		.ascii	"OK pour effacer\000"
+ 307      6F757220 
+ 307      65666661 
+ 307      63657200 
+ 308              		.section	.rodata.s0122,"a",%progbits
+ 309              		.align	2
+ 312              	s0122:
+ 313 0000 4F4B2070 		.ascii	"OK pour\000"
+ 313      6F757200 
+ 314              		.section	.rodata.s0123,"a",%progbits
+ 315              		.align	2
+ 318              	s0123:
+ 319 0000 4F4B2070 		.ascii	"OK pour annuler\000"
+ 319      6F757220 
+ 319      616E6E75 
+ 319      6C657200 
+ 320              		.section	.rodata.s0124,"a",%progbits
+ 321              		.align	2
+ 324              	s0124:
+ 325 0000 4F4E2000 		.ascii	"ON \000"
+ 326              		.section	.rodata.s0125,"a",%progbits
+ 327              		.align	2
+ 330              	s0125:
+ 331 0000 00       		.space	1
+ 332 0001 000000   		.section	.rodata.s0126,"a",%progbits
+ 333              		.align	2
+ 336              	s0126:
+ 337 0000 4F564552 		.ascii	"OVERLOAD\000"
+ 337      4C4F4144 
+ 337      00
+ 338 0009 000000   		.section	.rodata.s0127,"a",%progbits
+ 339              		.align	2
+ 342              	s0127:
+ 343 0000 6F752045 		.ascii	"ou ESC pour annuler\000"
+ 343      53432070 
+ 343      6F757220 
+ 343      616E6E75 
+ 343      6C657200 
+ 344              		.section	.rodata.s0128,"a",%progbits
+ 345              		.align	2
+ 348              	s0128:
+ 349 0000 50415353 		.ascii	"PASS\000"
+ 349      00
+ 350 0005 000000   		.section	.rodata.s0129,"a",%progbits
+ 351              		.align	2
+ 354              	s0129:
+ 355 0000 00       		.space	1
+ 356 0001 000000   		.section	.rodata.s0076,"a",%progbits
+ 357              		.align	2
+ 360              	s0076:
+ 361 0000 46616374 		.ascii	"Factor 'PI'\000"
+ 361      6F722027 
+ 361      50492700 
+ 362              		.section	.rodata.s0077,"a",%progbits
+ 363              		.align	2
+ 366              	s0077:
+ 367 0000 466F7277 		.ascii	"Forward Speed:   %5.1fkmh\000"
+ 367      61726420 
+ 367      53706565 
+ 367      643A2020 
+ 367      2025352E 
+ 368 001a 0000     		.section	.rodata.s0078,"a",%progbits
+ 369              		.align	2
+ 372              	s0078:
+ 373 0000 47572530 		.ascii	"GW%03u-%03urev%02u\000"
+ 373      33752D25 
+ 373      30337572 
+ 373      65762530 
+ 373      327500
+ 374 0013 00       		.section	.rodata.s0008,"a",%progbits
+ 375              		.align	2
+ 378              	s0008:
+ 379 0000 53696C61 		.ascii	"Silage\000"
+ 379      676500
+ 380 0007 00       		.section	.rodata.s0079,"a",%progbits
+ 381              		.align	2
+ 384              	s0079:
+ 385 0000 47656172 		.ascii	"Gearbox Ratio\000"
+ 385      626F7820 
+ 385      52617469 
+ 385      6F00
+ 386 000e 0000     		.section	.rodata.s0160,"a",%progbits
+ 387              		.align	2
+ 390              	s0160:
+ 391 0000 54722E2F 		.ascii	"Tr./Min.\000"
+ 391      4D696E2E 
+ 391      00
+ 392 0009 000000   		.section	.rodata.s0161,"a",%progbits
+ 393              		.align	2
+ 396              	s0161:
+ 397 0000 00       		.space	1
+ 398 0001 000000   		.section	.rodata.s0162,"a",%progbits
+ 399              		.align	2
+ 402              	s0162:
+ 403 0000 00       		.space	1
+ 404 0001 000000   		.section	.rodata.s0163,"a",%progbits
+ 405              		.align	2
+ 408              	s0163:
+ 409 0000 56455249 		.ascii	"VERIN T/L\000"
+ 409      4E20542F 
+ 409      4C00
+ 410 000a 0000     		.section	.rodata.s0164,"a",%progbits
+ 411              		.align	2
+ 414              	s0164:
+ 415 0000 00       		.space	1
+ 416 0001 000000   		.section	.rodata.s0165,"a",%progbits
+ 417              		.align	2
+ 420              	s0165:
+ 421 0000 56697465 		.ascii	"Vitesse:\000"
+ 421      7373653A 
+ 421      00
+ 422 0009 000000   		.section	.rodata.s0166,"a",%progbits
+ 423              		.align	2
+ 426              	s0166:
+ 427 0000 57696474 		.ascii	"Width\000"
+ 427      6800
+ 428 0006 0000     		.section	.rodata.s0167,"a",%progbits
+ 429              		.align	2
+ 432              	s0167:
+ 433 0000 636F6D6D 		.ascii	"commencer Cal vitesse\000"
+ 433      656E6365 
+ 433      72204361 
+ 433      6C207669 
+ 433      74657373 
+ 434 0016 0000     		.section	.rodata.s0168,"a",%progbits
+ 435              		.align	2
+ 438              	s0168:
+ 439 0000 00       		.space	1
+ 440 0001 000000   		.section	.rodata.s0169,"a",%progbits
+ 441              		.align	2
+ 444              	s0169:
+ 445 0000 672E00   		.ascii	"g.\000"
+ 446 0003 00       		.section	.rodata.s0095,"a",%progbits
+ 447              		.align	2
+ 450              	s0095:
+ 451 0000 6B672070 		.ascii	"kg per Rev\000"
+ 451      65722052 
+ 451      657600
+ 452 000b 00       		.section	.rodata.s0096,"a",%progbits
+ 453              		.align	2
+ 456              	s0096:
+ 457 0000 6B6D2F68 		.ascii	"km/h.=0.0\000"
+ 457      2E3D302E 
+ 457      3000
+ 458 000a 0000     		.section	.rodata.s0021,"a",%progbits
+ 459              		.align	2
+ 462              	s0021:
+ 463 0000 59656172 		.ascii	"Year\000"
+ 463      00
+ 464 0005 000000   		.section	.rodata.s0097,"a",%progbits
+ 465              		.align	2
+ 468              	s0097:
+ 469 0000 00       		.space	1
+ 470 0001 000000   		.section	.rodata.s0023,"a",%progbits
+ 471              		.align	2
+ 474              	s0023:
+ 475 0000 54656368 		.ascii	"Technician Menu\000"
+ 475      6E696369 
+ 475      616E204D 
+ 475      656E7500 
+ 476              		.section	.rodata.s0098,"a",%progbits
+ 477              		.align	2
+ 480              	s0098:
+ 481 0000 4C415247 		.ascii	"LARGEUR\000"
+ 481      45555200 
+ 482              		.section	.rodata.s0025,"a",%progbits
+ 483              		.align	2
+ 486              	s0025:
+ 487 0000 4E657420 		.ascii	"Net On\000"
+ 487      4F6E00
+ 488 0007 00       		.section	.rodata.s0099,"a",%progbits
+ 489              		.align	2
+ 492              	s0099:
+ 493 0000 4D41582E 		.ascii	"MAX.\000"
+ 493      00
+ 494 0005 000000   		.section	.rodata.s0027,"a",%progbits
+ 495              		.align	2
+ 498              	s0027:
+ 499 0000 48617900 		.ascii	"Hay\000"
+ 500              		.section	.rodata.s0028,"a",%progbits
+ 501              		.align	2
+ 504              	s0028:
+ 505 0000 53747261 		.ascii	"Straw\000"
+ 505      7700
+ 506 0006 0000     		.section	.rodata.s0100,"a",%progbits
+ 507              		.align	2
+ 510              	s0100:
+ 511 0000 4D434D00 		.ascii	"MCM\000"
+ 512              		.section	.rodata.s0060,"a",%progbits
+ 513              		.align	2
+ 516              	s0060:
+ 517 0000 00       		.space	1
+ 518 0001 000000   		.section	.rodata.s0061,"a",%progbits
+ 519              		.align	2
+ 522              	s0061:
+ 523 0000 43414C3A 		.ascii	"CAL:\000"
+ 523      00
+ 524 0005 000000   		.section	.rodata.s0062,"a",%progbits
+ 525              		.align	2
+ 528              	s0062:
+ 529 0000 43415054 		.ascii	"CAPTEURS\000"
+ 529      45555253 
+ 529      00
+ 530 0009 000000   		.section	.rodata.s0063,"a",%progbits
+ 531              		.align	2
+ 534              	s0063:
+ 535 0000 00       		.space	1
+ 536 0001 000000   		.section	.rodata.s0094,"a",%progbits
+ 537              		.align	2
+ 540              	s0094:
+ 541 0000 494D502E 		.ascii	"IMP./Tr.\000"
+ 541      2F54722E 
+ 541      00
+ 542 0009 000000   		.section	.rodata.s0065,"a",%progbits
+ 543              		.align	2
+ 546              	s0065:
+ 547 0000 00       		.space	1
+ 548 0001 000000   		.section	.rodata.s0066,"a",%progbits
+ 549              		.align	2
+ 552              	s0066:
+ 553 0000 434F4E54 		.ascii	"CONTRASTE/LUMINOSITE\000"
+ 553      52415354 
+ 553      452F4C55 
+ 553      4D494E4F 
+ 553      53495445 
+ 554 0015 000000   		.section	.rodata.s0067,"a",%progbits
+ 555              		.align	2
+ 558              	s0067:
+ 559 0000 43616C20 		.ascii	"Cal vitesse actif\000"
+ 559      76697465 
+ 559      73736520 
+ 559      61637469 
+ 559      6600
+ 560 0012 0000     		.section	.rodata.s0068,"a",%progbits
+ 561              		.align	2
+ 564              	s0068:
+ 565 0000 436F6E74 		.ascii	"Contr\364le du code:\000"
+ 565      72F46C65 
+ 565      20647520 
+ 565      636F6465 
+ 565      3A00
+ 566 0012 0000     		.section	.rodata.s0069,"a",%progbits
+ 567              		.align	2
+ 570              	s0069:
+ 571 0000 00       		.space	1
+ 572 0001 000000   		.section	.rodata.s0002,"a",%progbits
+ 573              		.align	2
+ 576              	s0002:
+ 577 0000 4D616368 		.ascii	"Machine Setup\000"
+ 577      696E6520 
+ 577      53657475 
+ 577      7000
+ 578 000e 0000     		.section	.rodata.s0026,"a",%progbits
+ 579              		.align	2
+ 582              	s0026:
+ 583 0000 42616C65 		.ascii	"Bale Full Silage\000"
+ 583      2046756C 
+ 583      6C205369 
+ 583      6C616765 
+ 583      00
+ 584 0011 000000   		.section	.rodata.s0003,"a",%progbits
+ 585              		.align	2
+ 588              	s0003:
+ 589 0000 546F7461 		.ascii	"Total\000"
+ 589      6C00
+ 590 0006 0000     		.section	.rodata.s0130,"a",%progbits
+ 591              		.align	2
+ 594              	s0130:
+ 595 0000 504D472F 		.ascii	"PMG/TGW:\000"
+ 595      5447573A 
+ 595      00
+ 596 0009 000000   		.section	.rodata.s0131,"a",%progbits
+ 597              		.align	2
+ 600              	s0131:
+ 601 0000 50574D20 		.ascii	"PWM Frequency\000"
+ 601      46726571 
+ 601      75656E63 
+ 601      7900
+ 602 000e 0000     		.section	.rodata.s0132,"a",%progbits
+ 603              		.align	2
+ 606              	s0132:
+ 607 0000 50726573 		.ascii	"Pressez ESC pour annuler\000"
+ 607      73657A20 
+ 607      45534320 
+ 607      706F7572 
+ 607      20616E6E 
+ 608 0019 000000   		.section	.rodata.s0133,"a",%progbits
+ 609              		.align	2
+ 612              	s0133:
+ 613 0000 50726573 		.ascii	"Pressez OK pour valider\000"
+ 613      73657A20 
+ 613      4F4B2070 
+ 613      6F757220 
+ 613      76616C69 
+ 614              		.section	.rodata.s0134,"a",%progbits
+ 615              		.align	2
+ 618              	s0134:
+ 619 0000 50726573 		.ascii	"Pressez OK pour commencer\000"
+ 619      73657A20 
+ 619      4F4B2070 
+ 619      6F757220 
+ 619      636F6D6D 
+ 620 001a 0000     		.section	.rodata.s0135,"a",%progbits
+ 621              		.align	2
+ 624              	s0135:
+ 625 0000 50726573 		.ascii	"Pressez OK quand fini\000"
+ 625      73657A20 
+ 625      4F4B2071 
+ 625      75616E64 
+ 625      2066696E 
+ 626 0016 0000     		.section	.rodata.s0136,"a",%progbits
+ 627              		.align	2
+ 630              	s0136:
+ 631 0000 50726F64 		.ascii	"Product\000"
+ 631      75637400 
+ 632              		.section	.rodata.s0137,"a",%progbits
+ 633              		.align	2
+ 636              	s0137:
+ 637 0000 496D7075 		.ascii	"Impulsions = \000"
+ 637      6C73696F 
+ 637      6E73203D 
+ 637      2000
+ 638 000e 0000     		.section	.rodata.s0138,"a",%progbits
+ 639              		.align	2
+ 642              	s0138:
+ 643 0000 522E00   		.ascii	"R.\000"
+ 644 0003 00       		.section	.rodata.s0139,"a",%progbits
+ 645              		.align	2
+ 648              	s0139:
+ 649 0000 00       		.space	1
+ 650 0001 000000   		.section	.rodata.s0020,"a",%progbits
+ 651              		.align	2
+ 654              	s0020:
+ 655 0000 4D6F6E74 		.ascii	"Month\000"
+ 655      6800
+ 656 0006 0000     		.section	.rodata.s0022,"a",%progbits
+ 657              		.align	2
+ 660              	s0022:
+ 661 0000 456E676C 		.ascii	"English\000"
+ 661      69736800 
+ 662              		.section	.rodata.s0170,"a",%progbits
+ 663              		.align	2
+ 666              	s0170:
+ 667 0000 686100   		.ascii	"ha\000"
+ 668 0003 00       		.section	.rodata.s0171,"a",%progbits
+ 669              		.align	2
+ 672              	s0171:
+ 673 0000 6B6700   		.ascii	"kg\000"
+ 674 0003 00       		.section	.rodata.s0172,"a",%progbits
+ 675              		.align	2
+ 678              	s0172:
+ 679 0000 6B672F52 		.ascii	"kg/Rev.\000"
+ 679      65762E00 
+ 680              		.section	.rodata.s0173,"a",%progbits
+ 681              		.align	2
+ 684              	s0173:
+ 685 0000 6B672F68 		.ascii	"kg/ha\000"
+ 685      6100
+ 686 0006 0000     		.section	.rodata.s0174,"a",%progbits
+ 687              		.align	2
+ 690              	s0174:
+ 691 0000 6B672F68 		.ascii	"kg/ha    \000"
+ 691      61202020 
+ 691      2000
+ 692 000a 0000     		.section	.rodata.s0175,"a",%progbits
+ 693              		.align	2
+ 696              	s0175:
+ 697 0000 6B6D2F68 		.ascii	"km/h\000"
+ 697      00
+ 698 0005 000000   		.section	.rodata.s0176,"a",%progbits
+ 699              		.align	2
+ 702              	s0176:
+ 703 0000 6D00     		.ascii	"m\000"
+ 704 0002 0000     		.section	.rodata.s0177,"a",%progbits
+ 705              		.align	2
+ 708              	s0177:
+ 709 0000 6D2F7075 		.ascii	"m/pulse\000"
+ 709      6C736500 
+ 710              		.section	.rodata.s0178,"a",%progbits
+ 711              		.align	2
+ 714              	s0178:
+ 715 0000 00       		.space	1
+ 716 0001 000000   		.section	.rodata.s0179,"a",%progbits
+ 717              		.align	2
+ 720              	s0179:
+ 721 0000 6D657472 		.ascii	"metres\000"
+ 721      657300
+ 722 0007 00       		.section	.rodata.s0084,"a",%progbits
+ 723              		.align	2
+ 726              	s0084:
+ 727 0000 492F5020 		.ascii	"I/P 1 =\000"
+ 727      31203D00 
+ 728              		.section	.rodata.s0031,"a",%progbits
+ 729              		.align	2
+ 732              	s0031:
+ 733 0000 416E616C 		.ascii	"Analogue Inputs\000"
+ 733      6F677565 
+ 733      20496E70 
+ 733      75747300 
+ 734              		.section	.rodata.s0032,"a",%progbits
+ 735              		.align	2
+ 738              	s0032:
+ 739 0000 416E4950 		.ascii	"AnIP%1u\000"
+ 739      25317500 
+ 740              		.section	.rodata.s0085,"a",%progbits
+ 741              		.align	2
+ 744              	s0085:
+ 745 0000 492F5020 		.ascii	"I/P 10=\000"
+ 745      31303D00 
+ 746              		.section	.rodata.s0034,"a",%progbits
+ 747              		.align	2
+ 750              	s0034:
+ 751 0000 52657365 		.ascii	"Reset Total %1c\000"
+ 751      7420546F 
+ 751      74616C20 
+ 751      25316300 
+ 752              		.section	.rodata.s0035,"a",%progbits
+ 753              		.align	2
+ 756              	s0035:
+ 757 0000 00       		.space	1
+ 758 0001 000000   		.section	.rodata.s0036,"a",%progbits
+ 759              		.align	2
+ 762              	s0036:
+ 763 0000 52657365 		.ascii	"Reset Lube Count\000"
+ 763      74204C75 
+ 763      62652043 
+ 763      6F756E74 
+ 763      00
+ 764 0011 000000   		.section	.rodata.s0037,"a",%progbits
+ 765              		.align	2
+ 768              	s0037:
+ 769 0000 52657365 		.ascii	"Reset Defaults\000"
+ 769      74204465 
+ 769      6661756C 
+ 769      747300
+ 770 000f 00       		.section	.rodata.s0038,"a",%progbits
+ 771              		.align	2
+ 774              	s0038:
+ 775 0000 50726573 		.ascii	"Press \001 to Reset\000"
+ 775      73200120 
+ 775      746F2052 
+ 775      65736574 
+ 775      00
+ 776 0011 000000   		.section	.rodata.s0087,"a",%progbits
+ 777              		.align	2
+ 780              	s0087:
+ 781 0000 492F5020 		.ascii	"I/P 12=\000"
+ 781      31323D00 
+ 782              		.section	.rodata.s0039,"a",%progbits
+ 783              		.align	2
+ 786              	s0039:
+ 787 0000 46616374 		.ascii	"Factors Reset to Defaults\000"
+ 787      6F727320 
+ 787      52657365 
+ 787      7420746F 
+ 787      20446566 
+ 788 001a 0000     		.section	.rodata.s0070,"a",%progbits
+ 789              		.align	2
+ 792              	s0070:
+ 793 0000 44494147 		.ascii	"DIAGNOSTICS SEMOIR\000"
+ 793      4E4F5354 
+ 793      49435320 
+ 793      53454D4F 
+ 793      495200
+ 794 0013 00       		.section	.rodata.s0071,"a",%progbits
+ 795              		.align	2
+ 798              	s0071:
+ 799 0000 4550414E 		.ascii	"EPAND.=%6.1fm\000"
+ 799      442E3D25 
+ 799      362E3166 
+ 799      6D00
+ 800 000e 0000     		.section	.rodata.s0072,"a",%progbits
+ 801              		.align	2
+ 804              	s0072:
+ 805 0000 456E636F 		.ascii	"Encoder PPR\000"
+ 805      64657220 
+ 805      50505200 
+ 806              		.section	.rodata.s0073,"a",%progbits
+ 807              		.align	2
+ 810              	s0073:
+ 811 0000 45737361 		.ascii	"Essai de debit\000"
+ 811      69206465 
+ 811      20646562 
+ 811      697400
+ 812 000f 00       		.section	.rodata.s0074,"a",%progbits
+ 813              		.align	2
+ 816              	s0074:
+ 817 0000 00       		.space	1
+ 818 0001 000000   		.section	.rodata.s0101,"a",%progbits
+ 819              		.align	2
+ 822              	s0101:
+ 823 0000 4D434D20 		.ascii	"MCM I/O\000"
+ 823      492F4F00 
+ 824              		.section	.rodata.s0102,"a",%progbits
+ 825              		.align	2
+ 828              	s0102:
+ 829 0000 4D434D20 		.ascii	"MCM OK\000"
+ 829      4F4B00
+ 830 0007 00       		.section	.rodata.s0103,"a",%progbits
+ 831              		.align	2
+ 834              	s0103:
+ 835 0000 4D434D20 		.ascii	"MCM Unit\000"
+ 835      556E6974 
+ 835      00
+ 836 0009 000000   		.section	.rodata.s0104,"a",%progbits
+ 837              		.align	2
+ 840              	s0104:
+ 841 0000 4D494352 		.ascii	"MICRO\000"
+ 841      4F00
+ 842 0006 0000     		.section	.rodata.s0105,"a",%progbits
+ 843              		.align	2
+ 846              	s0105:
+ 847 0000 00       		.space	1
+ 848 0001 000000   		.section	.rodata.s0106,"a",%progbits
+ 849              		.align	2
+ 852              	s0106:
+ 853 0000 4D6F6465 		.ascii	"Mode\000"
+ 853      00
+ 854 0005 000000   		.section	.rodata.s0107,"a",%progbits
+ 855              		.align	2
+ 858              	s0107:
+ 859 0000 4D6F746F 		.ascii	"Motor Control Module\000"
+ 859      7220436F 
+ 859      6E74726F 
+ 859      6C204D6F 
+ 859      64756C65 
+ 860 0015 000000   		.section	.rodata.s0108,"a",%progbits
+ 861              		.align	2
+ 864              	s0108:
+ 865 0000 4D6F746F 		.ascii	"Motor Current:   %5uA\000"
+ 865      72204375 
+ 865      7272656E 
+ 865      743A2020 
+ 865      20253575 
+ 866 0016 0000     		.section	.rodata.s0109,"a",%progbits
+ 867              		.align	2
+ 870              	s0109:
+ 871 0000 4D6F746F 		.ascii	"Motor Frequency: %5uHz\000"
+ 871      72204672 
+ 871      65717565 
+ 871      6E63793A 
+ 871      20253575 
+ 872 0017 00       		.section	.rodata.s0140,"a",%progbits
+ 873              		.align	2
+ 876              	s0140:
+ 877 0000 00       		.space	1
+ 878 0001 000000   		.section	.rodata.s0141,"a",%progbits
+ 879              		.align	2
+ 882              	s0141:
+ 883 0000 52504D00 		.ascii	"RPM\000"
+ 884              		.section	.rodata.s0142,"a",%progbits
+ 885              		.align	2
+ 888              	s0142:
+ 889 0000 52532032 		.ascii	"RS 232\000"
+ 889      333200
+ 890 0007 00       		.section	.rodata.s0143,"a",%progbits
+ 891              		.align	2
+ 894              	s0143:
+ 895 0000 52657065 		.ascii	"Repere:\000"
+ 895      72653A00 
+ 896              		.section	.rodata.s0144,"a",%progbits
+ 897              		.align	2
+ 900              	s0144:
+ 901 0000 00       		.space	1
+ 902 0001 000000   		.section	.rodata.s0145,"a",%progbits
+ 903              		.align	2
+ 906              	s0145:
+ 907 0000 00       		.space	1
+ 908 0001 000000   		.section	.rodata.s0146,"a",%progbits
+ 909              		.align	2
+ 912              	s0146:
+ 913 0000 53454D2E 		.ascii	"SEM.  =%6.1fm\000"
+ 913      20203D25 
+ 913      362E3166 
+ 913      6D00
+ 914 000e 0000     		.section	.rodata.s0147,"a",%progbits
+ 915              		.align	2
+ 918              	s0147:
+ 919 0000 53485554 		.ascii	"SHUTDOWN\000"
+ 919      444F574E 
+ 919      00
+ 920 0009 000000   		.section	.rodata.s0148,"a",%progbits
+ 921              		.align	2
+ 924              	s0148:
+ 925 0000 53494D00 		.ascii	"SIM\000"
+ 926              		.section	.rodata.s0149,"a",%progbits
+ 927              		.align	2
+ 930              	s0149:
+ 931 0000 53544F50 		.ascii	"STOP\000"
+ 931      00
+ 932 0005 000000   		.section	.rodata.s0086,"a",%progbits
+ 933              		.align	2
+ 936              	s0086:
+ 937 0000 492F5020 		.ascii	"I/P 11=\000"
+ 937      31313D00 
+ 938              		.section	.rodata.Language00,"a",%progbits
+ 939              		.align	2
+ 942              	Language00:
+ 943 0000 00000000 		.word	s0000
+ 944 0004 00000000 		.word	s0001
+ 945 0008 00000000 		.word	s0002
+ 946 000c 00000000 		.word	s0003
+ 947 0010 00000000 		.word	s0004
+ 948 0014 00000000 		.word	s0005
+ 949 0018 00000000 		.word	s0006
+ 950 001c 00000000 		.word	s0007
+ 951 0020 00000000 		.word	s0008
+ 952 0024 00000000 		.word	s0009
+ 953 0028 00000000 		.word	s0010
+ 954 002c 00000000 		.word	s0011
+ 955 0030 00000000 		.word	s0012
+ 956 0034 00000000 		.word	s0013
+ 957 0038 00000000 		.word	s0014
+ 958 003c 00000000 		.word	s0015
+ 959 0040 00000000 		.word	s0016
+ 960 0044 00000000 		.word	s0017
+ 961 0048 00000000 		.word	s0018
+ 962 004c 00000000 		.word	s0019
+ 963 0050 00000000 		.word	s0020
+ 964 0054 00000000 		.word	s0021
+ 965 0058 00000000 		.word	s0022
+ 966 005c 00000000 		.word	s0023
+ 967 0060 00000000 		.word	s0024
+ 968 0064 00000000 		.word	s0025
+ 969 0068 00000000 		.word	s0026
+ 970 006c 00000000 		.word	s0027
+ 971 0070 00000000 		.word	s0028
+ 972 0074 00000000 		.word	s0029
+ 973 0078 00000000 		.word	s0030
+ 974 007c 00000000 		.word	s0031
+ 975 0080 00000000 		.word	s0032
+ 976 0084 00000000 		.word	s0033
+ 977 0088 00000000 		.word	s0034
+ 978 008c 00000000 		.word	s0035
+ 979 0090 00000000 		.word	s0036
+ 980 0094 00000000 		.word	s0037
+ 981 0098 00000000 		.word	s0038
+ 982 009c 00000000 		.word	s0039
+ 983 00a0 00000000 		.word	s0040
+ 984 00a4 00000000 		.word	s0041
+ 985 00a8 00000000 		.word	s0042
+ 986 00ac 00000000 		.word	s0043
+ 987 00b0 00000000 		.word	s0044
+ 988 00b4 00000000 		.word	s0045
+ 989 00b8 00000000 		.word	s0046
+ 990 00bc 00000000 		.word	s0047
+ 991 00c0 00000000 		.word	s0048
+ 992 00c4 00000000 		.word	s0049
+ 993 00c8 00000000 		.word	s0050
+ 994 00cc 00000000 		.word	s0051
+ 995 00d0 00000000 		.word	s0052
+ 996 00d4 00000000 		.word	s0053
+ 997 00d8 00000000 		.word	s0054
+ 998 00dc 00000000 		.word	s0055
+ 999 00e0 00000000 		.word	s0056
+ 1000 00e4 00000000 		.word	s0057
+ 1001 00e8 00000000 		.word	s0058
+ 1002 00ec 00000000 		.word	s0059
+ 1003 00f0 00000000 		.word	s0060
+ 1004 00f4 00000000 		.word	s0061
+ 1005 00f8 00000000 		.word	s0062
+ 1006 00fc 00000000 		.word	s0063
+ 1007 0100 00000000 		.word	s0064
+ 1008 0104 00000000 		.word	s0065
+ 1009 0108 00000000 		.word	s0066
+ 1010 010c 00000000 		.word	s0067
+ 1011 0110 00000000 		.word	s0068
+ 1012 0114 00000000 		.word	s0069
+ 1013 0118 00000000 		.word	s0070
+ 1014 011c 00000000 		.word	s0071
+ 1015 0120 00000000 		.word	s0072
+ 1016 0124 00000000 		.word	s0073
+ 1017 0128 00000000 		.word	s0074
+ 1018 012c 00000000 		.word	s0075
+ 1019 0130 00000000 		.word	s0076
+ 1020 0134 00000000 		.word	s0077
+ 1021 0138 00000000 		.word	s0078
+ 1022 013c 00000000 		.word	s0079
+ 1023 0140 00000000 		.word	s0080
+ 1024 0144 00000000 		.word	s0081
+ 1025 0148 00000000 		.word	s0082
+ 1026 014c 00000000 		.word	s0083
+ 1027 0150 00000000 		.word	s0084
+ 1028 0154 00000000 		.word	s0085
+ 1029 0158 00000000 		.word	s0086
+ 1030 015c 00000000 		.word	s0087
+ 1031 0160 00000000 		.word	s0088
+ 1032 0164 00000000 		.word	s0089
+ 1033 0168 00000000 		.word	s0090
+ 1034 016c 00000000 		.word	s0091
+ 1035 0170 00000000 		.word	s0092
+ 1036 0174 00000000 		.word	s0093
+ 1037 0178 00000000 		.word	s0094
+ 1038 017c 00000000 		.word	s0095
+ 1039 0180 00000000 		.word	s0096
+ 1040 0184 00000000 		.word	s0097
+ 1041 0188 00000000 		.word	s0098
+ 1042 018c 00000000 		.word	s0099
+ 1043 0190 00000000 		.word	s0100
+ 1044 0194 00000000 		.word	s0101
+ 1045 0198 00000000 		.word	s0102
+ 1046 019c 00000000 		.word	s0103
+ 1047 01a0 00000000 		.word	s0104
+ 1048 01a4 00000000 		.word	s0105
+ 1049 01a8 00000000 		.word	s0106
+ 1050 01ac 00000000 		.word	s0107
+ 1051 01b0 00000000 		.word	s0108
+ 1052 01b4 00000000 		.word	s0109
+ 1053 01b8 00000000 		.word	s0110
+ 1054 01bc 00000000 		.word	s0111
+ 1055 01c0 00000000 		.word	s0112
+ 1056 01c4 00000000 		.word	s0113
+ 1057 01c8 00000000 		.word	s0114
+ 1058 01cc 00000000 		.word	s0115
+ 1059 01d0 00000000 		.word	s0116
+ 1060 01d4 00000000 		.word	s0117
+ 1061 01d8 00000000 		.word	s0118
+ 1062 01dc 00000000 		.word	s0119
+ 1063 01e0 00000000 		.word	s0120
+ 1064 01e4 00000000 		.word	s0121
+ 1065 01e8 00000000 		.word	s0122
+ 1066 01ec 00000000 		.word	s0123
+ 1067 01f0 00000000 		.word	s0124
+ 1068 01f4 00000000 		.word	s0125
+ 1069 01f8 00000000 		.word	s0126
+ 1070 01fc 00000000 		.word	s0127
+ 1071 0200 00000000 		.word	s0128
+ 1072 0204 00000000 		.word	s0129
+ 1073 0208 00000000 		.word	s0130
+ 1074 020c 00000000 		.word	s0131
+ 1075 0210 00000000 		.word	s0132
+ 1076 0214 00000000 		.word	s0133
+ 1077 0218 00000000 		.word	s0134
+ 1078 021c 00000000 		.word	s0135
+ 1079 0220 00000000 		.word	s0136
+ 1080 0224 00000000 		.word	s0137
+ 1081 0228 00000000 		.word	s0138
+ 1082 022c 00000000 		.word	s0139
+ 1083 0230 00000000 		.word	s0140
+ 1084 0234 00000000 		.word	s0141
+ 1085 0238 00000000 		.word	s0142
+ 1086 023c 00000000 		.word	s0143
+ 1087 0240 00000000 		.word	s0144
+ 1088 0244 00000000 		.word	s0145
+ 1089 0248 00000000 		.word	s0146
+ 1090 024c 00000000 		.word	s0147
+ 1091 0250 00000000 		.word	s0148
+ 1092 0254 00000000 		.word	s0149
+ 1093 0258 00000000 		.word	s0150
+ 1094 025c 00000000 		.word	s0151
+ 1095 0260 00000000 		.word	s0152
+ 1096 0264 00000000 		.word	s0153
+ 1097 0268 00000000 		.word	s0154
+ 1098 026c 00000000 		.word	s0155
+ 1099 0270 00000000 		.word	s0156
+ 1100 0274 00000000 		.word	s0157
+ 1101 0278 00000000 		.word	s0158
+ 1102 027c 00000000 		.word	s0159
+ 1103 0280 00000000 		.word	s0160
+ 1104 0284 00000000 		.word	s0161
+ 1105 0288 00000000 		.word	s0162
+ 1106 028c 00000000 		.word	s0163
+ 1107 0290 00000000 		.word	s0164
+ 1108 0294 00000000 		.word	s0165
+ 1109 0298 00000000 		.word	s0166
+ 1110 029c 00000000 		.word	s0167
+ 1111 02a0 00000000 		.word	s0168
+ 1112 02a4 00000000 		.word	s0169
+ 1113 02a8 00000000 		.word	s0170
+ 1114 02ac 00000000 		.word	s0171
+ 1115 02b0 00000000 		.word	s0172
+ 1116 02b4 00000000 		.word	s0173
+ 1117 02b8 00000000 		.word	s0174
+ 1118 02bc 00000000 		.word	s0175
+ 1119 02c0 00000000 		.word	s0176
+ 1120 02c4 00000000 		.word	s0177
+ 1121 02c8 00000000 		.word	s0178
+ 1122 02cc 00000000 		.word	s0179
+ 1123 02d0 00000000 		.word	s0180
+ 1124 02d4 00000000 		.word	s0181
+ 1125 02d8 00000000 		.word	s0182
+ 1126              		.section	.rodata.s0000,"a",%progbits
+ 1127              		.align	2
+ 1130              	s0000:
+ 1131 0000 00       		.space	1
+ 1132 0001 000000   		.section	.rodata.s0001,"a",%progbits
+ 1133              		.align	2
+ 1136              	s0001:
+ 1137 0000 4D616368 		.ascii	"Machine Menu\000"
+ 1137      696E6520 
+ 1137      4D656E75 
+ 1137      00
+ 1138 000d 000000   		.section	.rodata.s0088,"a",%progbits
+ 1139              		.align	2
+ 1142              	s0088:
+ 1143 0000 492F5020 		.ascii	"I/P 3 =\000"
+ 1143      33203D00 
+ 1144              		.section	.rodata.s0075,"a",%progbits
+ 1145              		.align	2
+ 1148              	s0075:
+ 1149 0000 46616374 		.ascii	"Factor 'D'\000"
+ 1149      6F722027 
+ 1149      442700
+ 1150 000b 00       		.section	.rodata.s0089,"a",%progbits
+ 1151              		.align	2
+ 1154              	s0089:
+ 1155 0000 492F5020 		.ascii	"I/P 5 =\000"
+ 1155      35203D00 
+ 1156              		.section	.rodata.s0180,"a",%progbits
+ 1157              		.align	2
+ 1160              	s0180:
+ 1161 0000 6F7500   		.ascii	"ou\000"
+ 1162 0003 00       		.section	.rodata.s0181,"a",%progbits
+ 1163              		.align	2
+ 1166              	s0181:
+ 1167 0000 706F7572 		.ascii	"pour modifier\000"
+ 1167      206D6F64 
+ 1167      69666965 
+ 1167      7200
+ 1168 000e 0000     		.section	.rodata.s0182,"a",%progbits
+ 1169              		.align	2
+ 1172              	s0182:
+ 1173 0000 7300     		.ascii	"s\000"
+ 1174 0002 0000     		.section	.rodata.s0016,"a",%progbits
+ 1175              		.align	2
+ 1178              	s0016:
+ 1179 0000 4C616E67 		.ascii	"Language\000"
+ 1179      75616765 
+ 1179      00
+ 1180 0009 000000   		.section	.rodata.s0009,"a",%progbits
+ 1181              		.align	2
+ 1184              	s0009:
+ 1185 0000 544F5441 		.ascii	"TOTAL:\000"
+ 1185      4C3A00
+ 1186 0007 00       		.section	.rodata.s0029,"a",%progbits
+ 1187              		.align	2
+ 1190              	s0029:
+ 1191 0000 4C756265 		.ascii	"Lube Alarm\000"
+ 1191      20416C61 
+ 1191      726D00
+ 1192 000b 00       		.section	.rodata.s0040,"a",%progbits
+ 1193              		.align	2
+ 1196              	s0040:
+ 1197 0000 4B6E6966 		.ascii	"Knife Pressure\000"
+ 1197      65205072 
+ 1197      65737375 
+ 1197      726500
+ 1198 000f 00       		.section	.rodata.s0041,"a",%progbits
+ 1199              		.align	2
+ 1202              	s0041:
+ 1203 0000 4B6E6966 		.ascii	"Knife Pres. Warn\000"
+ 1203      65205072 
+ 1203      65732E20 
+ 1203      5761726E 
+ 1203      00
+ 1204 0011 000000   		.section	.rodata.s0042,"a",%progbits
+ 1205              		.align	2
+ 1208              	s0042:
+ 1209 0000 4E657420 		.ascii	"Net Delay\000"
+ 1209      44656C61 
+ 1209      7900
+ 1210 000a 0000     		.section	.rodata.s0043,"a",%progbits
+ 1211              		.align	2
+ 1214              	s0043:
+ 1215 0000 4E657420 		.ascii	"Net Tension\000"
+ 1215      54656E73 
+ 1215      696F6E00 
+ 1216              		.section	.rodata.s0044,"a",%progbits
+ 1217              		.align	2
+ 1220              	s0044:
+ 1221 0000 4E657420 		.ascii	"Net Ramp Time\000"
+ 1221      52616D70 
+ 1221      2054696D 
+ 1221      6500
+ 1222 000e 0000     		.section	.rodata.s0045,"a",%progbits
+ 1223              		.align	2
+ 1226              	s0045:
+ 1227 0000 4E657420 		.ascii	"Net Ramp Start\000"
+ 1227      52616D70 
+ 1227      20537461 
+ 1227      727400
+ 1228 000f 00       		.section	.rodata.s0046,"a",%progbits
+ 1229              		.align	2
+ 1232              	s0046:
+ 1233 0000 4D414E20 		.ascii	"MAN Net Brake\000"
+ 1233      4E657420 
+ 1233      4272616B 
+ 1233      6500
+ 1234 000e 0000     		.section	.rodata.s0047,"a",%progbits
+ 1235              		.align	2
+ 1238              	s0047:
+ 1239 0000 44617920 		.ascii	"Day Total\000"
+ 1239      546F7461 
+ 1239      6C00
+ 1240 000a 0000     		.section	.rodata.s0048,"a",%progbits
+ 1241              		.align	2
+ 1244              	s0048:
+ 1245 0000 52657365 		.ascii	"Reset Day Total\000"
+ 1245      74204461 
+ 1245      7920546F 
+ 1245      74616C00 
+ 1246              		.section	.rodata.s0049,"a",%progbits
+ 1247              		.align	2
+ 1250              	s0049:
+ 1251 0000 362E2050 		.ascii	"6. PORTUGESE\000"
+ 1251      4F525455 
+ 1251      47455345 
+ 1251      00
+ 1252 000d 000000   		.section	.rodata.s0080,"a",%progbits
+ 1253              		.align	2
+ 1256              	s0080:
+ 1257 0000 47726169 		.ascii	"Grains/m2\000"
+ 1257      6E732F6D 
+ 1257      3200
+ 1258 000a 0000     		.section	.rodata.s0081,"a",%progbits
+ 1259              		.align	2
+ 1262              	s0081:
+ 1263 0000 48454144 		.ascii	"HEADUNIT I/O\000"
+ 1263      554E4954 
+ 1263      20492F4F 
+ 1263      00
+ 1264 000d 000000   		.section	.rodata.s0082,"a",%progbits
+ 1265              		.align	2
+ 1268              	s0082:
+ 1269 0000 00       		.space	1
+ 1270 0001 000000   		.section	.rodata.s0083,"a",%progbits
+ 1271              		.align	2
+ 1274              	s0083:
+ 1275 0000 487A00   		.ascii	"Hz\000"
+ 1276 0003 00       		.section	.rodata.s0110,"a",%progbits
+ 1277              		.align	2
+ 1280              	s0110:
+ 1281 0000 4D6F746F 		.ascii	"Motor Speed:     %5uRPM\000"
+ 1281      72205370 
+ 1281      6565643A 
+ 1281      20202020 
+ 1281      20253575 
+ 1282              		.section	.rodata.s0111,"a",%progbits
+ 1283              		.align	2
+ 1286              	s0111:
+ 1287 0000 00       		.space	1
+ 1288 0001 000000   		.section	.rodata.s0112,"a",%progbits
+ 1289              		.align	2
+ 1292              	s0112:
+ 1293 0000 4E4D4541 		.ascii	"NMEA VTG\000"
+ 1293      20565447 
+ 1293      00
+ 1294 0009 000000   		.section	.rodata.s0113,"a",%progbits
+ 1295              		.align	2
+ 1298              	s0113:
+ 1299 0000 4E4F204D 		.ascii	"NO MCM\000"
+ 1299      434D00
+ 1300 0007 00       		.section	.rodata.s0114,"a",%progbits
+ 1301              		.align	2
+ 1304              	s0114:
+ 1305 0000 4E4F524D 		.ascii	"NORMAL\000"
+ 1305      414C00
+ 1306 0007 00       		.section	.rodata.s0115,"a",%progbits
+ 1307              		.align	2
+ 1310              	s0115:
+ 1311 0000 4E6F7576 		.ascii	"Nouveau facteur = \000"
+ 1311      65617520 
+ 1311      66616374 
+ 1311      65757220 
+ 1311      3D2000
+ 1312 0013 00       		.section	.rodata.s0116,"a",%progbits
+ 1313              		.align	2
+ 1316              	s0116:
+ 1317 0000 46616972 		.ascii	"Faire 100 metres\000"
+ 1317      65203130 
+ 1317      30206D65 
+ 1317      74726573 
+ 1317      00
+ 1318 0011 000000   		.section	.rodata.s0117,"a",%progbits
+ 1319              		.align	2
+ 1322              	s0117:
+ 1323 0000 4F2F5020 		.ascii	"O/P 1 =\000"
+ 1323      31203D00 
+ 1324              		.section	.rodata.s0118,"a",%progbits
+ 1325              		.align	2
+ 1328              	s0118:
+ 1329 0000 4F2F5020 		.ascii	"O/P 2 =\000"
+ 1329      32203D00 
+ 1330              		.section	.rodata.s0119,"a",%progbits
+ 1331              		.align	2
+ 1334              	s0119:
+ 1335 0000 4F464600 		.ascii	"OFF\000"
+ 1336              		.section	.rodata.s0010,"a",%progbits
+ 1337              		.align	2
+ 1340              	s0010:
+ 1341 0000 546F7461 		.ascii	"Total %1c\000"
+ 1341      6C202531 
+ 1341      6300
+ 1342 000a 0000     		.section	.rodata.s0024,"a",%progbits
+ 1343              		.align	2
+ 1346              	s0024:
+ 1347 0000 454E5445 		.ascii	"ENTER PIN CODE\000"
+ 1347      52205049 
+ 1347      4E20434F 
+ 1347      444500
+ 1348 000f 00       		.section	.rodata.s0064,"a",%progbits
+ 1349              		.align	2
+ 1352              	s0064:
+ 1353 0000 434F4E46 		.ascii	"CONFIG TECHNICIEN\000"
+ 1353      49472054 
+ 1353      4543484E 
+ 1353      49434945 
+ 1353      4E00
+ 1354 0012 0000     		.section	.rodata.s0150,"a",%progbits
+ 1355              		.align	2
+ 1358              	s0150:
+ 1359 0000 53595354 		.ascii	"SYSTEME DE TRAMLINE\000"
+ 1359      454D4520 
+ 1359      44452054 
+ 1359      52414D4C 
+ 1359      494E4500 
+ 1360              		.section	.rodata.s0151,"a",%progbits
+ 1361              		.align	2
+ 1364              	s0151:
+ 1365 0000 536F6674 		.ascii	"Software: CMA%03u-%03u\000"
+ 1365      77617265 
+ 1365      3A20434D 
+ 1365      41253033 
+ 1365      752D2530 
+ 1366 0017 00       		.section	.rodata.s0152,"a",%progbits
+ 1367              		.align	2
+ 1370              	s0152:
+ 1371 0000 41727265 		.ascii	"Arreter \340 100m\000"
+ 1371      74657220 
+ 1371      E0203130 
+ 1371      306D00
+ 1372 000f 00       		.section	.rodata.s0153,"a",%progbits
+ 1373              		.align	2
+ 1376              	s0153:
+ 1377 0000 00       		.space	1
+ 1378 0001 000000   		.section	.rodata.s0154,"a",%progbits
+ 1379              		.align	2
+ 1382              	s0154:
+ 1383 0000 54617267 		.ascii	"Target RPM:      %5.0fRPM\000"
+ 1383      65742052 
+ 1383      504D3A20 
+ 1383      20202020 
+ 1383      2025352E 
+ 1384 001a 0000     		.section	.rodata.s0155,"a",%progbits
+ 1385              		.align	2
+ 1388              	s0155:
+ 1389 0000 54617267 		.ascii	"Target Rate\000"
+ 1389      65742052 
+ 1389      61746500 
+ 1390              		.section	.rodata.s0156,"a",%progbits
+ 1391              		.align	2
+ 1394              	s0156:
+ 1395 0000 54617267 		.ascii	"Target=\000"
+ 1395      65743D00 
+ 1396              		.section	.rodata.s0157,"a",%progbits
+ 1397              		.align	2
+ 1400              	s0157:
+ 1401 0000 54656D70 		.ascii	"Temp > 90\260C\000"
+ 1401      203E2039 
+ 1401      30B04300 
+ 1402              		.section	.rodata.s0158,"a",%progbits
+ 1403              		.align	2
+ 1406              	s0158:
+ 1407 0000 54657374 		.ascii	"Test de calibrage\000"
+ 1407      20646520 
+ 1407      63616C69 
+ 1407      62726167 
+ 1407      6500
+ 1408 0012 0000     		.section	.rodata.s0159,"a",%progbits
+ 1409              		.align	2
+ 1412              	s0159:
+ 1413 0000 546F6E6E 		.ascii	"Tonnes\000"
+ 1413      657300
+ 1414 0007 00       		.section	.rodata.s0030,"a",%progbits
+ 1415              		.align	2
+ 1418              	s0030:
+ 1419 0000 44696769 		.ascii	"Digital Inputs\000"
+ 1419      74616C20 
+ 1419      496E7075 
+ 1419      747300
+ 1420 000f 00       		.section	.rodata.s0011,"a",%progbits
+ 1421              		.align	2
+ 1424              	s0011:
+ 1425 0000 4C756265 		.ascii	"Lube Count\000"
+ 1425      20436F75 
+ 1425      6E7400
+ 1426 000b 00       		.section	.rodata.s0012,"a",%progbits
+ 1427              		.align	2
+ 1430              	s0012:
+ 1431 0000 4772616E 		.ascii	"Grand Total\000"
+ 1431      6420546F 
+ 1431      74616C00 
+ 1432              		.section	.rodata.s0013,"a",%progbits
+ 1433              		.align	2
+ 1436              	s0013:
+ 1437 0000 4F706572 		.ascii	"Operator Setup\000"
+ 1437      61746F72 
+ 1437      20536574 
+ 1437      757000
+ 1438 000f 00       		.section	.rodata.s0014,"a",%progbits
+ 1439              		.align	2
+ 1442              	s0014:
+ 1443 0000 436F6E74 		.ascii	"Contrast\000"
+ 1443      72617374 
+ 1443      00
+ 1444 0009 000000   		.section	.rodata.s0015,"a",%progbits
+ 1445              		.align	2
+ 1448              	s0015:
+ 1449 0000 436C6F63 		.ascii	"Clock Adjust\000"
+ 1449      6B204164 
+ 1449      6A757374 
+ 1449      00
+ 1450 000d 000000   		.section	.rodata.s0033,"a",%progbits
+ 1451              		.align	2
+ 1454              	s0033:
+ 1455 0000 4F757470 		.ascii	"Outputs\000"
+ 1455      75747300 
+ 1456              		.section	.rodata.s0017,"a",%progbits
+ 1457              		.align	2
+ 1460              	s0017:
+ 1461 0000 48727300 		.ascii	"Hrs\000"
+ 1462              		.section	.rodata.s0018,"a",%progbits
+ 1463              		.align	2
+ 1466              	s0018:
+ 1467 0000 4D696E73 		.ascii	"Mins\000"
+ 1467      00
+ 1468 0005 000000   		.section	.rodata.s0019,"a",%progbits
+ 1469              		.align	2
+ 1472              	s0019:
+ 1473 0000 44617465 		.ascii	"Date\000"
+ 1473      00
+ 1474 0005 000000   		.section	.rodata.s0050,"a",%progbits
+ 1475              		.align	2
+ 1478              	s0050:
+ 1479 0000 362E2052 		.ascii	"6. R\340Z DES FACTEUR\000"
+ 1479      E05A2044 
+ 1479      45532046 
+ 1479      41435445 
+ 1479      555200
+ 1480 0013 00       		.section	.rodata.s0051,"a",%progbits
+ 1481              		.align	2
+ 1484              	s0051:
+ 1485 0000 4100     		.ascii	"A\000"
+ 1486 0002 0000     		.section	.rodata.s0052,"a",%progbits
+ 1487              		.align	2
+ 1490              	s0052:
+ 1491 0000 41637475 		.ascii	"Actual=\000"
+ 1491      616C3D00 
+ 1492              		.section	.rodata.s0053,"a",%progbits
+ 1493              		.align	2
+ 1496              	s0053:
+ 1497 0000 446F6E6E 		.ascii	"Donnees effacees\000"
+ 1497      65657320 
+ 1497      65666661 
+ 1497      63656573 
+ 1497      00
+ 1498 0011 000000   		.text
+ 1499              	.Letext0:
+ 1500              		.file 1 "./include/task.h"
+ 1501              		.file 2 "./include/queue.h"
+ 1502              		.file 3 "./include/semphr.h"
+ 1503              		.file 4 "Board.h"
+ 1504              		.file 5 "strings.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 strings.c
+  C:\Temp\cci4u8MZ.s:263    .rodata.TextString:00000000 TextString
+  C:\Temp\cci4u8MZ.s:942    .rodata.Language00:00000000 Language00
+  C:\Temp\cci4u8MZ.s:714    .rodata.s0178:00000000 s0178
+  C:\Temp\cci4u8MZ.s:438    .rodata.s0168:00000000 s0168
+  C:\Temp\cci4u8MZ.s:414    .rodata.s0164:00000000 s0164
+  C:\Temp\cci4u8MZ.s:402    .rodata.s0162:00000000 s0162
+  C:\Temp\cci4u8MZ.s:396    .rodata.s0161:00000000 s0161
+  C:\Temp\cci4u8MZ.s:1376   .rodata.s0153:00000000 s0153
+  C:\Temp\cci4u8MZ.s:906    .rodata.s0145:00000000 s0145
+  C:\Temp\cci4u8MZ.s:900    .rodata.s0144:00000000 s0144
+  C:\Temp\cci4u8MZ.s:876    .rodata.s0140:00000000 s0140
+  C:\Temp\cci4u8MZ.s:648    .rodata.s0139:00000000 s0139
+  C:\Temp\cci4u8MZ.s:354    .rodata.s0129:00000000 s0129
+  C:\Temp\cci4u8MZ.s:330    .rodata.s0125:00000000 s0125
+  C:\Temp\cci4u8MZ.s:1286   .rodata.s0111:00000000 s0111
+  C:\Temp\cci4u8MZ.s:846    .rodata.s0105:00000000 s0105
+  C:\Temp\cci4u8MZ.s:468    .rodata.s0097:00000000 s0097
+  C:\Temp\cci4u8MZ.s:1268   .rodata.s0082:00000000 s0082
+  C:\Temp\cci4u8MZ.s:816    .rodata.s0074:00000000 s0074
+  C:\Temp\cci4u8MZ.s:570    .rodata.s0069:00000000 s0069
+  C:\Temp\cci4u8MZ.s:546    .rodata.s0065:00000000 s0065
+  C:\Temp\cci4u8MZ.s:534    .rodata.s0063:00000000 s0063
+  C:\Temp\cci4u8MZ.s:516    .rodata.s0060:00000000 s0060
+  C:\Temp\cci4u8MZ.s:233    .rodata.s0058:00000000 s0058
+  C:\Temp\cci4u8MZ.s:227    .rodata.s0057:00000000 s0057
+  C:\Temp\cci4u8MZ.s:756    .rodata.s0035:00000000 s0035
+  C:\Temp\cci4u8MZ.s:1130   .rodata.s0000:00000000 s0000
+  C:\Temp\cci4u8MZ.s:1172   .rodata.s0182:00000000 s0182
+  C:\Temp\cci4u8MZ.s:1166   .rodata.s0181:00000000 s0181
+  C:\Temp\cci4u8MZ.s:1160   .rodata.s0180:00000000 s0180
+  C:\Temp\cci4u8MZ.s:720    .rodata.s0179:00000000 s0179
+  C:\Temp\cci4u8MZ.s:708    .rodata.s0177:00000000 s0177
+  C:\Temp\cci4u8MZ.s:702    .rodata.s0176:00000000 s0176
+  C:\Temp\cci4u8MZ.s:696    .rodata.s0175:00000000 s0175
+  C:\Temp\cci4u8MZ.s:690    .rodata.s0174:00000000 s0174
+  C:\Temp\cci4u8MZ.s:684    .rodata.s0173:00000000 s0173
+  C:\Temp\cci4u8MZ.s:678    .rodata.s0172:00000000 s0172
+  C:\Temp\cci4u8MZ.s:672    .rodata.s0171:00000000 s0171
+  C:\Temp\cci4u8MZ.s:666    .rodata.s0170:00000000 s0170
+  C:\Temp\cci4u8MZ.s:444    .rodata.s0169:00000000 s0169
+  C:\Temp\cci4u8MZ.s:432    .rodata.s0167:00000000 s0167
+  C:\Temp\cci4u8MZ.s:426    .rodata.s0166:00000000 s0166
+  C:\Temp\cci4u8MZ.s:420    .rodata.s0165:00000000 s0165
+  C:\Temp\cci4u8MZ.s:408    .rodata.s0163:00000000 s0163
+  C:\Temp\cci4u8MZ.s:390    .rodata.s0160:00000000 s0160
+  C:\Temp\cci4u8MZ.s:1412   .rodata.s0159:00000000 s0159
+  C:\Temp\cci4u8MZ.s:1406   .rodata.s0158:00000000 s0158
+  C:\Temp\cci4u8MZ.s:1400   .rodata.s0157:00000000 s0157
+  C:\Temp\cci4u8MZ.s:1394   .rodata.s0156:00000000 s0156
+  C:\Temp\cci4u8MZ.s:1388   .rodata.s0155:00000000 s0155
+  C:\Temp\cci4u8MZ.s:1382   .rodata.s0154:00000000 s0154
+  C:\Temp\cci4u8MZ.s:1370   .rodata.s0152:00000000 s0152
+  C:\Temp\cci4u8MZ.s:1364   .rodata.s0151:00000000 s0151
+  C:\Temp\cci4u8MZ.s:1358   .rodata.s0150:00000000 s0150
+  C:\Temp\cci4u8MZ.s:930    .rodata.s0149:00000000 s0149
+  C:\Temp\cci4u8MZ.s:924    .rodata.s0148:00000000 s0148
+  C:\Temp\cci4u8MZ.s:918    .rodata.s0147:00000000 s0147
+  C:\Temp\cci4u8MZ.s:912    .rodata.s0146:00000000 s0146
+  C:\Temp\cci4u8MZ.s:894    .rodata.s0143:00000000 s0143
+  C:\Temp\cci4u8MZ.s:888    .rodata.s0142:00000000 s0142
+  C:\Temp\cci4u8MZ.s:882    .rodata.s0141:00000000 s0141
+  C:\Temp\cci4u8MZ.s:642    .rodata.s0138:00000000 s0138
+  C:\Temp\cci4u8MZ.s:636    .rodata.s0137:00000000 s0137
+  C:\Temp\cci4u8MZ.s:630    .rodata.s0136:00000000 s0136
+  C:\Temp\cci4u8MZ.s:624    .rodata.s0135:00000000 s0135
+  C:\Temp\cci4u8MZ.s:618    .rodata.s0134:00000000 s0134
+  C:\Temp\cci4u8MZ.s:612    .rodata.s0133:00000000 s0133
+  C:\Temp\cci4u8MZ.s:606    .rodata.s0132:00000000 s0132
+  C:\Temp\cci4u8MZ.s:600    .rodata.s0131:00000000 s0131
+  C:\Temp\cci4u8MZ.s:594    .rodata.s0130:00000000 s0130
+  C:\Temp\cci4u8MZ.s:348    .rodata.s0128:00000000 s0128
+  C:\Temp\cci4u8MZ.s:342    .rodata.s0127:00000000 s0127
+  C:\Temp\cci4u8MZ.s:336    .rodata.s0126:00000000 s0126
+  C:\Temp\cci4u8MZ.s:324    .rodata.s0124:00000000 s0124
+  C:\Temp\cci4u8MZ.s:318    .rodata.s0123:00000000 s0123
+  C:\Temp\cci4u8MZ.s:312    .rodata.s0122:00000000 s0122
+  C:\Temp\cci4u8MZ.s:306    .rodata.s0121:00000000 s0121
+  C:\Temp\cci4u8MZ.s:300    .rodata.s0120:00000000 s0120
+  C:\Temp\cci4u8MZ.s:1334   .rodata.s0119:00000000 s0119
+  C:\Temp\cci4u8MZ.s:1328   .rodata.s0118:00000000 s0118
+  C:\Temp\cci4u8MZ.s:1322   .rodata.s0117:00000000 s0117
+  C:\Temp\cci4u8MZ.s:1316   .rodata.s0116:00000000 s0116
+  C:\Temp\cci4u8MZ.s:1310   .rodata.s0115:00000000 s0115
+  C:\Temp\cci4u8MZ.s:1304   .rodata.s0114:00000000 s0114
+  C:\Temp\cci4u8MZ.s:1298   .rodata.s0113:00000000 s0113
+  C:\Temp\cci4u8MZ.s:1292   .rodata.s0112:00000000 s0112
+  C:\Temp\cci4u8MZ.s:1280   .rodata.s0110:00000000 s0110
+  C:\Temp\cci4u8MZ.s:870    .rodata.s0109:00000000 s0109
+  C:\Temp\cci4u8MZ.s:864    .rodata.s0108:00000000 s0108
+  C:\Temp\cci4u8MZ.s:858    .rodata.s0107:00000000 s0107
+  C:\Temp\cci4u8MZ.s:852    .rodata.s0106:00000000 s0106
+  C:\Temp\cci4u8MZ.s:840    .rodata.s0104:00000000 s0104
+  C:\Temp\cci4u8MZ.s:834    .rodata.s0103:00000000 s0103
+  C:\Temp\cci4u8MZ.s:828    .rodata.s0102:00000000 s0102
+  C:\Temp\cci4u8MZ.s:822    .rodata.s0101:00000000 s0101
+  C:\Temp\cci4u8MZ.s:510    .rodata.s0100:00000000 s0100
+  C:\Temp\cci4u8MZ.s:492    .rodata.s0099:00000000 s0099
+  C:\Temp\cci4u8MZ.s:480    .rodata.s0098:00000000 s0098
+  C:\Temp\cci4u8MZ.s:456    .rodata.s0096:00000000 s0096
+  C:\Temp\cci4u8MZ.s:450    .rodata.s0095:00000000 s0095
+  C:\Temp\cci4u8MZ.s:540    .rodata.s0094:00000000 s0094
+  C:\Temp\cci4u8MZ.s:294    .rodata.s0093:00000000 s0093
+  C:\Temp\cci4u8MZ.s:288    .rodata.s0092:00000000 s0092
+  C:\Temp\cci4u8MZ.s:282    .rodata.s0091:00000000 s0091
+  C:\Temp\cci4u8MZ.s:276    .rodata.s0090:00000000 s0090
+  C:\Temp\cci4u8MZ.s:1154   .rodata.s0089:00000000 s0089
+  C:\Temp\cci4u8MZ.s:1142   .rodata.s0088:00000000 s0088
+  C:\Temp\cci4u8MZ.s:780    .rodata.s0087:00000000 s0087
+  C:\Temp\cci4u8MZ.s:936    .rodata.s0086:00000000 s0086
+  C:\Temp\cci4u8MZ.s:744    .rodata.s0085:00000000 s0085
+  C:\Temp\cci4u8MZ.s:726    .rodata.s0084:00000000 s0084
+  C:\Temp\cci4u8MZ.s:1274   .rodata.s0083:00000000 s0083
+  C:\Temp\cci4u8MZ.s:1262   .rodata.s0081:00000000 s0081
+  C:\Temp\cci4u8MZ.s:1256   .rodata.s0080:00000000 s0080
+  C:\Temp\cci4u8MZ.s:384    .rodata.s0079:00000000 s0079
+  C:\Temp\cci4u8MZ.s:372    .rodata.s0078:00000000 s0078
+  C:\Temp\cci4u8MZ.s:366    .rodata.s0077:00000000 s0077
+  C:\Temp\cci4u8MZ.s:360    .rodata.s0076:00000000 s0076
+  C:\Temp\cci4u8MZ.s:1148   .rodata.s0075:00000000 s0075
+  C:\Temp\cci4u8MZ.s:810    .rodata.s0073:00000000 s0073
+  C:\Temp\cci4u8MZ.s:804    .rodata.s0072:00000000 s0072
+  C:\Temp\cci4u8MZ.s:798    .rodata.s0071:00000000 s0071
+  C:\Temp\cci4u8MZ.s:792    .rodata.s0070:00000000 s0070
+  C:\Temp\cci4u8MZ.s:564    .rodata.s0068:00000000 s0068
+  C:\Temp\cci4u8MZ.s:558    .rodata.s0067:00000000 s0067
+  C:\Temp\cci4u8MZ.s:552    .rodata.s0066:00000000 s0066
+  C:\Temp\cci4u8MZ.s:1352   .rodata.s0064:00000000 s0064
+  C:\Temp\cci4u8MZ.s:528    .rodata.s0062:00000000 s0062
+  C:\Temp\cci4u8MZ.s:522    .rodata.s0061:00000000 s0061
+  C:\Temp\cci4u8MZ.s:239    .rodata.s0059:00000000 s0059
+  C:\Temp\cci4u8MZ.s:221    .rodata.s0056:00000000 s0056
+  C:\Temp\cci4u8MZ.s:215    .rodata.s0055:00000000 s0055
+  C:\Temp\cci4u8MZ.s:209    .rodata.s0054:00000000 s0054
+  C:\Temp\cci4u8MZ.s:1496   .rodata.s0053:00000000 s0053
+  C:\Temp\cci4u8MZ.s:1490   .rodata.s0052:00000000 s0052
+  C:\Temp\cci4u8MZ.s:1484   .rodata.s0051:00000000 s0051
+  C:\Temp\cci4u8MZ.s:1478   .rodata.s0050:00000000 s0050
+  C:\Temp\cci4u8MZ.s:1250   .rodata.s0049:00000000 s0049
+  C:\Temp\cci4u8MZ.s:1244   .rodata.s0048:00000000 s0048
+  C:\Temp\cci4u8MZ.s:1238   .rodata.s0047:00000000 s0047
+  C:\Temp\cci4u8MZ.s:1232   .rodata.s0046:00000000 s0046
+  C:\Temp\cci4u8MZ.s:1226   .rodata.s0045:00000000 s0045
+  C:\Temp\cci4u8MZ.s:1220   .rodata.s0044:00000000 s0044
+  C:\Temp\cci4u8MZ.s:1214   .rodata.s0043:00000000 s0043
+  C:\Temp\cci4u8MZ.s:1208   .rodata.s0042:00000000 s0042
+  C:\Temp\cci4u8MZ.s:1202   .rodata.s0041:00000000 s0041
+  C:\Temp\cci4u8MZ.s:1196   .rodata.s0040:00000000 s0040
+  C:\Temp\cci4u8MZ.s:786    .rodata.s0039:00000000 s0039
+  C:\Temp\cci4u8MZ.s:774    .rodata.s0038:00000000 s0038
+  C:\Temp\cci4u8MZ.s:768    .rodata.s0037:00000000 s0037
+  C:\Temp\cci4u8MZ.s:762    .rodata.s0036:00000000 s0036
+  C:\Temp\cci4u8MZ.s:750    .rodata.s0034:00000000 s0034
+  C:\Temp\cci4u8MZ.s:1454   .rodata.s0033:00000000 s0033
+  C:\Temp\cci4u8MZ.s:738    .rodata.s0032:00000000 s0032
+  C:\Temp\cci4u8MZ.s:732    .rodata.s0031:00000000 s0031
+  C:\Temp\cci4u8MZ.s:1418   .rodata.s0030:00000000 s0030
+  C:\Temp\cci4u8MZ.s:1190   .rodata.s0029:00000000 s0029
+  C:\Temp\cci4u8MZ.s:504    .rodata.s0028:00000000 s0028
+  C:\Temp\cci4u8MZ.s:498    .rodata.s0027:00000000 s0027
+  C:\Temp\cci4u8MZ.s:582    .rodata.s0026:00000000 s0026
+  C:\Temp\cci4u8MZ.s:486    .rodata.s0025:00000000 s0025
+  C:\Temp\cci4u8MZ.s:1346   .rodata.s0024:00000000 s0024
+  C:\Temp\cci4u8MZ.s:474    .rodata.s0023:00000000 s0023
+  C:\Temp\cci4u8MZ.s:660    .rodata.s0022:00000000 s0022
+  C:\Temp\cci4u8MZ.s:462    .rodata.s0021:00000000 s0021
+  C:\Temp\cci4u8MZ.s:654    .rodata.s0020:00000000 s0020
+  C:\Temp\cci4u8MZ.s:1472   .rodata.s0019:00000000 s0019
+  C:\Temp\cci4u8MZ.s:1466   .rodata.s0018:00000000 s0018
+  C:\Temp\cci4u8MZ.s:1460   .rodata.s0017:00000000 s0017
+  C:\Temp\cci4u8MZ.s:1178   .rodata.s0016:00000000 s0016
+  C:\Temp\cci4u8MZ.s:1448   .rodata.s0015:00000000 s0015
+  C:\Temp\cci4u8MZ.s:1442   .rodata.s0014:00000000 s0014
+  C:\Temp\cci4u8MZ.s:1436   .rodata.s0013:00000000 s0013
+  C:\Temp\cci4u8MZ.s:1430   .rodata.s0012:00000000 s0012
+  C:\Temp\cci4u8MZ.s:1424   .rodata.s0011:00000000 s0011
+  C:\Temp\cci4u8MZ.s:1340   .rodata.s0010:00000000 s0010
+  C:\Temp\cci4u8MZ.s:1184   .rodata.s0009:00000000 s0009
+  C:\Temp\cci4u8MZ.s:378    .rodata.s0008:00000000 s0008
+  C:\Temp\cci4u8MZ.s:270    .rodata.s0007:00000000 s0007
+  C:\Temp\cci4u8MZ.s:257    .rodata.s0006:00000000 s0006
+  C:\Temp\cci4u8MZ.s:245    .rodata.s0005:00000000 s0005
+  C:\Temp\cci4u8MZ.s:251    .rodata.s0004:00000000 s0004
+  C:\Temp\cci4u8MZ.s:588    .rodata.s0003:00000000 s0003
+  C:\Temp\cci4u8MZ.s:576    .rodata.s0002:00000000 s0002
+  C:\Temp\cci4u8MZ.s:1136   .rodata.s0001:00000000 s0001
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\cci4u8MZ.s:206    .rodata.s0054:00000000 $d
+  C:\Temp\cci4u8MZ.s:212    .rodata.s0055:00000000 $d
+  C:\Temp\cci4u8MZ.s:218    .rodata.s0056:00000000 $d
+  C:\Temp\cci4u8MZ.s:224    .rodata.s0057:00000000 $d
+  C:\Temp\cci4u8MZ.s:230    .rodata.s0058:00000000 $d
+  C:\Temp\cci4u8MZ.s:236    .rodata.s0059:00000000 $d
+  C:\Temp\cci4u8MZ.s:242    .rodata.s0005:00000000 $d
+  C:\Temp\cci4u8MZ.s:248    .rodata.s0004:00000000 $d
+  C:\Temp\cci4u8MZ.s:254    .rodata.s0006:00000000 $d
+  C:\Temp\cci4u8MZ.s:260    .rodata.TextString:00000000 $d
+  C:\Temp\cci4u8MZ.s:267    .rodata.s0007:00000000 $d
+  C:\Temp\cci4u8MZ.s:273    .rodata.s0090:00000000 $d
+  C:\Temp\cci4u8MZ.s:279    .rodata.s0091:00000000 $d
+  C:\Temp\cci4u8MZ.s:285    .rodata.s0092:00000000 $d
+  C:\Temp\cci4u8MZ.s:291    .rodata.s0093:00000000 $d
+  C:\Temp\cci4u8MZ.s:297    .rodata.s0120:00000000 $d
+  C:\Temp\cci4u8MZ.s:303    .rodata.s0121:00000000 $d
+  C:\Temp\cci4u8MZ.s:309    .rodata.s0122:00000000 $d
+  C:\Temp\cci4u8MZ.s:315    .rodata.s0123:00000000 $d
+  C:\Temp\cci4u8MZ.s:321    .rodata.s0124:00000000 $d
+  C:\Temp\cci4u8MZ.s:327    .rodata.s0125:00000000 $d
+  C:\Temp\cci4u8MZ.s:333    .rodata.s0126:00000000 $d
+  C:\Temp\cci4u8MZ.s:339    .rodata.s0127:00000000 $d
+  C:\Temp\cci4u8MZ.s:345    .rodata.s0128:00000000 $d
+  C:\Temp\cci4u8MZ.s:351    .rodata.s0129:00000000 $d
+  C:\Temp\cci4u8MZ.s:357    .rodata.s0076:00000000 $d
+  C:\Temp\cci4u8MZ.s:363    .rodata.s0077:00000000 $d
+  C:\Temp\cci4u8MZ.s:369    .rodata.s0078:00000000 $d
+  C:\Temp\cci4u8MZ.s:375    .rodata.s0008:00000000 $d
+  C:\Temp\cci4u8MZ.s:381    .rodata.s0079:00000000 $d
+  C:\Temp\cci4u8MZ.s:387    .rodata.s0160:00000000 $d
+  C:\Temp\cci4u8MZ.s:393    .rodata.s0161:00000000 $d
+  C:\Temp\cci4u8MZ.s:399    .rodata.s0162:00000000 $d
+  C:\Temp\cci4u8MZ.s:405    .rodata.s0163:00000000 $d
+  C:\Temp\cci4u8MZ.s:411    .rodata.s0164:00000000 $d
+  C:\Temp\cci4u8MZ.s:417    .rodata.s0165:00000000 $d
+  C:\Temp\cci4u8MZ.s:423    .rodata.s0166:00000000 $d
+  C:\Temp\cci4u8MZ.s:429    .rodata.s0167:00000000 $d
+  C:\Temp\cci4u8MZ.s:435    .rodata.s0168:00000000 $d
+  C:\Temp\cci4u8MZ.s:441    .rodata.s0169:00000000 $d
+  C:\Temp\cci4u8MZ.s:447    .rodata.s0095:00000000 $d
+  C:\Temp\cci4u8MZ.s:453    .rodata.s0096:00000000 $d
+  C:\Temp\cci4u8MZ.s:459    .rodata.s0021:00000000 $d
+  C:\Temp\cci4u8MZ.s:465    .rodata.s0097:00000000 $d
+  C:\Temp\cci4u8MZ.s:471    .rodata.s0023:00000000 $d
+  C:\Temp\cci4u8MZ.s:477    .rodata.s0098:00000000 $d
+  C:\Temp\cci4u8MZ.s:483    .rodata.s0025:00000000 $d
+  C:\Temp\cci4u8MZ.s:489    .rodata.s0099:00000000 $d
+  C:\Temp\cci4u8MZ.s:495    .rodata.s0027:00000000 $d
+  C:\Temp\cci4u8MZ.s:501    .rodata.s0028:00000000 $d
+  C:\Temp\cci4u8MZ.s:507    .rodata.s0100:00000000 $d
+  C:\Temp\cci4u8MZ.s:513    .rodata.s0060:00000000 $d
+  C:\Temp\cci4u8MZ.s:519    .rodata.s0061:00000000 $d
+  C:\Temp\cci4u8MZ.s:525    .rodata.s0062:00000000 $d
+  C:\Temp\cci4u8MZ.s:531    .rodata.s0063:00000000 $d
+  C:\Temp\cci4u8MZ.s:537    .rodata.s0094:00000000 $d
+  C:\Temp\cci4u8MZ.s:543    .rodata.s0065:00000000 $d
+  C:\Temp\cci4u8MZ.s:549    .rodata.s0066:00000000 $d
+  C:\Temp\cci4u8MZ.s:555    .rodata.s0067:00000000 $d
+  C:\Temp\cci4u8MZ.s:561    .rodata.s0068:00000000 $d
+  C:\Temp\cci4u8MZ.s:567    .rodata.s0069:00000000 $d
+  C:\Temp\cci4u8MZ.s:573    .rodata.s0002:00000000 $d
+  C:\Temp\cci4u8MZ.s:579    .rodata.s0026:00000000 $d
+  C:\Temp\cci4u8MZ.s:585    .rodata.s0003:00000000 $d
+  C:\Temp\cci4u8MZ.s:591    .rodata.s0130:00000000 $d
+  C:\Temp\cci4u8MZ.s:597    .rodata.s0131:00000000 $d
+  C:\Temp\cci4u8MZ.s:603    .rodata.s0132:00000000 $d
+  C:\Temp\cci4u8MZ.s:609    .rodata.s0133:00000000 $d
+  C:\Temp\cci4u8MZ.s:615    .rodata.s0134:00000000 $d
+  C:\Temp\cci4u8MZ.s:621    .rodata.s0135:00000000 $d
+  C:\Temp\cci4u8MZ.s:627    .rodata.s0136:00000000 $d
+  C:\Temp\cci4u8MZ.s:633    .rodata.s0137:00000000 $d
+  C:\Temp\cci4u8MZ.s:639    .rodata.s0138:00000000 $d
+  C:\Temp\cci4u8MZ.s:645    .rodata.s0139:00000000 $d
+  C:\Temp\cci4u8MZ.s:651    .rodata.s0020:00000000 $d
+  C:\Temp\cci4u8MZ.s:657    .rodata.s0022:00000000 $d
+  C:\Temp\cci4u8MZ.s:663    .rodata.s0170:00000000 $d
+  C:\Temp\cci4u8MZ.s:669    .rodata.s0171:00000000 $d
+  C:\Temp\cci4u8MZ.s:675    .rodata.s0172:00000000 $d
+  C:\Temp\cci4u8MZ.s:681    .rodata.s0173:00000000 $d
+  C:\Temp\cci4u8MZ.s:687    .rodata.s0174:00000000 $d
+  C:\Temp\cci4u8MZ.s:693    .rodata.s0175:00000000 $d
+  C:\Temp\cci4u8MZ.s:699    .rodata.s0176:00000000 $d
+  C:\Temp\cci4u8MZ.s:705    .rodata.s0177:00000000 $d
+  C:\Temp\cci4u8MZ.s:711    .rodata.s0178:00000000 $d
+  C:\Temp\cci4u8MZ.s:717    .rodata.s0179:00000000 $d
+  C:\Temp\cci4u8MZ.s:723    .rodata.s0084:00000000 $d
+  C:\Temp\cci4u8MZ.s:729    .rodata.s0031:00000000 $d
+  C:\Temp\cci4u8MZ.s:735    .rodata.s0032:00000000 $d
+  C:\Temp\cci4u8MZ.s:741    .rodata.s0085:00000000 $d
+  C:\Temp\cci4u8MZ.s:747    .rodata.s0034:00000000 $d
+  C:\Temp\cci4u8MZ.s:753    .rodata.s0035:00000000 $d
+  C:\Temp\cci4u8MZ.s:759    .rodata.s0036:00000000 $d
+  C:\Temp\cci4u8MZ.s:765    .rodata.s0037:00000000 $d
+  C:\Temp\cci4u8MZ.s:771    .rodata.s0038:00000000 $d
+  C:\Temp\cci4u8MZ.s:777    .rodata.s0087:00000000 $d
+  C:\Temp\cci4u8MZ.s:783    .rodata.s0039:00000000 $d
+  C:\Temp\cci4u8MZ.s:789    .rodata.s0070:00000000 $d
+  C:\Temp\cci4u8MZ.s:795    .rodata.s0071:00000000 $d
+  C:\Temp\cci4u8MZ.s:801    .rodata.s0072:00000000 $d
+  C:\Temp\cci4u8MZ.s:807    .rodata.s0073:00000000 $d
+  C:\Temp\cci4u8MZ.s:813    .rodata.s0074:00000000 $d
+  C:\Temp\cci4u8MZ.s:819    .rodata.s0101:00000000 $d
+  C:\Temp\cci4u8MZ.s:825    .rodata.s0102:00000000 $d
+  C:\Temp\cci4u8MZ.s:831    .rodata.s0103:00000000 $d
+  C:\Temp\cci4u8MZ.s:837    .rodata.s0104:00000000 $d
+  C:\Temp\cci4u8MZ.s:843    .rodata.s0105:00000000 $d
+  C:\Temp\cci4u8MZ.s:849    .rodata.s0106:00000000 $d
+  C:\Temp\cci4u8MZ.s:855    .rodata.s0107:00000000 $d
+  C:\Temp\cci4u8MZ.s:861    .rodata.s0108:00000000 $d
+  C:\Temp\cci4u8MZ.s:867    .rodata.s0109:00000000 $d
+  C:\Temp\cci4u8MZ.s:873    .rodata.s0140:00000000 $d
+  C:\Temp\cci4u8MZ.s:879    .rodata.s0141:00000000 $d
+  C:\Temp\cci4u8MZ.s:885    .rodata.s0142:00000000 $d
+  C:\Temp\cci4u8MZ.s:891    .rodata.s0143:00000000 $d
+  C:\Temp\cci4u8MZ.s:897    .rodata.s0144:00000000 $d
+  C:\Temp\cci4u8MZ.s:903    .rodata.s0145:00000000 $d
+  C:\Temp\cci4u8MZ.s:909    .rodata.s0146:00000000 $d
+  C:\Temp\cci4u8MZ.s:915    .rodata.s0147:00000000 $d
+  C:\Temp\cci4u8MZ.s:921    .rodata.s0148:00000000 $d
+  C:\Temp\cci4u8MZ.s:927    .rodata.s0149:00000000 $d
+  C:\Temp\cci4u8MZ.s:933    .rodata.s0086:00000000 $d
+  C:\Temp\cci4u8MZ.s:939    .rodata.Language00:00000000 $d
+  C:\Temp\cci4u8MZ.s:1127   .rodata.s0000:00000000 $d
+  C:\Temp\cci4u8MZ.s:1133   .rodata.s0001:00000000 $d
+  C:\Temp\cci4u8MZ.s:1139   .rodata.s0088:00000000 $d
+  C:\Temp\cci4u8MZ.s:1145   .rodata.s0075:00000000 $d
+  C:\Temp\cci4u8MZ.s:1151   .rodata.s0089:00000000 $d
+  C:\Temp\cci4u8MZ.s:1157   .rodata.s0180:00000000 $d
+  C:\Temp\cci4u8MZ.s:1163   .rodata.s0181:00000000 $d
+  C:\Temp\cci4u8MZ.s:1169   .rodata.s0182:00000000 $d
+  C:\Temp\cci4u8MZ.s:1175   .rodata.s0016:00000000 $d
+  C:\Temp\cci4u8MZ.s:1181   .rodata.s0009:00000000 $d
+  C:\Temp\cci4u8MZ.s:1187   .rodata.s0029:00000000 $d
+  C:\Temp\cci4u8MZ.s:1193   .rodata.s0040:00000000 $d
+  C:\Temp\cci4u8MZ.s:1199   .rodata.s0041:00000000 $d
+  C:\Temp\cci4u8MZ.s:1205   .rodata.s0042:00000000 $d
+  C:\Temp\cci4u8MZ.s:1211   .rodata.s0043:00000000 $d
+  C:\Temp\cci4u8MZ.s:1217   .rodata.s0044:00000000 $d
+  C:\Temp\cci4u8MZ.s:1223   .rodata.s0045:00000000 $d
+  C:\Temp\cci4u8MZ.s:1229   .rodata.s0046:00000000 $d
+  C:\Temp\cci4u8MZ.s:1235   .rodata.s0047:00000000 $d
+  C:\Temp\cci4u8MZ.s:1241   .rodata.s0048:00000000 $d
+  C:\Temp\cci4u8MZ.s:1247   .rodata.s0049:00000000 $d
+  C:\Temp\cci4u8MZ.s:1253   .rodata.s0080:00000000 $d
+  C:\Temp\cci4u8MZ.s:1259   .rodata.s0081:00000000 $d
+  C:\Temp\cci4u8MZ.s:1265   .rodata.s0082:00000000 $d
+  C:\Temp\cci4u8MZ.s:1271   .rodata.s0083:00000000 $d
+  C:\Temp\cci4u8MZ.s:1277   .rodata.s0110:00000000 $d
+  C:\Temp\cci4u8MZ.s:1283   .rodata.s0111:00000000 $d
+  C:\Temp\cci4u8MZ.s:1289   .rodata.s0112:00000000 $d
+  C:\Temp\cci4u8MZ.s:1295   .rodata.s0113:00000000 $d
+  C:\Temp\cci4u8MZ.s:1301   .rodata.s0114:00000000 $d
+  C:\Temp\cci4u8MZ.s:1307   .rodata.s0115:00000000 $d
+  C:\Temp\cci4u8MZ.s:1313   .rodata.s0116:00000000 $d
+  C:\Temp\cci4u8MZ.s:1319   .rodata.s0117:00000000 $d
+  C:\Temp\cci4u8MZ.s:1325   .rodata.s0118:00000000 $d
+  C:\Temp\cci4u8MZ.s:1331   .rodata.s0119:00000000 $d
+  C:\Temp\cci4u8MZ.s:1337   .rodata.s0010:00000000 $d
+  C:\Temp\cci4u8MZ.s:1343   .rodata.s0024:00000000 $d
+  C:\Temp\cci4u8MZ.s:1349   .rodata.s0064:00000000 $d
+  C:\Temp\cci4u8MZ.s:1355   .rodata.s0150:00000000 $d
+  C:\Temp\cci4u8MZ.s:1361   .rodata.s0151:00000000 $d
+  C:\Temp\cci4u8MZ.s:1367   .rodata.s0152:00000000 $d
+  C:\Temp\cci4u8MZ.s:1373   .rodata.s0153:00000000 $d
+  C:\Temp\cci4u8MZ.s:1379   .rodata.s0154:00000000 $d
+  C:\Temp\cci4u8MZ.s:1385   .rodata.s0155:00000000 $d
+  C:\Temp\cci4u8MZ.s:1391   .rodata.s0156:00000000 $d
+  C:\Temp\cci4u8MZ.s:1397   .rodata.s0157:00000000 $d
+  C:\Temp\cci4u8MZ.s:1403   .rodata.s0158:00000000 $d
+  C:\Temp\cci4u8MZ.s:1409   .rodata.s0159:00000000 $d
+  C:\Temp\cci4u8MZ.s:1415   .rodata.s0030:00000000 $d
+  C:\Temp\cci4u8MZ.s:1421   .rodata.s0011:00000000 $d
+  C:\Temp\cci4u8MZ.s:1427   .rodata.s0012:00000000 $d
+  C:\Temp\cci4u8MZ.s:1433   .rodata.s0013:00000000 $d
+  C:\Temp\cci4u8MZ.s:1439   .rodata.s0014:00000000 $d
+  C:\Temp\cci4u8MZ.s:1445   .rodata.s0015:00000000 $d
+  C:\Temp\cci4u8MZ.s:1451   .rodata.s0033:00000000 $d
+  C:\Temp\cci4u8MZ.s:1457   .rodata.s0017:00000000 $d
+  C:\Temp\cci4u8MZ.s:1463   .rodata.s0018:00000000 $d
+  C:\Temp\cci4u8MZ.s:1469   .rodata.s0019:00000000 $d
+  C:\Temp\cci4u8MZ.s:1475   .rodata.s0050:00000000 $d
+  C:\Temp\cci4u8MZ.s:1481   .rodata.s0051:00000000 $d
+  C:\Temp\cci4u8MZ.s:1487   .rodata.s0052:00000000 $d
+  C:\Temp\cci4u8MZ.s:1493   .rodata.s0053:00000000 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,2724 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"interrupts.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.TC0_irq_handler,"ax",%progbits
+  17              		.align	2
+  18              		.global	TC0_irq_handler
+  20              	TC0_irq_handler:
+  21              	.LFB376:
+  22              		.file 1 "interrupts.c"
+   1:interrupts.c  **** // -----------------------------------------------------------
+   2:interrupts.c  **** // Software:         GW302 - McHale V6 Fixed Chamber Round Baler
+   3:interrupts.c  **** // C Source File:    interrupts.c
+   4:interrupts.c  **** // Description:      Graphic Wizard Interrupts File
+   5:interrupts.c  **** // -----------------------------------------------------------
+   6:interrupts.c  **** 
+   7:interrupts.c  **** 
+   8:interrupts.c  **** // Include Standard files
+   9:interrupts.c  **** #include "Board.h"
+  10:interrupts.c  **** 
+  11:interrupts.c  **** #include <stdlib.h>
+  12:interrupts.c  **** 
+  13:interrupts.c  **** 
+  14:interrupts.c  **** // functions
+  15:interrupts.c  **** 
+  16:interrupts.c  **** // -----------------------------------------------------------
+  17:interrupts.c  **** // Function Name       : TC0_irq_handler
+  18:interrupts.c  **** // Object              : C handler interrupt function
+  19:interrupts.c  **** // Output Parameters   : increment timer0_interrupt_count
+  20:interrupts.c  **** // -----------------------------------------------------------
+  21:interrupts.c  **** void TC0_irq_handler( void )
+  22:interrupts.c  **** {
+  23              		.loc 1 22 0
+  24              		.cfi_startproc
+  25              		@ Interrupt Service Routine.
+  26              		@ args = 0, pretend = 0, frame = 0
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28              		@ link register save eliminated.
+  29 0000 1F102DE9 		stmfd	sp!, {r0, r1, r2, r3, r4, ip}
+  30              	.LCFI0:
+  31              		.cfi_def_cfa_offset 24
+  32              		.cfi_offset 0, -24
+  33              		.cfi_offset 1, -20
+  34              		.cfi_offset 2, -16
+  35              		.cfi_offset 3, -12
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 12, -4
+  23:interrupts.c  **** 	static unsigned short int time, count;
+  24:interrupts.c  **** 	static unsigned int stime, tlast;
+  25:interrupts.c  **** 	static unsigned char fnow;
+  26:interrupts.c  **** 
+  27:interrupts.c  **** 	register int status, ctime, ltime;
+  28:interrupts.c  **** 
+  29:interrupts.c  **** 	// Acknowledge interrupt status by reading register
+  30:interrupts.c  **** 	status = AT91C_BASE_TC0->TC_SR;
+  38              		.loc 1 30 0
+  39 0004 5F3AE0E3 		mvn	r3, #389120
+  40 0008 DF3F13E5 		ldr	r3, [r3, #-4063]
+  41              	.LVL0:
+  31:interrupts.c  **** 
+  32:interrupts.c  **** 	if( status & AT91C_TC_COVFS ) // timer overflow MCK/128
+  42              		.loc 1 32 0
+  43 000c 010013E3 		tst	r3, #1
+  44 0010 2500000A 		beq	.L2
+  33:interrupts.c  **** 	{
+  34:interrupts.c  **** 		fnow = 0;
+  45              		.loc 1 34 0
+  46 0014 0010A0E3 		mov	r1, #0
+  47 0018 44219FE5 		ldr	r2, .L6
+  48 001c 0010C2E5 		strb	r1, [r2, #0]
+  35:interrupts.c  **** 		time++;
+  49              		.loc 1 35 0
+  50 0020 40119FE5 		ldr	r1, .L6+4
+  51 0024 B020D1E1 		ldrh	r2, [r1, #0]
+  52 0028 012082E2 		add	r2, r2, #1
+  53 002c 0228A0E1 		mov	r2, r2, asl #16
+  54 0030 2228A0E1 		mov	r2, r2, lsr #16
+  55 0034 B020C1E1 		strh	r2, [r1, #0]	@ movhi
+  36:interrupts.c  **** 		ctime = (time * 0x10000UL) + AT91C_BASE_TC0->TC_CV;
+  56              		.loc 1 36 0
+  57 0038 5F1AE0E3 		mvn	r1, #389120
+  58 003c EF1F11E5 		ldr	r1, [r1, #-4079]
+  59 0040 021881E0 		add	r1, r1, r2, asl #16
+  60              	.LVL1:
+  37:interrupts.c  **** 		ltime = ctime - stime;
+  61              		.loc 1 37 0
+  62 0044 20219FE5 		ldr	r2, .L6+8
+  63 0048 002092E5 		ldr	r2, [r2, #0]
+  64 004c 012062E0 		rsb	r2, r2, r1
+  65              	.LVL2:
+  38:interrupts.c  **** 		if( ltime > 1872000UL ) // MCK/128 - 5.00 seconds zero time
+  66              		.loc 1 38 0
+  67 0050 18019FE5 		ldr	r0, .L6+12
+  68 0054 000052E1 		cmp	r2, r0
+  69 0058 0A00009A 		bls	.L3
+  39:interrupts.c  **** 		{
+  40:interrupts.c  **** 			f0time = ltime;	
+  70              		.loc 1 40 0
+  71 005c 10019FE5 		ldr	r0, .L6+16
+  72 0060 002080E5 		str	r2, [r0, #0]
+  41:interrupts.c  **** 			stime = ctime;
+  73              		.loc 1 41 0
+  74 0064 00219FE5 		ldr	r2, .L6+8
+  75              	.LVL3:
+  76 0068 001082E5 		str	r1, [r2, #0]
+  42:interrupts.c  **** 			f0count = count;
+  77              		.loc 1 42 0
+  78 006c 04219FE5 		ldr	r2, .L6+20
+  79 0070 B000D2E1 		ldrh	r0, [r2, #0]
+  80              	.LVL4:
+  81 0074 00119FE5 		ldr	r1, .L6+24
+  82              	.LVL5:
+  83 0078 B000C1E1 		strh	r0, [r1, #0]	@ movhi
+  43:interrupts.c  **** 			count = 0;
+  84              		.loc 1 43 0
+  85 007c 0010A0E3 		mov	r1, #0
+  86 0080 B010C2E1 		strh	r1, [r2, #0]	@ movhi
+  87 0084 080000EA 		b	.L2
+  88              	.LVL6:
+  89              	.L3:
+  44:interrupts.c  **** 		}
+  45:interrupts.c  **** 		else if( ltime > 374400UL ) // MCK/128 - 1.00 seconds now time
+  90              		.loc 1 45 0
+  91 0088 F0109FE5 		ldr	r1, .L6+28
+  92              	.LVL7:
+  93 008c 010052E1 		cmp	r2, r1
+  94 0090 0500009A 		bls	.L2
+  46:interrupts.c  **** 		{
+  47:interrupts.c  **** 			if( count )
+  95              		.loc 1 47 0
+  96 0094 DC209FE5 		ldr	r2, .L6+20
+  97              	.LVL8:
+  98 0098 B020D2E1 		ldrh	r2, [r2, #0]
+  99 009c 000052E3 		cmp	r2, #0
+  48:interrupts.c  **** 			{
+  49:interrupts.c  **** 				fnow = 1;
+ 100              		.loc 1 49 0
+ 101 00a0 0110A013 		movne	r1, #1
+ 102 00a4 B8209F15 		ldrne	r2, .L6
+ 103 00a8 0010C215 		strneb	r1, [r2, #0]
+ 104              	.L2:
+  50:interrupts.c  **** 			}	
+  51:interrupts.c  **** 		}
+  52:interrupts.c  **** 	}
+  53:interrupts.c  **** 
+  54:interrupts.c  **** 	if( status & AT91C_TC_LDRAS ) // capture
+ 105              		.loc 1 54 0
+ 106 00ac 200013E3 		tst	r3, #32
+ 107 00b0 2600000A 		beq	.L4
+  55:interrupts.c  **** 	{
+  56:interrupts.c  **** 		// debounce of 500us with MCK/128 (187 * 128/MCK Seconds) for 2KHz limit
+  57:interrupts.c  **** 		// but use 180 so we can actually measure 2000Hz
+  58:interrupts.c  **** 		if( (AT91C_BASE_TC0->TC_RA - tlast) > 180UL )
+ 108              		.loc 1 58 0
+ 109 00b4 5F3AE0E3 		mvn	r3, #389120
+ 110              	.LVL9:
+ 111 00b8 EB2F13E5 		ldr	r2, [r3, #-4075]
+ 112 00bc C0309FE5 		ldr	r3, .L6+32
+ 113 00c0 003093E5 		ldr	r3, [r3, #0]
+ 114 00c4 023063E0 		rsb	r3, r3, r2
+ 115 00c8 B40053E3 		cmp	r3, #180
+ 116 00cc 1B00009A 		bls	.L5
+  59:interrupts.c  **** 		{ 	
+  60:interrupts.c  **** 			count++;
+ 117              		.loc 1 60 0
+ 118 00d0 A0309FE5 		ldr	r3, .L6+20
+ 119 00d4 B020D3E1 		ldrh	r2, [r3, #0]
+ 120 00d8 012082E2 		add	r2, r2, #1
+ 121 00dc 0228A0E1 		mov	r2, r2, asl #16
+ 122 00e0 2228A0E1 		mov	r2, r2, lsr #16
+ 123 00e4 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  61:interrupts.c  **** 			if( fnow )
+ 124              		.loc 1 61 0
+ 125 00e8 74309FE5 		ldr	r3, .L6
+ 126 00ec 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 127 00f0 000053E3 		cmp	r3, #0
+ 128 00f4 1100000A 		beq	.L5
+  62:interrupts.c  **** 			{
+  63:interrupts.c  **** 				fnow = 0;
+ 129              		.loc 1 63 0
+ 130 00f8 0030A0E3 		mov	r3, #0
+ 131 00fc 60109FE5 		ldr	r1, .L6
+ 132 0100 0030C1E5 		strb	r3, [r1, #0]
+  64:interrupts.c  **** 				ctime = (time * 0x10000UL) + AT91C_BASE_TC0->TC_RA;
+ 133              		.loc 1 64 0
+ 134 0104 5F1AE0E3 		mvn	r1, #389120
+ 135 0108 EB1F11E5 		ldr	r1, [r1, #-4075]
+ 136 010c 54009FE5 		ldr	r0, .L6+4
+ 137 0110 B000D0E1 		ldrh	r0, [r0, #0]
+ 138 0114 000881E0 		add	r0, r1, r0, asl #16
+ 139              	.LVL10:
+  65:interrupts.c  **** 
+  66:interrupts.c  **** 				f0time = ctime - stime;
+ 140              		.loc 1 66 0
+ 141 0118 4C109FE5 		ldr	r1, .L6+8
+ 142 011c 004091E5 		ldr	r4, [r1, #0]
+ 143 0120 004064E0 		rsb	r4, r4, r0
+ 144 0124 48C09FE5 		ldr	ip, .L6+16
+ 145 0128 00408CE5 		str	r4, [ip, #0]
+  67:interrupts.c  **** 				stime = ctime;
+ 146              		.loc 1 67 0
+ 147 012c 000081E5 		str	r0, [r1, #0]
+  68:interrupts.c  **** 				f0count = count;
+ 148              		.loc 1 68 0
+ 149 0130 44109FE5 		ldr	r1, .L6+24
+ 150 0134 B020C1E1 		strh	r2, [r1, #0]	@ movhi
+  69:interrupts.c  **** 				count = 0;
+ 151              		.loc 1 69 0
+ 152 0138 38209FE5 		ldr	r2, .L6+20
+ 153 013c B030C2E1 		strh	r3, [r2, #0]	@ movhi
+ 154              	.LVL11:
+ 155              	.L5:
+  70:interrupts.c  **** 			}
+  71:interrupts.c  **** 		}
+  72:interrupts.c  **** 		tlast = AT91C_BASE_TC0->TC_RA;
+ 156              		.loc 1 72 0
+ 157 0140 5F3AE0E3 		mvn	r3, #389120
+ 158 0144 EB2F13E5 		ldr	r2, [r3, #-4075]
+ 159 0148 34309FE5 		ldr	r3, .L6+32
+ 160 014c 002083E5 		str	r2, [r3, #0]
+ 161              	.L4:
+  73:interrupts.c  **** 	}
+  74:interrupts.c  **** 
+  75:interrupts.c  **** 	// reset interrupt, any value can be written so use peripheral ID
+  76:interrupts.c  **** 	AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_TC0;
+ 162              		.loc 1 76 0
+ 163 0150 0F20A0E3 		mov	r2, #15
+ 164 0154 0030E0E3 		mvn	r3, #0
+ 165 0158 CF2E03E5 		str	r2, [r3, #-3791]
+  77:interrupts.c  **** } 
+ 166              		.loc 1 77 0
+ 167 015c 1F10BDE8 		ldmfd	sp!, {r0, r1, r2, r3, r4, ip}
+ 168 0160 04F05EE2 		subs	pc, lr, #4
+ 169              	.L7:
+ 170              		.align	2
+ 171              	.L6:
+ 172 0164 00000000 		.word	.LANCHOR0
+ 173 0168 00000000 		.word	.LANCHOR1
+ 174 016c 00000000 		.word	.LANCHOR2
+ 175 0170 80901C00 		.word	1872000
+ 176 0174 00000000 		.word	f0time
+ 177 0178 00000000 		.word	.LANCHOR3
+ 178 017c 00000000 		.word	f0count
+ 179 0180 80B60500 		.word	374400
+ 180 0184 00000000 		.word	.LANCHOR4
+ 181              		.cfi_endproc
+ 182              	.LFE376:
+ 184              		.section	.text.TC1_irq_handler,"ax",%progbits
+ 185              		.align	2
+ 186              		.global	TC1_irq_handler
+ 188              	TC1_irq_handler:
+ 189              	.LFB377:
+  78:interrupts.c  **** // -----------------------------------------------------------
+  79:interrupts.c  **** 
+  80:interrupts.c  **** 
+  81:interrupts.c  **** // -----------------------------------------------------------
+  82:interrupts.c  **** // Function Name       : TC1_irq_handler
+  83:interrupts.c  **** // Object              : C handler interrupt function
+  84:interrupts.c  **** // -----------------------------------------------------------
+  85:interrupts.c  **** void TC1_irq_handler( void )
+  86:interrupts.c  **** {
+ 190              		.loc 1 86 0
+ 191              		.cfi_startproc
+ 192              		@ Interrupt Service Routine.
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195              		@ link register save eliminated.
+ 196 0000 0C002DE9 		stmfd	sp!, {r2, r3}
+ 197              	.LCFI1:
+ 198              		.cfi_def_cfa_offset 8
+ 199              		.cfi_offset 2, -8
+ 200              		.cfi_offset 3, -4
+  87:interrupts.c  **** 	//static unsigned char off_length;
+  88:interrupts.c  **** 	register unsigned int i;
+  89:interrupts.c  **** 
+  90:interrupts.c  **** 	TC1_interrupt_count++;
+ 201              		.loc 1 90 0
+ 202 0004 1C319FE5 		ldr	r3, .L18
+ 203 0008 002093E5 		ldr	r2, [r3, #0]
+ 204 000c 012082E2 		add	r2, r2, #1
+ 205 0010 002083E5 		str	r2, [r3, #0]
+  91:interrupts.c  **** 	
+  92:interrupts.c  **** 	if( TC1_count0 )
+ 206              		.loc 1 92 0
+ 207 0014 10319FE5 		ldr	r3, .L18+4
+ 208 0018 003093E5 		ldr	r3, [r3, #0]
+ 209 001c 000053E3 		cmp	r3, #0
+  93:interrupts.c  **** 	{
+  94:interrupts.c  **** 		TC1_count0--;
+ 210              		.loc 1 94 0
+ 211 0020 01304312 		subne	r3, r3, #1
+ 212 0024 00219F15 		ldrne	r2, .L18+4
+ 213 0028 00308215 		strne	r3, [r2, #0]
+  95:interrupts.c  **** 	}
+  96:interrupts.c  **** 	else
+  97:interrupts.c  **** 	{
+  98:interrupts.c  **** 		TC1_count0 = 99; // 10Hz or 100 msec
+ 214              		.loc 1 98 0
+ 215 002c 6320A003 		moveq	r2, #99
+ 216 0030 F4309F05 		ldreq	r3, .L18+4
+ 217 0034 00208305 		streq	r2, [r3, #0]
+  99:interrupts.c  **** 		AllTime++; // Incremented every 100 msec
+ 218              		.loc 1 99 0
+ 219 0038 F0309F05 		ldreq	r3, .L18+8
+ 220 003c 0020D305 		ldreqb	r2, [r3, #0]	@ zero_extendqisi2
+ 221 0040 01208202 		addeq	r2, r2, #1
+ 222 0044 0020C305 		streqb	r2, [r3, #0]
+ 223 0048 2E0000EA 		b	.L10
+ 224              	.LVL12:
+ 225              	.L15:
+ 100:interrupts.c  **** 	}
+ 101:interrupts.c  **** 
+ 102:interrupts.c  **** 	for( i = 0; i < MAX_MCM; i++ )
+ 103:interrupts.c  **** 	{
+ 104:interrupts.c  **** 		if( mcm[i].timeout < 10000 ) // incremented every millisecond.
+ 105:interrupts.c  **** 		{
+ 106:interrupts.c  **** 			mcm[i].timeout++;
+ 226              		.loc 1 106 0
+ 227 004c 013083E2 		add	r3, r3, #1
+ 228 0050 DC209FE5 		ldr	r2, .L18+12
+ 229 0054 B230C2E1 		strh	r3, [r2, #2]	@ movhi
+ 230              	.L16:
+ 231              	.LVL13:
+ 107:interrupts.c  **** 		}
+ 108:interrupts.c  **** 	}
+ 109:interrupts.c  **** 	
+ 110:interrupts.c  **** 	if( buzz_length )
+ 232              		.loc 1 110 0
+ 233 0058 D8309FE5 		ldr	r3, .L18+16
+ 234 005c 003093E5 		ldr	r3, [r3, #0]
+ 235 0060 000053E3 		cmp	r3, #0
+ 236 0064 0600000A 		beq	.L11
+ 111:interrupts.c  **** 	{
+ 112:interrupts.c  **** 		buzz_length--;
+ 237              		.loc 1 112 0
+ 238 0068 013043E2 		sub	r3, r3, #1
+ 239 006c C4209FE5 		ldr	r2, .L18+16
+ 240 0070 003082E5 		str	r3, [r2, #0]
+ 113:interrupts.c  **** 		AT91C_BASE_PIOA->PIO_CODR = BUZZER; /* buzzer ON */
+ 241              		.loc 1 113 0
+ 242 0074 0129A0E3 		mov	r2, #16384
+ 243 0078 0030E0E3 		mvn	r3, #0
+ 244 007c CB2B03E5 		str	r2, [r3, #-3019]
+ 245 0080 1A0000EA 		b	.L12
+ 246              	.L11:
+ 114:interrupts.c  **** 	}
+ 115:interrupts.c  **** 	else if( off_length )
+ 247              		.loc 1 115 0
+ 248 0084 B0309FE5 		ldr	r3, .L18+20
+ 249 0088 003093E5 		ldr	r3, [r3, #0]
+ 250 008c 000053E3 		cmp	r3, #0
+ 251 0090 0600000A 		beq	.L13
+ 116:interrupts.c  **** 	{
+ 117:interrupts.c  **** 		off_length--;
+ 252              		.loc 1 117 0
+ 253 0094 013043E2 		sub	r3, r3, #1
+ 254 0098 9C209FE5 		ldr	r2, .L18+20
+ 255 009c 003082E5 		str	r3, [r2, #0]
+ 118:interrupts.c  **** 		AT91C_BASE_PIOA->PIO_SODR = BUZZER; /* buzzer OFF */
+ 256              		.loc 1 118 0
+ 257 00a0 0129A0E3 		mov	r2, #16384
+ 258 00a4 0030E0E3 		mvn	r3, #0
+ 259 00a8 CF2B03E5 		str	r2, [r3, #-3023]
+ 260 00ac 0F0000EA 		b	.L12
+ 261              	.L13:
+ 119:interrupts.c  **** 	}                               
+ 120:interrupts.c  **** 	else if( buzz_count )
+ 262              		.loc 1 120 0
+ 263 00b0 88309FE5 		ldr	r3, .L18+24
+ 264 00b4 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 265 00b8 000053E3 		cmp	r3, #0
+ 266 00bc 0800000A 		beq	.L14
+ 121:interrupts.c  **** 	{
+ 122:interrupts.c  **** 		buzz_count--;
+ 267              		.loc 1 122 0
+ 268 00c0 013043E2 		sub	r3, r3, #1
+ 269 00c4 74209FE5 		ldr	r2, .L18+24
+ 270 00c8 0030C2E5 		strb	r3, [r2, #0]
+ 123:interrupts.c  **** 		buzz_length = BEEP_ON;
+ 271              		.loc 1 123 0
+ 272 00cc 6430A0E3 		mov	r3, #100
+ 273 00d0 60209FE5 		ldr	r2, .L18+16
+ 274 00d4 003082E5 		str	r3, [r2, #0]
+ 124:interrupts.c  **** 		off_length = BEEP_OFF;
+ 275              		.loc 1 124 0
+ 276 00d8 5C209FE5 		ldr	r2, .L18+20
+ 277 00dc 003082E5 		str	r3, [r2, #0]
+ 278 00e0 020000EA 		b	.L12
+ 279              	.L14:
+ 125:interrupts.c  **** 	}
+ 126:interrupts.c  **** 	else
+ 127:interrupts.c  **** 	{
+ 128:interrupts.c  **** 		AT91C_BASE_PIOA->PIO_SODR = BUZZER;
+ 280              		.loc 1 128 0
+ 281 00e4 0129A0E3 		mov	r2, #16384
+ 282 00e8 0030E0E3 		mvn	r3, #0
+ 283 00ec CF2B03E5 		str	r2, [r3, #-3023]
+ 284              	.L12:
+ 129:interrupts.c  **** 	}
+ 130:interrupts.c  **** 
+ 131:interrupts.c  **** 	// Acknowledge interrupt status by reading register
+ 132:interrupts.c  **** 	i = AT91C_BASE_TC1->TC_SR;
+ 285              		.loc 1 132 0
+ 286 00f0 5F3AE0E3 		mvn	r3, #389120
+ 287 00f4 9F3F13E5 		ldr	r3, [r3, #-3999]
+ 288              	.LVL14:
+ 133:interrupts.c  **** 
+ 134:interrupts.c  **** 	// reset interrupt, any value can be written so use peripheral ID
+ 135:interrupts.c  **** 	AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_TC1;
+ 289              		.loc 1 135 0
+ 290 00f8 1020A0E3 		mov	r2, #16
+ 291 00fc 0030E0E3 		mvn	r3, #0
+ 292 0100 CF2E03E5 		str	r2, [r3, #-3791]
+ 293 0104 050000EA 		b	.L17
+ 294              	.L10:
+ 295              	.LVL15:
+ 104:interrupts.c  **** 		if( mcm[i].timeout < 10000 ) // incremented every millisecond.
+ 296              		.loc 1 104 0
+ 297 0108 24309FE5 		ldr	r3, .L18+12
+ 298 010c B230D3E1 		ldrh	r3, [r3, #2]
+ 299 0110 2C209FE5 		ldr	r2, .L18+28
+ 300 0114 020053E1 		cmp	r3, r2
+ 301 0118 CBFFFF9A 		bls	.L15
+ 302 011c CDFFFFEA 		b	.L16
+ 303              	.LVL16:
+ 304              	.L17:
+ 136:interrupts.c  **** } 
+ 305              		.loc 1 136 0
+ 306 0120 0C00BDE8 		ldmfd	sp!, {r2, r3}
+ 307 0124 04F05EE2 		subs	pc, lr, #4
+ 308              	.L19:
+ 309              		.align	2
+ 310              	.L18:
+ 311 0128 00000000 		.word	TC1_interrupt_count
+ 312 012c 00000000 		.word	TC1_count0
+ 313 0130 00000000 		.word	AllTime
+ 314 0134 00000000 		.word	mcm
+ 315 0138 00000000 		.word	buzz_length
+ 316 013c 00000000 		.word	off_length
+ 317 0140 00000000 		.word	buzz_count
+ 318 0144 0F270000 		.word	9999
+ 319              		.cfi_endproc
+ 320              	.LFE377:
+ 322              		.section	.text.TC4_irq_handler,"ax",%progbits
+ 323              		.align	2
+ 324              		.global	TC4_irq_handler
+ 326              	TC4_irq_handler:
+ 327              	.LFB378:
+ 137:interrupts.c  **** // -----------------------------------------------------------
+ 138:interrupts.c  **** 
+ 139:interrupts.c  **** 
+ 140:interrupts.c  **** // -----------------------------------------------------------
+ 141:interrupts.c  **** // Function Name       : TC4_irq_handler
+ 142:interrupts.c  **** // Object              : C handler interrupt function
+ 143:interrupts.c  **** // -----------------------------------------------------------
+ 144:interrupts.c  **** void TC4_irq_handler( void )
+ 145:interrupts.c  **** {
+ 328              		.loc 1 145 0
+ 329              		.cfi_startproc
+ 330              		@ Interrupt Service Routine.
+ 331              		@ args = 0, pretend = 0, frame = 0
+ 332              		@ frame_needed = 0, uses_anonymous_args = 0
+ 333              		@ link register save eliminated.
+ 334 0000 0E002DE9 		stmfd	sp!, {r1, r2, r3}
+ 335              	.LCFI2:
+ 336              		.cfi_def_cfa_offset 12
+ 337              		.cfi_offset 1, -12
+ 338              		.cfi_offset 2, -8
+ 339              		.cfi_offset 3, -4
+ 146:interrupts.c  **** 	static unsigned int tlast;
+ 147:interrupts.c  **** 
+ 148:interrupts.c  **** 	register int status;
+ 149:interrupts.c  **** 
+ 150:interrupts.c  **** 	// Acknowledge interrupt status by reading register
+ 151:interrupts.c  **** 	status = AT91C_BASE_TC4->TC_SR;
+ 340              		.loc 1 151 0
+ 341 0004 5B3AE0E3 		mvn	r3, #372736
+ 342 0008 9F3F13E5 		ldr	r3, [r3, #-3999]
+ 343              	.LVL17:
+ 152:interrupts.c  **** 
+ 153:interrupts.c  **** 	if( status & AT91C_TC_COVFS ) // timer overflow MCK/128/65536
+ 344              		.loc 1 153 0
+ 345 000c 010013E3 		tst	r3, #1
+ 346 0010 0500000A 		beq	.L21
+ 154:interrupts.c  **** 	{
+ 155:interrupts.c  **** 		if( tl_confimation_delay[0] < 255 )
+ 347              		.loc 1 155 0
+ 348 0014 70209FE5 		ldr	r2, .L24
+ 349 0018 0020D2E5 		ldrb	r2, [r2, #0]	@ zero_extendqisi2
+ 350 001c FF0052E3 		cmp	r2, #255
+ 156:interrupts.c  **** 		{
+ 157:interrupts.c  **** 			tl_confimation_delay[0]++;
+ 351              		.loc 1 157 0
+ 352 0020 01208212 		addne	r2, r2, #1
+ 353 0024 60109F15 		ldrne	r1, .L24
+ 354 0028 0020C115 		strneb	r2, [r1, #0]
+ 355              	.L21:
+ 158:interrupts.c  **** 		}
+ 159:interrupts.c  **** 	}
+ 160:interrupts.c  **** 
+ 161:interrupts.c  **** 	if( status & AT91C_TC_LDRAS ) // capture
+ 356              		.loc 1 161 0
+ 357 002c 200013E3 		tst	r3, #32
+ 358 0030 1000000A 		beq	.L22
+ 162:interrupts.c  **** 	{
+ 163:interrupts.c  **** 		// debounce of 500us with MCK/128 (187 * 128/MCK Seconds) for 2KHz limit
+ 164:interrupts.c  **** 		// but use 180 so we can actually measure 2000Hz
+ 165:interrupts.c  **** 		if( (AT91C_BASE_TC4->TC_RA - tlast) > 180UL )
+ 359              		.loc 1 165 0
+ 360 0034 5B3AE0E3 		mvn	r3, #372736
+ 361              	.LVL18:
+ 362 0038 AB2F13E5 		ldr	r2, [r3, #-4011]
+ 363 003c 4C309FE5 		ldr	r3, .L24+4
+ 364 0040 003093E5 		ldr	r3, [r3, #0]
+ 365 0044 023063E0 		rsb	r3, r3, r2
+ 366 0048 B40053E3 		cmp	r3, #180
+ 367 004c 0500009A 		bls	.L23
+ 166:interrupts.c  **** 		{
+ 167:interrupts.c  **** 			if( tl_target_count[0] < 255 )
+ 368              		.loc 1 167 0
+ 369 0050 3C309FE5 		ldr	r3, .L24+8
+ 370 0054 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 371 0058 FF0053E3 		cmp	r3, #255
+ 168:interrupts.c  **** 			{
+ 169:interrupts.c  **** 				tl_target_count[0]++;
+ 372              		.loc 1 169 0
+ 373 005c 01308312 		addne	r3, r3, #1
+ 374 0060 2C209F15 		ldrne	r2, .L24+8
+ 375 0064 0030C215 		strneb	r3, [r2, #0]
+ 376              	.L23:
+ 170:interrupts.c  **** 			}
+ 171:interrupts.c  **** 		}
+ 172:interrupts.c  **** 		tlast = AT91C_BASE_TC4->TC_RA;
+ 377              		.loc 1 172 0
+ 378 0068 5B3AE0E3 		mvn	r3, #372736
+ 379 006c AB2F13E5 		ldr	r2, [r3, #-4011]
+ 380 0070 18309FE5 		ldr	r3, .L24+4
+ 381 0074 002083E5 		str	r2, [r3, #0]
+ 382              	.L22:
+ 173:interrupts.c  **** 	}
+ 174:interrupts.c  **** 
+ 175:interrupts.c  **** 	// reset interrupt, any value can be written so use peripheral ID
+ 176:interrupts.c  **** 	AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_TC4;
+ 383              		.loc 1 176 0
+ 384 0078 1320A0E3 		mov	r2, #19
+ 385 007c 0030E0E3 		mvn	r3, #0
+ 386 0080 CF2E03E5 		str	r2, [r3, #-3791]
+ 177:interrupts.c  **** } 
+ 387              		.loc 1 177 0
+ 388 0084 0E00BDE8 		ldmfd	sp!, {r1, r2, r3}
+ 389 0088 04F05EE2 		subs	pc, lr, #4
+ 390              	.L25:
+ 391              		.align	2
+ 392              	.L24:
+ 393 008c 00000000 		.word	tl_confimation_delay
+ 394 0090 00000000 		.word	.LANCHOR5
+ 395 0094 00000000 		.word	tl_target_count
+ 396              		.cfi_endproc
+ 397              	.LFE378:
+ 399              		.section	.text.TC5_irq_handler,"ax",%progbits
+ 400              		.align	2
+ 401              		.global	TC5_irq_handler
+ 403              	TC5_irq_handler:
+ 404              	.LFB379:
+ 178:interrupts.c  **** // -----------------------------------------------------------
+ 179:interrupts.c  **** 
+ 180:interrupts.c  **** 
+ 181:interrupts.c  **** // -----------------------------------------------------------
+ 182:interrupts.c  **** // Function Name       : TC5_irq_handler
+ 183:interrupts.c  **** // Object              : C handler interrupt function
+ 184:interrupts.c  **** // -----------------------------------------------------------
+ 185:interrupts.c  **** void TC5_irq_handler( void )
+ 186:interrupts.c  **** {
+ 405              		.loc 1 186 0
+ 406              		.cfi_startproc
+ 407              		@ Interrupt Service Routine.
+ 408              		@ args = 0, pretend = 0, frame = 0
+ 409              		@ frame_needed = 0, uses_anonymous_args = 0
+ 410              		@ link register save eliminated.
+ 411 0000 0E002DE9 		stmfd	sp!, {r1, r2, r3}
+ 412              	.LCFI3:
+ 413              		.cfi_def_cfa_offset 12
+ 414              		.cfi_offset 1, -12
+ 415              		.cfi_offset 2, -8
+ 416              		.cfi_offset 3, -4
+ 187:interrupts.c  **** 	static unsigned int tlast;
+ 188:interrupts.c  **** 
+ 189:interrupts.c  **** 	register int status;
+ 190:interrupts.c  **** 
+ 191:interrupts.c  **** 	// Acknowledge interrupt status by reading register
+ 192:interrupts.c  **** 	status = AT91C_BASE_TC5->TC_SR;
+ 417              		.loc 1 192 0
+ 418 0004 5B3AE0E3 		mvn	r3, #372736
+ 419 0008 5F3F13E5 		ldr	r3, [r3, #-3935]
+ 420              	.LVL19:
+ 193:interrupts.c  **** 
+ 194:interrupts.c  **** 	if( status & AT91C_TC_COVFS ) // timer overflow MCK/128
+ 421              		.loc 1 194 0
+ 422 000c 010013E3 		tst	r3, #1
+ 423 0010 0500000A 		beq	.L27
+ 195:interrupts.c  **** 	{
+ 196:interrupts.c  **** 		if( tl_confimation_delay[1] < 255 )
+ 424              		.loc 1 196 0
+ 425 0014 70209FE5 		ldr	r2, .L30
+ 426 0018 0120D2E5 		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 427 001c FF0052E3 		cmp	r2, #255
+ 197:interrupts.c  **** 		{
+ 198:interrupts.c  **** 			tl_confimation_delay[1]++;
+ 428              		.loc 1 198 0
+ 429 0020 01208212 		addne	r2, r2, #1
+ 430 0024 60109F15 		ldrne	r1, .L30
+ 431 0028 0120C115 		strneb	r2, [r1, #1]
+ 432              	.L27:
+ 199:interrupts.c  **** 		}
+ 200:interrupts.c  **** 	}
+ 201:interrupts.c  **** 
+ 202:interrupts.c  **** 	if( status & AT91C_TC_LDRAS ) // capture
+ 433              		.loc 1 202 0
+ 434 002c 200013E3 		tst	r3, #32
+ 435 0030 1000000A 		beq	.L28
+ 203:interrupts.c  **** 	{
+ 204:interrupts.c  **** 		// debounce of 500us with MCK/128 (187 * 128/MCK Seconds) for 2KHz limit
+ 205:interrupts.c  **** 		// but use 180 so we can actually measure 2000Hz
+ 206:interrupts.c  **** 		if( (AT91C_BASE_TC5->TC_RA - tlast) > 180UL )
+ 436              		.loc 1 206 0
+ 437 0034 5B3AE0E3 		mvn	r3, #372736
+ 438              	.LVL20:
+ 439 0038 6B2F13E5 		ldr	r2, [r3, #-3947]
+ 440 003c 4C309FE5 		ldr	r3, .L30+4
+ 441 0040 003093E5 		ldr	r3, [r3, #0]
+ 442 0044 023063E0 		rsb	r3, r3, r2
+ 443 0048 B40053E3 		cmp	r3, #180
+ 444 004c 0500009A 		bls	.L29
+ 207:interrupts.c  **** 		{
+ 208:interrupts.c  **** 			if( tl_target_count[1] < 255 )
+ 445              		.loc 1 208 0
+ 446 0050 3C309FE5 		ldr	r3, .L30+8
+ 447 0054 0130D3E5 		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 448 0058 FF0053E3 		cmp	r3, #255
+ 209:interrupts.c  **** 			{
+ 210:interrupts.c  **** 				tl_target_count[1]++;
+ 449              		.loc 1 210 0
+ 450 005c 01308312 		addne	r3, r3, #1
+ 451 0060 2C209F15 		ldrne	r2, .L30+8
+ 452 0064 0130C215 		strneb	r3, [r2, #1]
+ 453              	.L29:
+ 211:interrupts.c  **** 			}
+ 212:interrupts.c  **** 		}
+ 213:interrupts.c  **** 		tlast = AT91C_BASE_TC5->TC_RA;
+ 454              		.loc 1 213 0
+ 455 0068 5B3AE0E3 		mvn	r3, #372736
+ 456 006c 6B2F13E5 		ldr	r2, [r3, #-3947]
+ 457 0070 18309FE5 		ldr	r3, .L30+4
+ 458 0074 002083E5 		str	r2, [r3, #0]
+ 459              	.L28:
+ 214:interrupts.c  **** 	}
+ 215:interrupts.c  **** 
+ 216:interrupts.c  **** 	// reset interrupt, any value can be written so use peripheral ID
+ 217:interrupts.c  **** 	AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_TC5;
+ 460              		.loc 1 217 0
+ 461 0078 1420A0E3 		mov	r2, #20
+ 462 007c 0030E0E3 		mvn	r3, #0
+ 463 0080 CF2E03E5 		str	r2, [r3, #-3791]
+ 218:interrupts.c  **** } 
+ 464              		.loc 1 218 0
+ 465 0084 0E00BDE8 		ldmfd	sp!, {r1, r2, r3}
+ 466 0088 04F05EE2 		subs	pc, lr, #4
+ 467              	.L31:
+ 468              		.align	2
+ 469              	.L30:
+ 470 008c 00000000 		.word	tl_confimation_delay
+ 471 0090 00000000 		.word	.LANCHOR6
+ 472 0094 00000000 		.word	tl_target_count
+ 473              		.cfi_endproc
+ 474              	.LFE379:
+ 476              		.section	.text.TC6_irq_handler,"ax",%progbits
+ 477              		.align	2
+ 478              		.global	TC6_irq_handler
+ 480              	TC6_irq_handler:
+ 481              	.LFB380:
+ 219:interrupts.c  **** // -----------------------------------------------------------
+ 220:interrupts.c  **** 
+ 221:interrupts.c  **** 
+ 222:interrupts.c  **** // -----------------------------------------------------------
+ 223:interrupts.c  **** // Function Name       : TC6_irq_handler
+ 224:interrupts.c  **** // Object              : C handler interrupt function
+ 225:interrupts.c  **** // -----------------------------------------------------------
+ 226:interrupts.c  **** void TC6_irq_handler( void )
+ 227:interrupts.c  **** {
+ 482              		.loc 1 227 0
+ 483              		.cfi_startproc
+ 484              		@ Interrupt Service Routine.
+ 485              		@ args = 0, pretend = 0, frame = 0
+ 486              		@ frame_needed = 0, uses_anonymous_args = 0
+ 487              		@ link register save eliminated.
+ 488 0000 1F102DE9 		stmfd	sp!, {r0, r1, r2, r3, r4, ip}
+ 489              	.LCFI4:
+ 490              		.cfi_def_cfa_offset 24
+ 491              		.cfi_offset 0, -24
+ 492              		.cfi_offset 1, -20
+ 493              		.cfi_offset 2, -16
+ 494              		.cfi_offset 3, -12
+ 495              		.cfi_offset 4, -8
+ 496              		.cfi_offset 12, -4
+ 228:interrupts.c  **** 	static unsigned short int time, count;	
+ 229:interrupts.c  **** 	static unsigned int stime, tlast;
+ 230:interrupts.c  **** 	static unsigned char fnow;
+ 231:interrupts.c  **** 
+ 232:interrupts.c  **** 	register int status, ctime, ltime;
+ 233:interrupts.c  **** 
+ 234:interrupts.c  **** 	// Acknowledge interrupt status by reading register
+ 235:interrupts.c  **** 	status = AT91C_BASE_TC6->TC_SR;
+ 497              		.loc 1 235 0
+ 498 0004 573AE0E3 		mvn	r3, #356352
+ 499 0008 DF3F13E5 		ldr	r3, [r3, #-4063]
+ 500              	.LVL21:
+ 236:interrupts.c  **** 
+ 237:interrupts.c  **** 	if( status & AT91C_TC_COVFS ) // timer overflow MCK/128
+ 501              		.loc 1 237 0
+ 502 000c 010013E3 		tst	r3, #1
+ 503 0010 3300000A 		beq	.L33
+ 238:interrupts.c  **** 	{
+ 239:interrupts.c  **** 		fnow = 0;
+ 504              		.loc 1 239 0
+ 505 0014 0010A0E3 		mov	r1, #0
+ 506 0018 B8219FE5 		ldr	r2, .L37
+ 507 001c 0010C2E5 		strb	r1, [r2, #0]
+ 240:interrupts.c  **** 
+ 241:interrupts.c  **** 		time++;
+ 508              		.loc 1 241 0
+ 509 0020 B4119FE5 		ldr	r1, .L37+4
+ 510 0024 B020D1E1 		ldrh	r2, [r1, #0]
+ 511 0028 012082E2 		add	r2, r2, #1
+ 512 002c 0228A0E1 		mov	r2, r2, asl #16
+ 513 0030 2228A0E1 		mov	r2, r2, lsr #16
+ 514 0034 B020C1E1 		strh	r2, [r1, #0]	@ movhi
+ 242:interrupts.c  **** 		ctime = (time * 0x10000UL) + AT91C_BASE_TC6->TC_CV;
+ 515              		.loc 1 242 0
+ 516 0038 571AE0E3 		mvn	r1, #356352
+ 517 003c EF1F11E5 		ldr	r1, [r1, #-4079]
+ 518 0040 021881E0 		add	r1, r1, r2, asl #16
+ 519              	.LVL22:
+ 243:interrupts.c  **** 		ltime = ctime - stime;
+ 520              		.loc 1 243 0
+ 521 0044 94219FE5 		ldr	r2, .L37+8
+ 522 0048 002092E5 		ldr	r2, [r2, #0]
+ 523 004c 012062E0 		rsb	r2, r2, r1
+ 524              	.LVL23:
+ 244:interrupts.c  **** 		if( ltime > 44928UL ) // MCK/128 - 0.12 seconds zero time
+ 525              		.loc 1 244 0
+ 526 0050 8C019FE5 		ldr	r0, .L37+12
+ 527 0054 000052E1 		cmp	r2, r0
+ 528 0058 1900009A 		bls	.L34
+ 245:interrupts.c  **** 		{
+ 246:interrupts.c  **** 			f6time = ltime;	
+ 529              		.loc 1 246 0
+ 530 005c 84019FE5 		ldr	r0, .L37+16
+ 531 0060 002080E5 		str	r2, [r0, #0]
+ 247:interrupts.c  **** 			stime = ctime;
+ 532              		.loc 1 247 0
+ 533 0064 74219FE5 		ldr	r2, .L37+8
+ 534              	.LVL24:
+ 535 0068 001082E5 		str	r1, [r2, #0]
+ 248:interrupts.c  **** 			f6count = count;
+ 536              		.loc 1 248 0
+ 537 006c 78119FE5 		ldr	r1, .L37+20
+ 538              	.LVL25:
+ 539 0070 B020D1E1 		ldrh	r2, [r1, #0]
+ 540 0074 74019FE5 		ldr	r0, .L37+24
+ 541              	.LVL26:
+ 542 0078 B020C0E1 		strh	r2, [r0, #0]	@ movhi
+ 249:interrupts.c  **** 			NetPulseCount += count;
+ 543              		.loc 1 249 0
+ 544 007c 70019FE5 		ldr	r0, .L37+28
+ 545 0080 00C090E5 		ldr	ip, [r0, #0]
+ 546 0084 0CC082E0 		add	ip, r2, ip
+ 547 0088 00C080E5 		str	ip, [r0, #0]
+ 250:interrupts.c  **** 			BeakEngagePulseCount += count;
+ 548              		.loc 1 250 0
+ 549 008c 64019FE5 		ldr	r0, .L37+32
+ 550 0090 00C090E5 		ldr	ip, [r0, #0]
+ 551 0094 0CC082E0 		add	ip, r2, ip
+ 552 0098 00C080E5 		str	ip, [r0, #0]
+ 251:interrupts.c  **** 			NetMetresPulseCount += count; 
+ 553              		.loc 1 251 0
+ 554 009c 58019FE5 		ldr	r0, .L37+36
+ 555 00a0 00C090E5 		ldr	ip, [r0, #0]
+ 556 00a4 0C2082E0 		add	r2, r2, ip
+ 557 00a8 002080E5 		str	r2, [r0, #0]
+ 252:interrupts.c  **** 			count = 0;
+ 558              		.loc 1 252 0
+ 559 00ac 0020A0E3 		mov	r2, #0
+ 560 00b0 B020C1E1 		strh	r2, [r1, #0]	@ movhi
+ 253:interrupts.c  **** 			
+ 254:interrupts.c  **** 			newf6 = 1;
+ 561              		.loc 1 254 0
+ 562 00b4 0110A0E3 		mov	r1, #1
+ 563 00b8 40219FE5 		ldr	r2, .L37+40
+ 564 00bc 0010C2E5 		strb	r1, [r2, #0]
+ 565 00c0 070000EA 		b	.L33
+ 566              	.LVL27:
+ 567              	.L34:
+ 255:interrupts.c  **** 		}
+ 256:interrupts.c  **** 		else if( ltime > 14976UL ) // MCK/128 - 0.04 seconds now time
+ 568              		.loc 1 256 0
+ 569 00c4 EA0D52E3 		cmp	r2, #14976
+ 570 00c8 0500009A 		bls	.L33
+ 257:interrupts.c  **** 		{
+ 258:interrupts.c  **** 			if( count )
+ 571              		.loc 1 258 0
+ 572 00cc 18219FE5 		ldr	r2, .L37+20
+ 573              	.LVL28:
+ 574 00d0 B020D2E1 		ldrh	r2, [r2, #0]
+ 575 00d4 000052E3 		cmp	r2, #0
+ 259:interrupts.c  **** 			{
+ 260:interrupts.c  **** 				fnow = 1;
+ 576              		.loc 1 260 0
+ 577 00d8 0110A013 		movne	r1, #1
+ 578              	.LVL29:
+ 579 00dc F4209F15 		ldrne	r2, .L37
+ 580 00e0 0010C215 		strneb	r1, [r2, #0]
+ 581              	.L33:
+ 261:interrupts.c  **** 			}	
+ 262:interrupts.c  **** 		}
+ 263:interrupts.c  **** 	}
+ 264:interrupts.c  **** 
+ 265:interrupts.c  **** 	if( status & AT91C_TC_LDRAS ) // capture
+ 582              		.loc 1 265 0
+ 583 00e4 200013E3 		tst	r3, #32
+ 584 00e8 3500000A 		beq	.L35
+ 266:interrupts.c  **** 	{
+ 267:interrupts.c  **** 		// debounce of 500us with MCK/128 (187 * 128/MCK Seconds) for 2KHz limit
+ 268:interrupts.c  **** 		// but use 180 so we can actually measure 2000Hz
+ 269:interrupts.c  **** 		if( (AT91C_BASE_TC6->TC_RA - tlast) > 180UL )
+ 585              		.loc 1 269 0
+ 586 00ec 573AE0E3 		mvn	r3, #356352
+ 587              	.LVL30:
+ 588 00f0 EB2F13E5 		ldr	r2, [r3, #-4075]
+ 589 00f4 08319FE5 		ldr	r3, .L37+44
+ 590 00f8 003093E5 		ldr	r3, [r3, #0]
+ 591 00fc 023063E0 		rsb	r3, r3, r2
+ 592 0100 B40053E3 		cmp	r3, #180
+ 593 0104 2A00009A 		bls	.L36
+ 270:interrupts.c  **** 		{ 	
+ 271:interrupts.c  **** 			count++;
+ 594              		.loc 1 271 0
+ 595 0108 DC209FE5 		ldr	r2, .L37+20
+ 596 010c B030D2E1 		ldrh	r3, [r2, #0]
+ 597 0110 013083E2 		add	r3, r3, #1
+ 598 0114 0338A0E1 		mov	r3, r3, asl #16
+ 599 0118 2338A0E1 		mov	r3, r3, lsr #16
+ 600 011c B030C2E1 		strh	r3, [r2, #0]	@ movhi
+ 272:interrupts.c  **** 			if( fnow )
+ 601              		.loc 1 272 0
+ 602 0120 B0209FE5 		ldr	r2, .L37
+ 603 0124 0020D2E5 		ldrb	r2, [r2, #0]	@ zero_extendqisi2
+ 604 0128 000052E3 		cmp	r2, #0
+ 605 012c 2000000A 		beq	.L36
+ 273:interrupts.c  **** 			{
+ 274:interrupts.c  **** 				fnow = 0;
+ 606              		.loc 1 274 0
+ 607 0130 0020A0E3 		mov	r2, #0
+ 608 0134 9C109FE5 		ldr	r1, .L37
+ 609 0138 0020C1E5 		strb	r2, [r1, #0]
+ 275:interrupts.c  **** 				ctime = (time * 0x10000UL) + AT91C_BASE_TC6->TC_RA;
+ 610              		.loc 1 275 0
+ 611 013c 571AE0E3 		mvn	r1, #356352
+ 612 0140 EB1F11E5 		ldr	r1, [r1, #-4075]
+ 613 0144 90009FE5 		ldr	r0, .L37+4
+ 614 0148 B000D0E1 		ldrh	r0, [r0, #0]
+ 615 014c 000881E0 		add	r0, r1, r0, asl #16
+ 616              	.LVL31:
+ 276:interrupts.c  **** 
+ 277:interrupts.c  **** 				f6time = ctime - stime;	
+ 617              		.loc 1 277 0
+ 618 0150 88109FE5 		ldr	r1, .L37+8
+ 619 0154 004091E5 		ldr	r4, [r1, #0]
+ 620 0158 004064E0 		rsb	r4, r4, r0
+ 621 015c 84C09FE5 		ldr	ip, .L37+16
+ 622 0160 00408CE5 		str	r4, [ip, #0]
+ 278:interrupts.c  **** 				stime = ctime;
+ 623              		.loc 1 278 0
+ 624 0164 000081E5 		str	r0, [r1, #0]
+ 279:interrupts.c  **** 				f6count = count;
+ 625              		.loc 1 279 0
+ 626 0168 80109FE5 		ldr	r1, .L37+24
+ 627 016c B030C1E1 		strh	r3, [r1, #0]	@ movhi
+ 280:interrupts.c  **** 				NetPulseCount += count; 
+ 628              		.loc 1 280 0
+ 629 0170 7C109FE5 		ldr	r1, .L37+28
+ 630 0174 000091E5 		ldr	r0, [r1, #0]
+ 631              	.LVL32:
+ 632 0178 000083E0 		add	r0, r3, r0
+ 633 017c 000081E5 		str	r0, [r1, #0]
+ 281:interrupts.c  **** 				BeakEngagePulseCount += count;
+ 634              		.loc 1 281 0
+ 635 0180 70109FE5 		ldr	r1, .L37+32
+ 636 0184 000091E5 		ldr	r0, [r1, #0]
+ 637 0188 000083E0 		add	r0, r3, r0
+ 638 018c 000081E5 		str	r0, [r1, #0]
+ 282:interrupts.c  **** 				NetMetresPulseCount += count;
+ 639              		.loc 1 282 0
+ 640 0190 64109FE5 		ldr	r1, .L37+36
+ 641 0194 000091E5 		ldr	r0, [r1, #0]
+ 642 0198 003083E0 		add	r3, r3, r0
+ 643 019c 003081E5 		str	r3, [r1, #0]
+ 283:interrupts.c  **** 				count = 0;
+ 644              		.loc 1 283 0
+ 645 01a0 44309FE5 		ldr	r3, .L37+20
+ 646 01a4 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 284:interrupts.c  **** 				
+ 285:interrupts.c  **** 				newf6 = 1; 
+ 647              		.loc 1 285 0
+ 648 01a8 0120A0E3 		mov	r2, #1
+ 649 01ac 4C309FE5 		ldr	r3, .L37+40
+ 650 01b0 0020C3E5 		strb	r2, [r3, #0]
+ 651              	.LVL33:
+ 652              	.L36:
+ 286:interrupts.c  **** 			}
+ 287:interrupts.c  **** 		}
+ 288:interrupts.c  **** 		tlast = AT91C_BASE_TC6->TC_RA;
+ 653              		.loc 1 288 0
+ 654 01b4 573AE0E3 		mvn	r3, #356352
+ 655 01b8 EB2F13E5 		ldr	r2, [r3, #-4075]
+ 656 01bc 40309FE5 		ldr	r3, .L37+44
+ 657 01c0 002083E5 		str	r2, [r3, #0]
+ 658              	.L35:
+ 289:interrupts.c  **** 	}
+ 290:interrupts.c  **** 
+ 291:interrupts.c  **** 	// reset interrupt, any value can be written so use peripheral ID
+ 292:interrupts.c  **** 	AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_TC6;
+ 659              		.loc 1 292 0
+ 660 01c4 1520A0E3 		mov	r2, #21
+ 661 01c8 0030E0E3 		mvn	r3, #0
+ 662 01cc CF2E03E5 		str	r2, [r3, #-3791]
+ 293:interrupts.c  **** } 
+ 663              		.loc 1 293 0
+ 664 01d0 1F10BDE8 		ldmfd	sp!, {r0, r1, r2, r3, r4, ip}
+ 665 01d4 04F05EE2 		subs	pc, lr, #4
+ 666              	.L38:
+ 667              		.align	2
+ 668              	.L37:
+ 669 01d8 00000000 		.word	.LANCHOR7
+ 670 01dc 00000000 		.word	.LANCHOR8
+ 671 01e0 00000000 		.word	.LANCHOR9
+ 672 01e4 80AF0000 		.word	44928
+ 673 01e8 00000000 		.word	f6time
+ 674 01ec 00000000 		.word	.LANCHOR10
+ 675 01f0 00000000 		.word	f6count
+ 676 01f4 00000000 		.word	NetPulseCount
+ 677 01f8 00000000 		.word	BeakEngagePulseCount
+ 678 01fc 00000000 		.word	NetMetresPulseCount
+ 679 0200 00000000 		.word	newf6
+ 680 0204 00000000 		.word	.LANCHOR11
+ 681              		.cfi_endproc
+ 682              	.LFE380:
+ 684              		.section	.text.PIOB_irq_function,"ax",%progbits
+ 685              		.align	2
+ 686              		.global	PIOB_irq_function
+ 688              	PIOB_irq_function:
+ 689              	.LFB382:
+ 294:interrupts.c  **** // -----------------------------------------------------------
+ 295:interrupts.c  **** 
+ 296:interrupts.c  **** 
+ 297:interrupts.c  **** // -----------------------------------------------------------
+ 298:interrupts.c  **** // Function Name       : PIOB_irq_handler
+ 299:interrupts.c  **** // Object              : C handler interrupt function
+ 300:interrupts.c  **** // -----------------------------------------------------------
+ 301:interrupts.c  **** /* The interrupt is defined as "naked" as the full context is saved on entry as part of the context
+ 302:interrupts.c  **** void PIOB_irq_handler( void ) __attribute__((naked));
+ 303:interrupts.c  **** /* function is ordinary c routine */
+ 304:interrupts.c  **** void PIOB_irq_function( void );
+ 305:interrupts.c  **** 
+ 306:interrupts.c  **** void PIOB_irq_handler( void )
+ 307:interrupts.c  **** {
+ 308:interrupts.c  ****     /* Save the context of the interrupted task. */
+ 309:interrupts.c  ****     portSAVE_CONTEXT();
+ 310:interrupts.c  ****     
+ 311:interrupts.c  ****     /* Call the handler function.  This must be a separate 
+ 312:interrupts.c  ****     function unless you can guarantee that handling the 
+ 313:interrupts.c  ****     interrupt will never use any stack space. */
+ 314:interrupts.c  ****     PIOB_irq_function();
+ 315:interrupts.c  **** 
+ 316:interrupts.c  ****     /* Restore the context of the task that is going to 
+ 317:interrupts.c  ****     execute next. This might not be the same as the originally 
+ 318:interrupts.c  ****     interrupted task.*/
+ 319:interrupts.c  ****     portRESTORE_CONTEXT();
+ 320:interrupts.c  **** }
+ 321:interrupts.c  **** // -----------------------------------------------------------
+ 322:interrupts.c  **** 
+ 323:interrupts.c  **** 
+ 324:interrupts.c  **** // -----------------------------------------------------------
+ 325:interrupts.c  **** // Function Name       : PIOB_irq_handler
+ 326:interrupts.c  **** // Object              : C handler interrupt function
+ 327:interrupts.c  **** // -----------------------------------------------------------
+ 328:interrupts.c  **** void PIOB_irq_function( void )
+ 329:interrupts.c  **** {
+ 690              		.loc 1 329 0
+ 691              		.cfi_startproc
+ 692              		@ Function supports interworking.
+ 693              		@ args = 0, pretend = 0, frame = 0
+ 694              		@ frame_needed = 0, uses_anonymous_args = 0
+ 695 0000 08402DE9 		stmfd	sp!, {r3, lr}
+ 696              	.LCFI5:
+ 697              		.cfi_def_cfa_offset 8
+ 698              		.cfi_offset 3, -8
+ 699              		.cfi_offset 14, -4
+ 700              	.LVL34:
+ 330:interrupts.c  **** register unsigned int status;
+ 331:interrupts.c  **** 
+ 332:interrupts.c  **** portBASE_TYPE SwitchRequired = pdFALSE;
+ 333:interrupts.c  **** 
+ 334:interrupts.c  **** // reading interrupt status register clears all pending interrupt flags
+ 335:interrupts.c  **** status = AT91C_BASE_PIOB->PIO_ISR;
+ 701              		.loc 1 335 0
+ 702 0004 0030E0E3 		mvn	r3, #0
+ 703 0008 B33913E5 		ldr	r3, [r3, #-2483]
+ 704              	.LVL35:
+ 336:interrupts.c  **** 
+ 337:interrupts.c  **** // interrupting /*& pin low*/
+ 338:interrupts.c  **** if( status & AT91C_PIO_PB0 )/* && !((AT91C_BASE_PIOB->PIO_PDSR) & AT91C_PIO_PB0)  )*/
+ 705              		.loc 1 338 0
+ 706 000c 010013E3 		tst	r3, #1
+ 707 0010 0700000A 		beq	.L40
+ 339:interrupts.c  **** {
+ 340:interrupts.c  **** 	// Resume Power task - save factors and turn off
+ 341:interrupts.c  ****     PowerSwitchedOff = 0;
+ 708              		.loc 1 341 0
+ 709 0014 0020A0E3 		mov	r2, #0
+ 710 0018 28309FE5 		ldr	r3, .L41
+ 711              	.LVL36:
+ 712 001c 0020C3E5 		strb	r2, [r3, #0]
+ 342:interrupts.c  **** 	SwitchRequired = xTaskResumeFromISR( POWERtaskhandle );
+ 713              		.loc 1 342 0
+ 714 0020 24309FE5 		ldr	r3, .L41+4
+ 715 0024 000093E5 		ldr	r0, [r3, #0]
+ 716 0028 FEFFFFEB 		bl	xTaskResumeFromISR
+ 717              	.LVL37:
+ 343:interrupts.c  **** }
+ 344:interrupts.c  **** 
+ 345:interrupts.c  **** if( SwitchRequired )                                       \
+ 718              		.loc 1 345 0
+ 719 002c 000050E3 		cmp	r0, #0
+ 346:interrupts.c  **** {
+ 347:interrupts.c  **** 	portYIELD_FROM_ISR();
+ 720              		.loc 1 347 0
+ 721 0030 FEFFFF1B 		blne	vTaskSwitchContext
+ 722              	.LVL38:
+ 723              	.L40:
+ 348:interrupts.c  **** }
+ 349:interrupts.c  **** 
+ 350:interrupts.c  **** // reset interrupt, any value can be written so use peripheral ID
+ 351:interrupts.c  **** AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_PIOB;
+ 724              		.loc 1 351 0
+ 725 0034 0320A0E3 		mov	r2, #3
+ 726 0038 0030E0E3 		mvn	r3, #0
+ 727 003c CF2E03E5 		str	r2, [r3, #-3791]
+ 352:interrupts.c  **** } 
+ 728              		.loc 1 352 0
+ 729 0040 0840BDE8 		ldmfd	sp!, {r3, lr}
+ 730 0044 1EFF2FE1 		bx	lr
+ 731              	.L42:
+ 732              		.align	2
+ 733              	.L41:
+ 734 0048 00000000 		.word	PowerSwitchedOff
+ 735 004c 00000000 		.word	POWERtaskhandle
+ 736              		.cfi_endproc
+ 737              	.LFE382:
+ 739              		.section	.text.PIOB_irq_handler,"ax",%progbits
+ 740              		.align	2
+ 741              		.global	PIOB_irq_handler
+ 743              	PIOB_irq_handler:
+ 744              	.LFB381:
+ 307:interrupts.c  **** {
+ 745              		.loc 1 307 0
+ 746              		.cfi_startproc
+ 747              		@ Function supports interworking.
+ 748              		@ Naked Function: prologue and epilogue provided by programmer.
+ 749              		@ args = 0, pretend = 0, frame = 0
+ 750              		@ frame_needed = 0, uses_anonymous_args = 0
+ 751              	.LBB2:
+ 309:interrupts.c  ****     portSAVE_CONTEXT();
+ 752              		.loc 1 309 0
+ 753              	@ 309 "interrupts.c" 1
+ 754 0000 01002DE9 		STMDB	SP!, {R0}											
+ 755 0004 00204DE9 		STMDB	SP,{SP}^											
+ 756 0008 0000A0E1 		NOP														
+ 757 000c 04D04DE2 		SUB	SP, SP, #4											
+ 758 0010 0100BDE8 		LDMIA	SP!,{R0}											
+ 759 0014 004020E9 		STMDB	R0!, {LR}											
+ 760 0018 00E0A0E1 		MOV	LR, R0												
+ 761 001c 0100BDE8 		LDMIA	SP!, {R0}											
+ 762 0020 FF7F4EE9 		STMDB	LR,{R0-LR}^											
+ 763 0024 0000A0E1 		NOP														
+ 764 0028 3CE04EE2 		SUB	LR, LR, #60											
+ 765 002c 00004FE1 		MRS	R0, SPSR											
+ 766 0030 01002EE9 		STMDB	LR!, {R0}											
+ 767 0034 64009FE5 		LDR	R0, =ulCriticalNesting								
+ 768 0038 000090E5 		LDR	R0, [R0]											
+ 769 003c 01002EE9 		STMDB	LR!, {R0}											
+ 770 0040 5C009FE5 		LDR	R0, =pxCurrentTCB									
+ 771 0044 000090E5 		LDR	R0, [R0]											
+ 772 0048 00E080E5 		STR	LR, [R0]											
+ 773              		
+ 774              	@ 0 "" 2
+ 775 004c 44509FE5 		ldr	r5, .L44
+ 776 0050 003095E5 		ldr	r3, [r5, #0]
+ 777 0054 40409FE5 		ldr	r4, .L44+4
+ 778 0058 003094E5 		ldr	r3, [r4, #0]
+ 779              	.LBE2:
+ 314:interrupts.c  ****     PIOB_irq_function();
+ 780              		.loc 1 314 0
+ 781 005c FEFFFFEB 		bl	PIOB_irq_function
+ 782              	.LVL39:
+ 783              	.LBB3:
+ 319:interrupts.c  ****     portRESTORE_CONTEXT();
+ 784              		.loc 1 319 0
+ 785              	@ 319 "interrupts.c" 1
+ 786 0060 3C009FE5 		LDR		R0, =pxCurrentTCB								
+ 787 0064 000090E5 		LDR		R0, [R0]										
+ 788 0068 00E090E5 		LDR		LR, [R0]										
+ 789 006c 2C009FE5 		LDR		R0, =ulCriticalNesting							
+ 790 0070 0200BEE8 		LDMFD	LR!, {R1}											
+ 791 0074 001080E5 		STR		R1, [R0]										
+ 792 0078 0100BEE8 		LDMFD	LR!, {R0}											
+ 793 007c 00F069E1 		MSR		SPSR, R0										
+ 794 0080 FF7FDEE8 		LDMFD	LR, {R0-R14}^										
+ 795 0084 0000A0E1 		NOP														
+ 796 0088 3CE09EE5 		LDR		LR, [LR, #+60]									
+ 797 008c 04F05EE2 		SUBS	PC, LR, #4											
+ 798              		
+ 799              	@ 0 "" 2
+ 800 0090 003095E5 		ldr	r3, [r5, #0]
+ 801 0094 003094E5 		ldr	r3, [r4, #0]
+ 802              	.LBE3:
+ 320:interrupts.c  **** }
+ 803              		.loc 1 320 0
+ 804              	.L45:
+ 805              		.align	2
+ 806              	.L44:
+ 807 0098 00000000 		.word	ulCriticalNesting
+ 808 009c 00000000 		.word	pxCurrentTCB
+ 809              		.cfi_endproc
+ 810              	.LFE381:
+ 812              		.section	.text.ADC0_irq_function,"ax",%progbits
+ 813              		.align	2
+ 814              		.global	ADC0_irq_function
+ 816              	ADC0_irq_function:
+ 817              	.LFB384:
+ 353:interrupts.c  **** // -----------------------------------------------------------
+ 354:interrupts.c  **** 
+ 355:interrupts.c  **** 
+ 356:interrupts.c  **** // -----------------------------------------------------------
+ 357:interrupts.c  **** // Function Name       : ADC0_irq_handler
+ 358:interrupts.c  **** // Object              : C handler interrupt function
+ 359:interrupts.c  **** // -----------------------------------------------------------
+ 360:interrupts.c  **** /* The interrupt is defined as "naked" as the full context is saved on entry as part of the context
+ 361:interrupts.c  **** void ADC0_irq_handler( void ) __attribute__((naked));
+ 362:interrupts.c  **** 
+ 363:interrupts.c  **** /* function is ordinary c routine */
+ 364:interrupts.c  **** void ADC0_irq_function( void );
+ 365:interrupts.c  **** 
+ 366:interrupts.c  **** void ADC0_irq_handler( void )
+ 367:interrupts.c  **** {
+ 368:interrupts.c  ****     /* Save the context of the interrupted task. */
+ 369:interrupts.c  ****     portSAVE_CONTEXT();
+ 370:interrupts.c  ****     
+ 371:interrupts.c  ****     /* Call the handler function.  This must be a separate 
+ 372:interrupts.c  ****     function unless you can guarantee that handling the 
+ 373:interrupts.c  ****     interrupt will never use any stack space. */
+ 374:interrupts.c  ****     ADC0_irq_function();
+ 375:interrupts.c  **** 
+ 376:interrupts.c  ****     /* Restore the context of the task that is going to 
+ 377:interrupts.c  ****     execute next. This might not be the same as the originally 
+ 378:interrupts.c  ****     interrupted task.*/
+ 379:interrupts.c  ****     portRESTORE_CONTEXT();
+ 380:interrupts.c  **** }
+ 381:interrupts.c  **** 
+ 382:interrupts.c  **** void ADC0_irq_function( void )
+ 383:interrupts.c  **** {
+ 818              		.loc 1 383 0
+ 819              		.cfi_startproc
+ 820              		@ Function supports interworking.
+ 821              		@ args = 0, pretend = 0, frame = 0
+ 822              		@ frame_needed = 0, uses_anonymous_args = 0
+ 823 0000 F8452DE9 		stmfd	sp!, {r3, r4, r5, r6, r7, r8, sl, lr}
+ 824              	.LCFI6:
+ 825              		.cfi_def_cfa_offset 32
+ 826              		.cfi_offset 3, -32
+ 827              		.cfi_offset 4, -28
+ 828              		.cfi_offset 5, -24
+ 829              		.cfi_offset 6, -20
+ 830              		.cfi_offset 7, -16
+ 831              		.cfi_offset 8, -12
+ 832              		.cfi_offset 10, -8
+ 833              		.cfi_offset 14, -4
+ 834              	.LVL40:
+ 384:interrupts.c  **** static unsigned char Vcount;
+ 385:interrupts.c  **** 
+ 386:interrupts.c  **** static unsigned char SampleCount;
+ 387:interrupts.c  **** 
+ 388:interrupts.c  **** static unsigned long int BaleDiaVoltsAccumMultSamples; 
+ 389:interrupts.c  **** static unsigned long int DensityPresVoltsAccumMultSamples; 
+ 390:interrupts.c  **** static unsigned long int BaleShapeVoltsAccumMultSamples;
+ 391:interrupts.c  **** static unsigned long int KnifePresVoltsAccumMultSamples;
+ 392:interrupts.c  **** 
+ 393:interrupts.c  **** register unsigned long int BaleDiaVoltsMultSample;          
+ 394:interrupts.c  **** register unsigned long int DensityPresVoltsMultSample;       
+ 395:interrupts.c  **** register unsigned long int BaleShapeVoltsMultSample;  
+ 396:interrupts.c  **** register unsigned long int KnifePresVoltsMultSample;         
+ 397:interrupts.c  **** 
+ 398:interrupts.c  **** register unsigned int status;
+ 399:interrupts.c  **** portBASE_TYPE SwitchRequired = pdFALSE;
+ 400:interrupts.c  **** 
+ 401:interrupts.c  **** EOC7_interrupt_count++;
+ 835              		.loc 1 401 0
+ 836 0004 64319FE5 		ldr	r3, .L54
+ 837 0008 002093E5 		ldr	r2, [r3, #0]
+ 838 000c 012082E2 		add	r2, r2, #1
+ 839 0010 002083E5 		str	r2, [r3, #0]
+ 402:interrupts.c  **** 
+ 403:interrupts.c  **** // reading conversion register clears eoc flag
+ 404:interrupts.c  **** status = AT91C_BASE_ADC0->ADC_CDR7;
+ 840              		.loc 1 404 0
+ 841 0014 273AE0E3 		mvn	r3, #159744
+ 842 0018 B33F13E5 		ldr	r3, [r3, #-4019]
+ 843              	.LVL41:
+ 405:interrupts.c  **** 
+ 406:interrupts.c  **** if( status < (unsigned int)ATODVMIN )
+ 844              		.loc 1 406 0
+ 845 001c C90053E3 		cmp	r3, #201
+ 846 0020 0E00008A 		bhi	.L47
+ 407:interrupts.c  ****   {
+ 408:interrupts.c  ****   Vcount++;
+ 847              		.loc 1 408 0
+ 848 0024 48219FE5 		ldr	r2, .L54+4
+ 849 0028 0030D2E5 		ldrb	r3, [r2, #0]	@ zero_extendqisi2
+ 850              	.LVL42:
+ 851 002c 013083E2 		add	r3, r3, #1
+ 852 0030 FF3003E2 		and	r3, r3, #255
+ 853 0034 0030C2E5 		strb	r3, [r2, #0]
+ 409:interrupts.c  ****   if( Vcount > 2 )
+ 854              		.loc 1 409 0
+ 855 0038 020053E3 		cmp	r3, #2
+ 399:interrupts.c  **** portBASE_TYPE SwitchRequired = pdFALSE;
+ 856              		.loc 1 399 0
+ 857 003c 0000A093 		movls	r0, #0
+ 858              		.loc 1 409 0
+ 859 0040 0D00009A 		bls	.L48
+ 410:interrupts.c  ****     {
+ 411:interrupts.c  ****     // Resume Power task - save factors and turn off
+ 412:interrupts.c  ****     PowerSwitchedOff = 0;
+ 860              		.loc 1 412 0
+ 861 0044 0020A0E3 		mov	r2, #0
+ 862 0048 28319FE5 		ldr	r3, .L54+8
+ 863 004c 0020C3E5 		strb	r2, [r3, #0]
+ 413:interrupts.c  ****     SwitchRequired = xTaskResumeFromISR( POWERtaskhandle );
+ 864              		.loc 1 413 0
+ 865 0050 24319FE5 		ldr	r3, .L54+12
+ 866 0054 000093E5 		ldr	r0, [r3, #0]
+ 867 0058 FEFFFFEB 		bl	xTaskResumeFromISR
+ 868              	.LVL43:
+ 869 005c 060000EA 		b	.L48
+ 870              	.LVL44:
+ 871              	.L47:
+ 414:interrupts.c  ****     }	
+ 415:interrupts.c  ****   }
+ 416:interrupts.c  **** else if( Vcount )
+ 872              		.loc 1 416 0
+ 873 0060 0C319FE5 		ldr	r3, .L54+4
+ 874              	.LVL45:
+ 875 0064 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 876 0068 000053E3 		cmp	r3, #0
+ 417:interrupts.c  ****   {
+ 418:interrupts.c  ****   Vcount--;	
+ 877              		.loc 1 418 0
+ 878 006c 01304312 		subne	r3, r3, #1
+ 879 0070 FC209F15 		ldrne	r2, .L54+4
+ 880 0074 0030C215 		strneb	r3, [r2, #0]
+ 399:interrupts.c  **** portBASE_TYPE SwitchRequired = pdFALSE;
+ 881              		.loc 1 399 0
+ 882 0078 0000A0E3 		mov	r0, #0
+ 883              	.LVL46:
+ 884              	.L48:
+ 419:interrupts.c  ****   }
+ 420:interrupts.c  **** 
+ 421:interrupts.c  **** // Reading conversion register clears eoc flag
+ 422:interrupts.c  **** 
+ 423:interrupts.c  **** // AnIP1: Bale Diameter (read value)
+ 424:interrupts.c  **** BaleDiaVoltsMultSample     = (unsigned long int)( AT91C_BASE_ADC0->ADC_CDR0 );
+ 885              		.loc 1 424 0
+ 886 007c 273AE0E3 		mvn	r3, #159744
+ 887 0080 CF4F13E5 		ldr	r4, [r3, #-4047]
+ 888              	.LVL47:
+ 425:interrupts.c  **** 
+ 426:interrupts.c  **** // AnIP2: (Bale) Density Pressure (read value)
+ 427:interrupts.c  **** DensityPresVoltsMultSample = (unsigned long int)( AT91C_BASE_ADC0->ADC_CDR1 );
+ 889              		.loc 1 427 0
+ 890 0084 CBCF13E5 		ldr	ip, [r3, #-4043]
+ 891              	.LVL48:
+ 428:interrupts.c  **** 
+ 429:interrupts.c  **** // AnIP3: Bale Shape Indicator (read value)
+ 430:interrupts.c  **** BaleShapeVoltsMultSample   = (unsigned long int)( AT91C_BASE_ADC0->ADC_CDR2 );
+ 892              		.loc 1 430 0
+ 893 0088 C71F13E5 		ldr	r1, [r3, #-4039]
+ 894              	.LVL49:
+ 431:interrupts.c  **** 
+ 432:interrupts.c  **** // AnIP4: Knife Pressure (read value)
+ 433:interrupts.c  **** KnifePresVoltsMultSample   = (unsigned long int)( AT91C_BASE_ADC0->ADC_CDR3 );
+ 895              		.loc 1 433 0
+ 896 008c C32F13E5 		ldr	r2, [r3, #-4035]
+ 897              	.LVL50:
+ 434:interrupts.c  **** 
+ 435:interrupts.c  **** if( SampleCount )
+ 898              		.loc 1 435 0
+ 899 0090 E8309FE5 		ldr	r3, .L54+16
+ 900 0094 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 901 0098 000053E3 		cmp	r3, #0
+ 902 009c 1300000A 		beq	.L49
+ 436:interrupts.c  **** {
+ 437:interrupts.c  **** 	SampleCount--;
+ 903              		.loc 1 437 0
+ 904 00a0 013043E2 		sub	r3, r3, #1
+ 905 00a4 D4509FE5 		ldr	r5, .L54+16
+ 906 00a8 0030C5E5 		strb	r3, [r5, #0]
+ 438:interrupts.c  **** 
+ 439:interrupts.c  **** 	// Accumulating samples (each multiplied by INPUT_ACCURACY_MULTIPLIER) 
+ 440:interrupts.c  **** 	BaleDiaVoltsAccumMultSamples     += BaleDiaVoltsMultSample;
+ 907              		.loc 1 440 0
+ 908 00ac D0309FE5 		ldr	r3, .L54+20
+ 909 00b0 005093E5 		ldr	r5, [r3, #0]
+ 910 00b4 044085E0 		add	r4, r5, r4
+ 911              	.LVL51:
+ 912 00b8 004083E5 		str	r4, [r3, #0]
+ 441:interrupts.c  **** 	DensityPresVoltsAccumMultSamples += DensityPresVoltsMultSample;
+ 913              		.loc 1 441 0
+ 914 00bc C4309FE5 		ldr	r3, .L54+24
+ 915 00c0 004093E5 		ldr	r4, [r3, #0]
+ 916 00c4 0CC084E0 		add	ip, r4, ip
+ 917              	.LVL52:
+ 918 00c8 00C083E5 		str	ip, [r3, #0]
+ 442:interrupts.c  **** 	BaleShapeVoltsAccumMultSamples   += BaleShapeVoltsMultSample;
+ 919              		.loc 1 442 0
+ 920 00cc B8309FE5 		ldr	r3, .L54+28
+ 921 00d0 00C093E5 		ldr	ip, [r3, #0]
+ 922 00d4 01108CE0 		add	r1, ip, r1
+ 923              	.LVL53:
+ 924 00d8 001083E5 		str	r1, [r3, #0]
+ 443:interrupts.c  **** 	KnifePresVoltsAccumMultSamples   += KnifePresVoltsMultSample;
+ 925              		.loc 1 443 0
+ 926 00dc AC309FE5 		ldr	r3, .L54+32
+ 927 00e0 001093E5 		ldr	r1, [r3, #0]
+ 928 00e4 022081E0 		add	r2, r1, r2
+ 929              	.LVL54:
+ 930 00e8 002083E5 		str	r2, [r3, #0]
+ 931 00ec 160000EA 		b	.L50
+ 932              	.LVL55:
+ 933              	.L49:
+ 444:interrupts.c  **** }
+ 445:interrupts.c  **** else // SampleCount == 0 
+ 446:interrupts.c  **** {
+ 447:interrupts.c  **** 	// Saving total accumulated (multiplied) samples -- samples collected in NUM_ACCUMULATED_SAMPLES x
+ 448:interrupts.c  **** 	BaleDiaVoltsTotAccumMultSamples     = BaleDiaVoltsAccumMultSamples; 
+ 934              		.loc 1 448 0
+ 935 00f0 8C709FE5 		ldr	r7, .L54+20
+ 936 00f4 005097E5 		ldr	r5, [r7, #0]
+ 937 00f8 94309FE5 		ldr	r3, .L54+36
+ 938 00fc 005083E5 		str	r5, [r3, #0]
+ 449:interrupts.c  **** 	DensityPresVoltsTotAccumMultSamples = DensityPresVoltsAccumMultSamples; 
+ 939              		.loc 1 449 0
+ 940 0100 80609FE5 		ldr	r6, .L54+24
+ 941 0104 005096E5 		ldr	r5, [r6, #0]
+ 942 0108 88309FE5 		ldr	r3, .L54+40
+ 943 010c 005083E5 		str	r5, [r3, #0]
+ 450:interrupts.c  **** 	BaleShapeVoltsTotAccumMultSamples   = BaleShapeVoltsAccumMultSamples;
+ 944              		.loc 1 450 0
+ 945 0110 74509FE5 		ldr	r5, .L54+28
+ 946 0114 008095E5 		ldr	r8, [r5, #0]
+ 947 0118 7C309FE5 		ldr	r3, .L54+44
+ 948 011c 008083E5 		str	r8, [r3, #0]
+ 451:interrupts.c  **** 	KnifePresVoltsTotAccumMultSamples   = KnifePresVoltsAccumMultSamples;
+ 949              		.loc 1 451 0
+ 950 0120 68309FE5 		ldr	r3, .L54+32
+ 951 0124 00A093E5 		ldr	sl, [r3, #0]
+ 952 0128 70809FE5 		ldr	r8, .L54+48
+ 953 012c 00A088E5 		str	sl, [r8, #0]
+ 452:interrupts.c  **** 	
+ 453:interrupts.c  **** 	// Start accumulating next group of samples -- first sample collected on SampleCount==0 
+ 454:interrupts.c  **** 	BaleDiaVoltsAccumMultSamples     = BaleDiaVoltsMultSample;
+ 954              		.loc 1 454 0
+ 955 0130 004087E5 		str	r4, [r7, #0]
+ 455:interrupts.c  **** 	DensityPresVoltsAccumMultSamples = DensityPresVoltsMultSample; 
+ 956              		.loc 1 455 0
+ 957 0134 00C086E5 		str	ip, [r6, #0]
+ 456:interrupts.c  **** 	BaleShapeVoltsAccumMultSamples   = BaleShapeVoltsMultSample;
+ 958              		.loc 1 456 0
+ 959 0138 001085E5 		str	r1, [r5, #0]
+ 457:interrupts.c  **** 	KnifePresVoltsAccumMultSamples   = KnifePresVoltsMultSample;
+ 960              		.loc 1 457 0
+ 961 013c 002083E5 		str	r2, [r3, #0]
+ 458:interrupts.c  **** 
+ 459:interrupts.c  **** 	SampleCount = (NUM_ACCUMULATED_SAMPLES - 1); 
+ 962              		.loc 1 459 0
+ 963 0140 3120A0E3 		mov	r2, #49
+ 964              	.LVL56:
+ 965 0144 34309FE5 		ldr	r3, .L54+16
+ 966 0148 0020C3E5 		strb	r2, [r3, #0]
+ 967              	.LVL57:
+ 968              	.L50:
+ 460:interrupts.c  **** }
+ 461:interrupts.c  **** 
+ 462:interrupts.c  **** 
+ 463:interrupts.c  **** // clear overrun errors
+ 464:interrupts.c  **** status = AT91C_BASE_ADC0->ADC_SR;
+ 969              		.loc 1 464 0
+ 970 014c 273AE0E3 		mvn	r3, #159744
+ 971 0150 E33F13E5 		ldr	r3, [r3, #-4067]
+ 465:interrupts.c  **** 
+ 466:interrupts.c  **** if( SwitchRequired )                                          \
+ 972              		.loc 1 466 0
+ 973 0154 000050E3 		cmp	r0, #0
+ 467:interrupts.c  **** {
+ 468:interrupts.c  **** 	portYIELD_FROM_ISR();
+ 974              		.loc 1 468 0
+ 975 0158 FEFFFF1B 		blne	vTaskSwitchContext
+ 976              	.LVL58:
+ 977              	.L51:
+ 469:interrupts.c  **** }
+ 470:interrupts.c  **** 
+ 471:interrupts.c  **** // reset interrupt, any value can be written so use peripheral ID
+ 472:interrupts.c  **** AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_ADC0;
+ 978              		.loc 1 472 0
+ 979 015c 1820A0E3 		mov	r2, #24
+ 980 0160 0030E0E3 		mvn	r3, #0
+ 981 0164 CF2E03E5 		str	r2, [r3, #-3791]
+ 473:interrupts.c  **** } 
+ 982              		.loc 1 473 0
+ 983 0168 F845BDE8 		ldmfd	sp!, {r3, r4, r5, r6, r7, r8, sl, lr}
+ 984 016c 1EFF2FE1 		bx	lr
+ 985              	.L55:
+ 986              		.align	2
+ 987              	.L54:
+ 988 0170 00000000 		.word	EOC7_interrupt_count
+ 989 0174 00000000 		.word	.LANCHOR12
+ 990 0178 00000000 		.word	PowerSwitchedOff
+ 991 017c 00000000 		.word	POWERtaskhandle
+ 992 0180 00000000 		.word	.LANCHOR13
+ 993 0184 00000000 		.word	.LANCHOR14
+ 994 0188 00000000 		.word	.LANCHOR15
+ 995 018c 00000000 		.word	.LANCHOR16
+ 996 0190 00000000 		.word	.LANCHOR17
+ 997 0194 00000000 		.word	BaleDiaVoltsTotAccumMultSamples
+ 998 0198 00000000 		.word	DensityPresVoltsTotAccumMultSamples
+ 999 019c 00000000 		.word	BaleShapeVoltsTotAccumMultSamples
+ 1000 01a0 00000000 		.word	KnifePresVoltsTotAccumMultSamples
+ 1001              		.cfi_endproc
+ 1002              	.LFE384:
+ 1004              		.section	.text.ADC0_irq_handler,"ax",%progbits
+ 1005              		.align	2
+ 1006              		.global	ADC0_irq_handler
+ 1008              	ADC0_irq_handler:
+ 1009              	.LFB383:
+ 367:interrupts.c  **** {
+ 1010              		.loc 1 367 0
+ 1011              		.cfi_startproc
+ 1012              		@ Function supports interworking.
+ 1013              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1014              		@ args = 0, pretend = 0, frame = 0
+ 1015              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1016              	.LBB4:
+ 369:interrupts.c  ****     portSAVE_CONTEXT();
+ 1017              		.loc 1 369 0
+ 1018              	@ 369 "interrupts.c" 1
+ 1019 0000 01002DE9 		STMDB	SP!, {R0}											
+ 1020 0004 00204DE9 		STMDB	SP,{SP}^											
+ 1021 0008 0000A0E1 		NOP														
+ 1022 000c 04D04DE2 		SUB	SP, SP, #4											
+ 1023 0010 0100BDE8 		LDMIA	SP!,{R0}											
+ 1024 0014 004020E9 		STMDB	R0!, {LR}											
+ 1025 0018 00E0A0E1 		MOV	LR, R0												
+ 1026 001c 0100BDE8 		LDMIA	SP!, {R0}											
+ 1027 0020 FF7F4EE9 		STMDB	LR,{R0-LR}^											
+ 1028 0024 0000A0E1 		NOP														
+ 1029 0028 3CE04EE2 		SUB	LR, LR, #60											
+ 1030 002c 00004FE1 		MRS	R0, SPSR											
+ 1031 0030 01002EE9 		STMDB	LR!, {R0}											
+ 1032 0034 64009FE5 		LDR	R0, =ulCriticalNesting								
+ 1033 0038 000090E5 		LDR	R0, [R0]											
+ 1034 003c 01002EE9 		STMDB	LR!, {R0}											
+ 1035 0040 5C009FE5 		LDR	R0, =pxCurrentTCB									
+ 1036 0044 000090E5 		LDR	R0, [R0]											
+ 1037 0048 00E080E5 		STR	LR, [R0]											
+ 1038              		
+ 1039              	@ 0 "" 2
+ 1040 004c 44509FE5 		ldr	r5, .L57
+ 1041 0050 003095E5 		ldr	r3, [r5, #0]
+ 1042 0054 40409FE5 		ldr	r4, .L57+4
+ 1043 0058 003094E5 		ldr	r3, [r4, #0]
+ 1044              	.LBE4:
+ 374:interrupts.c  ****     ADC0_irq_function();
+ 1045              		.loc 1 374 0
+ 1046 005c FEFFFFEB 		bl	ADC0_irq_function
+ 1047              	.LVL59:
+ 1048              	.LBB5:
+ 379:interrupts.c  ****     portRESTORE_CONTEXT();
+ 1049              		.loc 1 379 0
+ 1050              	@ 379 "interrupts.c" 1
+ 1051 0060 3C009FE5 		LDR		R0, =pxCurrentTCB								
+ 1052 0064 000090E5 		LDR		R0, [R0]										
+ 1053 0068 00E090E5 		LDR		LR, [R0]										
+ 1054 006c 2C009FE5 		LDR		R0, =ulCriticalNesting							
+ 1055 0070 0200BEE8 		LDMFD	LR!, {R1}											
+ 1056 0074 001080E5 		STR		R1, [R0]										
+ 1057 0078 0100BEE8 		LDMFD	LR!, {R0}											
+ 1058 007c 00F069E1 		MSR		SPSR, R0										
+ 1059 0080 FF7FDEE8 		LDMFD	LR, {R0-R14}^										
+ 1060 0084 0000A0E1 		NOP														
+ 1061 0088 3CE09EE5 		LDR		LR, [LR, #+60]									
+ 1062 008c 04F05EE2 		SUBS	PC, LR, #4											
+ 1063              		
+ 1064              	@ 0 "" 2
+ 1065 0090 003095E5 		ldr	r3, [r5, #0]
+ 1066 0094 003094E5 		ldr	r3, [r4, #0]
+ 1067              	.LBE5:
+ 380:interrupts.c  **** }
+ 1068              		.loc 1 380 0
+ 1069              	.L58:
+ 1070              		.align	2
+ 1071              	.L57:
+ 1072 0098 00000000 		.word	ulCriticalNesting
+ 1073 009c 00000000 		.word	pxCurrentTCB
+ 1074              		.cfi_endproc
+ 1075              	.LFE383:
+ 1077              		.section	.text.debug_serial_setup,"ax",%progbits
+ 1078              		.align	2
+ 1079              		.global	debug_serial_setup
+ 1081              	debug_serial_setup:
+ 1082              	.LFB385:
+ 474:interrupts.c  **** // -----------------------------------------------------------
+ 475:interrupts.c  **** 
+ 476:interrupts.c  **** 
+ 477:interrupts.c  **** #if 0 // Removed
+ 478:interrupts.c  **** // -----------------------------------------------------------
+ 479:interrupts.c  **** // Function Name       : CAN0_irq_handler
+ 480:interrupts.c  **** // Object              : C handler interrupt function
+ 481:interrupts.c  **** // checks CAN0 peripheral for received data, and queues data
+ 482:interrupts.c  **** // -----------------------------------------------------------
+ 483:interrupts.c  **** /* The interrupt is defined as "naked" as the full context is saved on entry as part of the context
+ 484:interrupts.c  **** void CAN0_irq_handler( void ) __attribute__((naked));
+ 485:interrupts.c  **** 
+ 486:interrupts.c  **** /* function is ordinary c routine */
+ 487:interrupts.c  **** void CAN0_irq_function( void );
+ 488:interrupts.c  **** 
+ 489:interrupts.c  **** void CAN0_irq_handler( void )
+ 490:interrupts.c  **** {
+ 491:interrupts.c  ****     /* Save the context of the interrupted task. */
+ 492:interrupts.c  ****     portSAVE_CONTEXT();
+ 493:interrupts.c  ****     
+ 494:interrupts.c  ****     /* Call the handler function.  This must be a separate 
+ 495:interrupts.c  ****     function unless you can guarantee that handling the 
+ 496:interrupts.c  ****     interrupt will never use any stack space. */
+ 497:interrupts.c  ****     CAN0_irq_function();
+ 498:interrupts.c  **** 
+ 499:interrupts.c  ****     /* Restore the context of the task that is going to 
+ 500:interrupts.c  ****     execute next. This might not be the same as the originally 
+ 501:interrupts.c  ****     interrupted task.*/
+ 502:interrupts.c  ****     portRESTORE_CONTEXT();
+ 503:interrupts.c  **** }
+ 504:interrupts.c  **** 
+ 505:interrupts.c  **** void CAN0_irq_function( void )
+ 506:interrupts.c  **** {
+ 507:interrupts.c  **** register unsigned int cStatus, mStatus;
+ 508:interrupts.c  **** portBASE_TYPE SwitchRequired = pdFALSE;
+ 509:interrupts.c  **** 
+ 510:interrupts.c  **** // must align word data for interrupt else we get a prefetch abort
+ 511:interrupts.c  **** // struct CanMessage CanM __attribute__ ((aligned (16)));
+ 512:interrupts.c  **** struct CanMessage CanM;
+ 513:interrupts.c  **** 
+ 514:interrupts.c  **** // reading status clears it, so it is saved to local variable for later use
+ 515:interrupts.c  **** cStatus = AT91C_BASE_CAN0->CAN_SR;
+ 516:interrupts.c  **** 
+ 517:interrupts.c  **** // message box 1 interrupt
+ 518:interrupts.c  **** if( cStatus & AT91C_CAN_MB1 )
+ 519:interrupts.c  ****   {
+ 520:interrupts.c  ****   // new message received - only MCM in message box 1
+ 521:interrupts.c  ****   mStatus =	AT91C_BASE_CAN0->CAN_MB1.CAN_MB_MSR;
+ 522:interrupts.c  ****   if( mStatus & AT91C_CAN_MRDY )
+ 523:interrupts.c  ****     {
+ 524:interrupts.c  ****     // get message from CAN0 peripheral
+ 525:interrupts.c  ****     CanM.Id = AT91C_BASE_CAN0->CAN_MB1.CAN_MB_MID; // Message ID
+ 526:interrupts.c  ****     CanM.Data.l[0] = AT91C_BASE_CAN0->CAN_MB1.CAN_MB_MDL; // Message Data Low 		
+ 527:interrupts.c  ****     CanM.Data.l[1] = AT91C_BASE_CAN0->CAN_MB1.CAN_MB_MDH; // Message Data High 		
+ 528:interrupts.c  ****     
+ 529:interrupts.c  ****     // set to receive next message, clears MRDY & MABT 
+ 530:interrupts.c  ****     AT91C_BASE_CAN0->CAN_MB1.CAN_MB_MCR = AT91C_CAN_MTCR;
+ 531:interrupts.c  **** 
+ 532:interrupts.c  ****     // post the CAN message message to queue    
+ 533:interrupts.c  ****     xQueueSendFromISR( RxCAN_MCM, (void *)&CanM, &SwitchRequired );
+ 534:interrupts.c  ****     }
+ 535:interrupts.c  ****   }
+ 536:interrupts.c  **** 
+ 537:interrupts.c  **** if( SwitchRequired )                                          \
+ 538:interrupts.c  **** {
+ 539:interrupts.c  **** 	portYIELD_FROM_ISR();
+ 540:interrupts.c  **** }
+ 541:interrupts.c  **** 
+ 542:interrupts.c  **** // reset interrupt, any value can be written so use peripheral ID
+ 543:interrupts.c  **** AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_CAN0;
+ 544:interrupts.c  **** 
+ 545:interrupts.c  **** }
+ 546:interrupts.c  **** // -----------------------------------------------------------
+ 547:interrupts.c  **** #endif
+ 548:interrupts.c  **** 
+ 549:interrupts.c  **** 
+ 550:interrupts.c  **** // -----------------------------------------------------------
+ 551:interrupts.c  **** // Function Name       : debug_serial_setup
+ 552:interrupts.c  **** // -----------------------------------------------------------
+ 553:interrupts.c  **** void debug_serial_setup( void )
+ 554:interrupts.c  **** {
+ 1083              		.loc 1 554 0
+ 1084              		.cfi_startproc
+ 1085              		@ Function supports interworking.
+ 1086              		@ args = 0, pretend = 0, frame = 0
+ 1087              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1088              		@ link register save eliminated.
+ 555:interrupts.c  **** // Enable clock - system peripherals are always on
+ 556:interrupts.c  **** // AT91F_DBGU_CfgPMC();
+ 557:interrupts.c  **** 
+ 558:interrupts.c  **** // select DEBUG, PIOA pin 30 & 31 to peripheral A
+ 559:interrupts.c  **** AT91C_BASE_PIOA->PIO_ASR = AT91C_PA30_DRXD | AT91C_PA31_DTXD; 
+ 1089              		.loc 1 559 0
+ 1090 0000 0030E0E3 		mvn	r3, #0
+ 1091 0004 0321A0E3 		mov	r2, #-1073741824
+ 1092 0008 8F2B03E5 		str	r2, [r3, #-2959]
+ 560:interrupts.c  **** // disable PIO control of pin 30 & 31 (enabling peripheral control)
+ 561:interrupts.c  **** AT91C_BASE_PIOA->PIO_PDR = AT91C_PA30_DRXD | AT91C_PA31_DTXD;
+ 1093              		.loc 1 561 0
+ 1094 000c FB2B03E5 		str	r2, [r3, #-3067]
+ 562:interrupts.c  **** 
+ 563:interrupts.c  **** // Disable all USART0 interrupt sources to begin... */
+ 564:interrupts.c  **** AT91C_BASE_DBGU->DBGU_IDR = 0xFFFFFFFF;
+ 1095              		.loc 1 564 0
+ 1096 0010 F33D03E5 		str	r3, [r3, #-3571]
+ 565:interrupts.c  **** 
+ 566:interrupts.c  **** // Disable Debug Interrupts	
+ 567:interrupts.c  **** AT91C_BASE_DBGU->DBGU_IDR = AT91C_US_RXRDY | AT91C_US_TXRDY;
+ 1097              		.loc 1 567 0
+ 1098 0014 0320A0E3 		mov	r2, #3
+ 1099 0018 F32D03E5 		str	r2, [r3, #-3571]
+ 568:interrupts.c  **** 
+ 569:interrupts.c  **** // Reset various status bits (just in case)...
+ 570:interrupts.c  **** AT91C_BASE_DBGU->DBGU_CR = AT91C_US_RSTRX | AT91C_US_RSTTX | AT91C_US_RXDIS | AT91C_US_TXDIS | AT91
+ 1100              		.loc 1 570 0
+ 1101 001c 6B2FA0E3 		mov	r2, #428
+ 1102 0020 FF2D03E5 		str	r2, [r3, #-3583]
+ 571:interrupts.c  **** 
+ 572:interrupts.c  **** // set the baud rate divisor register
+ 573:interrupts.c  ****  AT91C_BASE_DBGU->DBGU_BRGR = BAUD9600;
+ 1103              		.loc 1 573 0
+ 1104 0024 4E2FA0E3 		mov	r2, #312
+ 1105 0028 DF2D03E5 		str	r2, [r3, #-3551]
+ 574:interrupts.c  **** /*AT91C_BASE_DBGU->DBGU_BRGR = BAUD115200;*/
+ 575:interrupts.c  **** 
+ 576:interrupts.c  **** // enable transmitter
+ 577:interrupts.c  **** AT91C_BASE_DBGU->DBGU_CR = AT91C_US_TXEN;
+ 1106              		.loc 1 577 0
+ 1107 002c 4020A0E3 		mov	r2, #64
+ 1108 0030 FF2D03E5 		str	r2, [r3, #-3583]
+ 578:interrupts.c  **** 
+ 579:interrupts.c  **** while( !(AT91C_BASE_DBGU->DBGU_CSR & AT91C_US_TXRDY) )
+ 1109              		.loc 1 579 0
+ 1110 0034 0320A0E1 		mov	r2, r3
+ 1111              	.L60:
+ 1112              		.loc 1 579 0 is_stmt 0 discriminator 1
+ 1113 0038 EB3D12E5 		ldr	r3, [r2, #-3563]
+ 1114 003c 020013E3 		tst	r3, #2
+ 1115 0040 FCFFFF0A 		beq	.L60
+ 580:interrupts.c  ****   {
+ 581:interrupts.c  ****   }
+ 582:interrupts.c  **** }
+ 1116              		.loc 1 582 0 is_stmt 1
+ 1117 0044 1EFF2FE1 		bx	lr
+ 1118              		.cfi_endproc
+ 1119              	.LFE385:
+ 1121              		.section	.text.debug_message_wait,"ax",%progbits
+ 1122              		.align	2
+ 1123              		.global	debug_message_wait
+ 1125              	debug_message_wait:
+ 1126              	.LFB386:
+ 583:interrupts.c  **** // -----------------------------------------------------------
+ 584:interrupts.c  **** 
+ 585:interrupts.c  **** 
+ 586:interrupts.c  **** // -----------------------------------------------------------
+ 587:interrupts.c  **** // Function Name       : debug_message_wait
+ 588:interrupts.c  **** // -----------------------------------------------------------
+ 589:interrupts.c  **** void debug_message_wait( void )
+ 590:interrupts.c  **** {
+ 1127              		.loc 1 590 0
+ 1128              		.cfi_startproc
+ 1129              		@ Function supports interworking.
+ 1130              		@ args = 0, pretend = 0, frame = 0
+ 1131              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1132              		@ link register save eliminated.
+ 591:interrupts.c  **** 
+ 592:interrupts.c  **** while( !(AT91C_BASE_DBGU->DBGU_CSR & AT91C_US_TXRDY) )
+ 1133              		.loc 1 592 0
+ 1134 0000 0020E0E3 		mvn	r2, #0
+ 1135              	.L63:
+ 1136              		.loc 1 592 0 is_stmt 0 discriminator 1
+ 1137 0004 EB3D12E5 		ldr	r3, [r2, #-3563]
+ 1138 0008 020013E3 		tst	r3, #2
+ 1139 000c FCFFFF0A 		beq	.L63
+ 593:interrupts.c  ****   {
+ 594:interrupts.c  ****   }
+ 595:interrupts.c  **** }
+ 1140              		.loc 1 595 0 is_stmt 1
+ 1141 0010 1EFF2FE1 		bx	lr
+ 1142              		.cfi_endproc
+ 1143              	.LFE386:
+ 1145              		.section	.text.debug_message,"ax",%progbits
+ 1146              		.align	2
+ 1147              		.global	debug_message
+ 1149              	debug_message:
+ 1150              	.LFB387:
+ 596:interrupts.c  **** // -----------------------------------------------------------
+ 597:interrupts.c  **** 
+ 598:interrupts.c  **** 
+ 599:interrupts.c  **** // -----------------------------------------------------------
+ 600:interrupts.c  **** // Function Name       : debug_message
+ 601:interrupts.c  **** // -----------------------------------------------------------
+ 602:interrupts.c  **** void debug_message( unsigned char *pt )
+ 603:interrupts.c  **** {
+ 1151              		.loc 1 603 0
+ 1152              		.cfi_startproc
+ 1153              		@ Function supports interworking.
+ 1154              		@ args = 0, pretend = 0, frame = 0
+ 1155              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1156              		@ link register save eliminated.
+ 1157              	.LVL60:
+ 602:interrupts.c  **** void debug_message( unsigned char *pt )
+ 1158              		.loc 1 602 0
+ 1159 0000 010040E2 		sub	r0, r0, #1
+ 1160              	.LVL61:
+ 604:interrupts.c  **** 
+ 605:interrupts.c  **** while( *pt )
+ 606:interrupts.c  ****   {
+ 607:interrupts.c  ****   AT91C_BASE_DBGU->DBGU_THR = *pt++;
+ 1161              		.loc 1 607 0
+ 1162 0004 0020E0E3 		mvn	r2, #0
+ 605:interrupts.c  **** while( *pt )
+ 1163              		.loc 1 605 0
+ 1164 0008 030000EA 		b	.L66
+ 1165              	.LVL62:
+ 1166              	.L68:
+ 1167              		.loc 1 607 0
+ 1168 000c E33D02E5 		str	r3, [r2, #-3555]
+ 1169              	.L67:
+ 608:interrupts.c  ****   while( !(AT91C_BASE_DBGU->DBGU_CSR & AT91C_US_TXRDY) )
+ 1170              		.loc 1 608 0 discriminator 1
+ 1171 0010 EB3D12E5 		ldr	r3, [r2, #-3563]
+ 1172 0014 020013E3 		tst	r3, #2
+ 1173 0018 FCFFFF0A 		beq	.L67
+ 1174              	.L66:
+ 605:interrupts.c  **** while( *pt )
+ 1175              		.loc 1 605 0 discriminator 1
+ 1176 001c 0130F0E5 		ldrb	r3, [r0, #1]!	@ zero_extendqisi2
+ 1177 0020 000053E3 		cmp	r3, #0
+ 1178 0024 F8FFFF1A 		bne	.L68
+ 609:interrupts.c  ****     {
+ 610:interrupts.c  ****     }
+ 611:interrupts.c  ****   }
+ 612:interrupts.c  **** }
+ 1179              		.loc 1 612 0
+ 1180 0028 1EFF2FE1 		bx	lr
+ 1181              		.cfi_endproc
+ 1182              	.LFE387:
+ 1184              		.section	.text.IntToString,"ax",%progbits
+ 1185              		.align	2
+ 1186              		.global	IntToString
+ 1188              	IntToString:
+ 1189              	.LFB388:
+ 613:interrupts.c  **** // -----------------------------------------------------------
+ 614:interrupts.c  **** 
+ 615:interrupts.c  **** 
+ 616:interrupts.c  **** // -----------------------------------------------------------
+ 617:interrupts.c  **** // Function Name       : IntToString
+ 618:interrupts.c  **** // 32 bit int to hex string 0x00000000 format
+ 619:interrupts.c  **** // -----------------------------------------------------------
+ 620:interrupts.c  **** unsigned char *IntToString( unsigned long int i )
+ 621:interrupts.c  **** {
+ 1190              		.loc 1 621 0
+ 1191              		.cfi_startproc
+ 1192              		@ Function supports interworking.
+ 1193              		@ args = 0, pretend = 0, frame = 0
+ 1194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1195              		@ link register save eliminated.
+ 1196              	.LVL63:
+ 622:interrupts.c  **** unsigned char *pt;
+ 623:interrupts.c  **** 
+ 624:interrupts.c  **** pt = (unsigned char *)buffer + 10;
+ 625:interrupts.c  **** *pt = 0x00; // 10
+ 1197              		.loc 1 625 0
+ 1198 0000 94309FE5 		ldr	r3, .L71
+ 1199 0004 0020A0E3 		mov	r2, #0
+ 1200 0008 0A20C3E5 		strb	r2, [r3, #10]
+ 1201              	.LVL64:
+ 626:interrupts.c  **** pt--;
+ 627:interrupts.c  **** *pt = binHex[i % 0x10]; // 9
+ 1202              		.loc 1 627 0
+ 1203 000c 8C209FE5 		ldr	r2, .L71+4
+ 1204 0010 0F1000E2 		and	r1, r0, #15
+ 1205 0014 0110D2E7 		ldrb	r1, [r2, r1]	@ zero_extendqisi2
+ 1206 0018 0910C3E5 		strb	r1, [r3, #9]
+ 628:interrupts.c  **** i = i / 0x10;
+ 1207              		.loc 1 628 0
+ 1208 001c 2012A0E1 		mov	r1, r0, lsr #4
+ 1209              	.LVL65:
+ 629:interrupts.c  **** pt--;
+ 630:interrupts.c  **** *pt = binHex[i % 0x10]; // 8
+ 1210              		.loc 1 630 0
+ 1211 0020 0FC001E2 		and	ip, r1, #15
+ 1212 0024 0CC0D2E7 		ldrb	ip, [r2, ip]	@ zero_extendqisi2
+ 1213 0028 08C0C3E5 		strb	ip, [r3, #8]
+ 631:interrupts.c  **** i = i / 0x10;
+ 1214              		.loc 1 631 0
+ 1215 002c 2004A0E1 		mov	r0, r0, lsr #8
+ 1216              	.LVL66:
+ 632:interrupts.c  **** pt--;
+ 633:interrupts.c  **** *pt = binHex[i % 0x10]; // 7
+ 1217              		.loc 1 633 0
+ 1218 0030 0FC000E2 		and	ip, r0, #15
+ 1219 0034 0CC0D2E7 		ldrb	ip, [r2, ip]	@ zero_extendqisi2
+ 1220 0038 07C0C3E5 		strb	ip, [r3, #7]
+ 634:interrupts.c  **** i = i / 0x10;
+ 1221              		.loc 1 634 0
+ 1222 003c 2114A0E1 		mov	r1, r1, lsr #8
+ 1223              	.LVL67:
+ 635:interrupts.c  **** pt--;
+ 636:interrupts.c  **** *pt = binHex[i % 0x10]; // 6
+ 1224              		.loc 1 636 0
+ 1225 0040 0FC001E2 		and	ip, r1, #15
+ 1226 0044 0CC0D2E7 		ldrb	ip, [r2, ip]	@ zero_extendqisi2
+ 1227 0048 06C0C3E5 		strb	ip, [r3, #6]
+ 637:interrupts.c  **** i = i / 0x10;
+ 1228              		.loc 1 637 0
+ 1229 004c 2004A0E1 		mov	r0, r0, lsr #8
+ 1230              	.LVL68:
+ 638:interrupts.c  **** pt--;
+ 639:interrupts.c  **** *pt = binHex[i % 0x10]; // 5
+ 1231              		.loc 1 639 0
+ 1232 0050 0FC000E2 		and	ip, r0, #15
+ 1233 0054 0CC0D2E7 		ldrb	ip, [r2, ip]	@ zero_extendqisi2
+ 1234 0058 05C0C3E5 		strb	ip, [r3, #5]
+ 640:interrupts.c  **** i = i / 0x10;
+ 1235              		.loc 1 640 0
+ 1236 005c 2114A0E1 		mov	r1, r1, lsr #8
+ 1237              	.LVL69:
+ 641:interrupts.c  **** pt--;
+ 642:interrupts.c  **** *pt = binHex[i % 0x10]; // 4
+ 1238              		.loc 1 642 0
+ 1239 0060 0FC001E2 		and	ip, r1, #15
+ 1240 0064 0CC0D2E7 		ldrb	ip, [r2, ip]	@ zero_extendqisi2
+ 1241 0068 04C0C3E5 		strb	ip, [r3, #4]
+ 643:interrupts.c  **** i = i / 0x10;
+ 1242              		.loc 1 643 0
+ 1243 006c 2004A0E1 		mov	r0, r0, lsr #8
+ 1244              	.LVL70:
+ 644:interrupts.c  **** pt--;
+ 645:interrupts.c  **** *pt = binHex[i % 0x10]; // 3
+ 1245              		.loc 1 645 0
+ 1246 0070 0F0000E2 		and	r0, r0, #15
+ 1247              	.LVL71:
+ 1248 0074 0000D2E7 		ldrb	r0, [r2, r0]	@ zero_extendqisi2
+ 1249 0078 0300C3E5 		strb	r0, [r3, #3]
+ 1250              	.LVL72:
+ 646:interrupts.c  **** i = i / 0x10;
+ 647:interrupts.c  **** pt--;
+ 648:interrupts.c  **** *pt = binHex[i % 0x10]; // 2
+ 1251              		.loc 1 648 0
+ 1252 007c 2124D2E7 		ldrb	r2, [r2, r1, lsr #8]	@ zero_extendqisi2
+ 1253 0080 0220C3E5 		strb	r2, [r3, #2]
+ 1254              	.LVL73:
+ 649:interrupts.c  **** pt--;
+ 650:interrupts.c  **** *pt = 'x'; // 1
+ 1255              		.loc 1 650 0
+ 1256 0084 7820A0E3 		mov	r2, #120
+ 1257 0088 0120C3E5 		strb	r2, [r3, #1]
+ 1258              	.LVL74:
+ 651:interrupts.c  **** pt--;
+ 652:interrupts.c  **** *pt = '0'; // 0
+ 1259              		.loc 1 652 0
+ 1260 008c 3020A0E3 		mov	r2, #48
+ 1261 0090 0020C3E5 		strb	r2, [r3, #0]
+ 653:interrupts.c  **** 
+ 654:interrupts.c  **** return( pt );
+ 655:interrupts.c  **** 
+ 656:interrupts.c  **** /*
+ 657:interrupts.c  **** buffer[10] = 0x00;
+ 658:interrupts.c  **** buffer[9] = binHex[i % 0x10];
+ 659:interrupts.c  **** i = i / 0x10;
+ 660:interrupts.c  **** buffer[8] = binHex[i % 0x10];
+ 661:interrupts.c  **** i = i / 0x10;
+ 662:interrupts.c  **** buffer[7] = binHex[i % 0x10];
+ 663:interrupts.c  **** i = i / 0x10;
+ 664:interrupts.c  **** buffer[6] = binHex[i % 0x10];
+ 665:interrupts.c  **** i = i / 0x10;
+ 666:interrupts.c  **** buffer[5] = binHex[i % 0x10];
+ 667:interrupts.c  **** i = i / 0x10;
+ 668:interrupts.c  **** buffer[4] = binHex[i % 0x10];
+ 669:interrupts.c  **** i = i / 0x10;
+ 670:interrupts.c  **** buffer[3] = binHex[i % 0x10];
+ 671:interrupts.c  **** i = i / 0x10;
+ 672:interrupts.c  **** buffer[2] = binHex[i % 0x10];
+ 673:interrupts.c  **** buffer[1] = 'x';
+ 674:interrupts.c  **** buffer[0] = '0';
+ 675:interrupts.c  **** 
+ 676:interrupts.c  **** return( &buffer[0] );
+ 677:interrupts.c  **** */
+ 678:interrupts.c  **** }
+ 1262              		.loc 1 678 0
+ 1263 0094 0300A0E1 		mov	r0, r3
+ 1264 0098 1EFF2FE1 		bx	lr
+ 1265              	.L72:
+ 1266              		.align	2
+ 1267              	.L71:
+ 1268 009c 00000000 		.word	buffer
+ 1269 00a0 00000000 		.word	binHex
+ 1270              		.cfi_endproc
+ 1271              	.LFE388:
+ 1273              		.section	.text.DebugAbortMessage,"ax",%progbits
+ 1274              		.align	2
+ 1275              		.global	DebugAbortMessage
+ 1277              	DebugAbortMessage:
+ 1278              	.LFB389:
+ 679:interrupts.c  **** /*-----------------------------------------------------------*/
+ 680:interrupts.c  **** 
+ 681:interrupts.c  **** 
+ 682:interrupts.c  **** unsigned char const * const DebugMessage[6] = {
+ 683:interrupts.c  ****  "\r\nUndefined IRQ",
+ 684:interrupts.c  ****  "\r\nPrefetch  IRQ",
+ 685:interrupts.c  ****  "\r\nReserved  IRQ",
+ 686:interrupts.c  ****  "\r\nDataAbort IRQ",
+ 687:interrupts.c  ****  "\r\nDefault   FIQ",
+ 688:interrupts.c  ****  "\r\nDefault   IRQ"
+ 689:interrupts.c  ****  };
+ 690:interrupts.c  **** 
+ 691:interrupts.c  **** #define DEBUG_UNDEFINED_INSTRUCTION_MESSAGE 0
+ 692:interrupts.c  **** #define DEBUG_PREFETCH_ABORT_MESSAGE        1
+ 693:interrupts.c  **** #define DEBUG_RESERVED_IRQ_MESSAGE          2
+ 694:interrupts.c  **** #define DEBUG_DATA_ABORT_MESSAGE            3
+ 695:interrupts.c  **** #define DEBUG_FIQ_MESSAGE                   4
+ 696:interrupts.c  **** #define DEBUG_IRQ_MESSAGE                   5
+ 697:interrupts.c  **** 
+ 698:interrupts.c  **** 
+ 699:interrupts.c  **** // -----------------------------------------------------------
+ 700:interrupts.c  **** // Function Name       : DebugAbortMessage
+ 701:interrupts.c  **** // -----------------------------------------------------------
+ 702:interrupts.c  **** void DebugAbortMessage( unsigned char messageID, int *lnk_ptr )
+ 703:interrupts.c  **** {
+ 1279              		.loc 1 703 0
+ 1280              		.cfi_startproc
+ 1281              		@ Function supports interworking.
+ 1282              		@ Volatile: function does not return.
+ 1283              		@ args = 0, pretend = 0, frame = 0
+ 1284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1285              	.LVL75:
+ 1286 0000 08402DE9 		stmfd	sp!, {r3, lr}
+ 1287              	.LCFI7:
+ 1288              		.cfi_def_cfa_offset 8
+ 1289              		.cfi_offset 3, -8
+ 1290              		.cfi_offset 14, -4
+ 1291 0004 0050A0E1 		mov	r5, r0
+ 1292 0008 0140A0E1 		mov	r4, r1
+ 704:interrupts.c  **** 
+ 705:interrupts.c  **** // done in main, as is always debug port
+ 706:interrupts.c  **** //debug_serial_setup();
+ 707:interrupts.c  **** 
+ 708:interrupts.c  **** debug_message( "\r\n" );
+ 1293              		.loc 1 708 0
+ 1294 000c 74009FE5 		ldr	r0, .L74
+ 1295              	.LVL76:
+ 1296 0010 FEFFFFEB 		bl	debug_message
+ 1297              	.LVL77:
+ 709:interrupts.c  **** 
+ 710:interrupts.c  **** debug_message( (unsigned char *)DebugMessage[messageID] );
+ 1298              		.loc 1 710 0
+ 1299 0014 70309FE5 		ldr	r3, .L74+4
+ 1300 0018 050193E7 		ldr	r0, [r3, r5, asl #2]
+ 1301 001c FEFFFFEB 		bl	debug_message
+ 1302              	.LVL78:
+ 711:interrupts.c  **** 
+ 712:interrupts.c  **** debug_message( ", Add: " );
+ 1303              		.loc 1 712 0
+ 1304 0020 68009FE5 		ldr	r0, .L74+8
+ 1305 0024 FEFFFFEB 		bl	debug_message
+ 1306              	.LVL79:
+ 713:interrupts.c  **** debug_message( IntToString( AT91C_BASE_MC->MC_AASR ) );
+ 1307              		.loc 1 713 0
+ 1308 0028 0050E0E3 		mvn	r5, #0
+ 1309 002c F70015E5 		ldr	r0, [r5, #-247]
+ 1310 0030 FEFFFFEB 		bl	IntToString
+ 1311              	.LVL80:
+ 1312 0034 FEFFFFEB 		bl	debug_message
+ 1313              	.LVL81:
+ 714:interrupts.c  **** 
+ 715:interrupts.c  **** debug_message( " Sta: " );
+ 1314              		.loc 1 715 0
+ 1315 0038 54009FE5 		ldr	r0, .L74+12
+ 1316 003c FEFFFFEB 		bl	debug_message
+ 1317              	.LVL82:
+ 716:interrupts.c  **** debug_message( IntToString( AT91C_BASE_MC->MC_ASR ) );
+ 1318              		.loc 1 716 0
+ 1319 0040 FB0015E5 		ldr	r0, [r5, #-251]
+ 1320 0044 FEFFFFEB 		bl	IntToString
+ 1321              	.LVL83:
+ 1322 0048 FEFFFFEB 		bl	debug_message
+ 1323              	.LVL84:
+ 717:interrupts.c  **** 
+ 718:interrupts.c  **** debug_message( ", LP " );
+ 1324              		.loc 1 718 0
+ 1325 004c 44009FE5 		ldr	r0, .L74+16
+ 1326 0050 FEFFFFEB 		bl	debug_message
+ 1327              	.LVL85:
+ 719:interrupts.c  **** debug_message( IntToString( (unsigned long int)lnk_ptr ) );
+ 1328              		.loc 1 719 0
+ 1329 0054 0400A0E1 		mov	r0, r4
+ 1330 0058 FEFFFFEB 		bl	IntToString
+ 1331              	.LVL86:
+ 1332 005c FEFFFFEB 		bl	debug_message
+ 1333              	.LVL87:
+ 720:interrupts.c  **** 
+ 721:interrupts.c  **** debug_message( " (" );
+ 1334              		.loc 1 721 0
+ 1335 0060 34009FE5 		ldr	r0, .L74+20
+ 1336 0064 FEFFFFEB 		bl	debug_message
+ 1337              	.LVL88:
+ 722:interrupts.c  **** debug_message( IntToString( (unsigned long int)(*lnk_ptr) ) );
+ 1338              		.loc 1 722 0
+ 1339 0068 000094E5 		ldr	r0, [r4, #0]
+ 1340 006c FEFFFFEB 		bl	IntToString
+ 1341              	.LVL89:
+ 1342 0070 FEFFFFEB 		bl	debug_message
+ 1343              	.LVL90:
+ 723:interrupts.c  **** 
+ 724:interrupts.c  **** debug_message( ")\r\n" );
+ 1344              		.loc 1 724 0
+ 1345 0074 24009FE5 		ldr	r0, .L74+24
+ 1346 0078 FEFFFFEB 		bl	debug_message
+ 1347              	.LVL91:
+ 725:interrupts.c  **** 
+ 726:interrupts.c  **** debug_message_wait(); // wait for com port ready
+ 1348              		.loc 1 726 0
+ 1349 007c FEFFFFEB 		bl	debug_message_wait
+ 1350              	.LVL92:
+ 727:interrupts.c  **** 
+ 728:interrupts.c  **** //vTaskList( (unsigned char *)buffer );
+ 729:interrupts.c  **** //vTaskSuspendAll(); // stop task switching
+ 730:interrupts.c  **** //debug_message( (unsigned char *)buffer );
+ 731:interrupts.c  **** //debug_message_wait();
+ 732:interrupts.c  **** 
+ 733:interrupts.c  **** // Restart
+ 734:interrupts.c  **** // AT91C_BASE_RSTC->RSTC_RCR = (0xA5000000 | AT91C_RSTC_PROCRST | AT91C_RSTC_PERRST | AT91C_RSTC_EX
+ 735:interrupts.c  **** 
+ 736:interrupts.c  **** // loops forever on Arm
+ 737:interrupts.c  **** exit( 1 );
+ 1351              		.loc 1 737 0
+ 1352 0080 0100A0E3 		mov	r0, #1
+ 1353 0084 FEFFFFEB 		bl	exit
+ 1354              	.LVL93:
+ 1355              	.L75:
+ 1356              		.align	2
+ 1357              	.L74:
+ 1358 0088 00000000 		.word	.LC0
+ 1359 008c 00000000 		.word	.LANCHOR18
+ 1360 0090 04000000 		.word	.LC1
+ 1361 0094 0C000000 		.word	.LC2
+ 1362 0098 14000000 		.word	.LC3
+ 1363 009c 1C000000 		.word	.LC4
+ 1364 00a0 20000000 		.word	.LC5
+ 1365              		.cfi_endproc
+ 1366              	.LFE389:
+ 1368              		.section	.text.AT91F_Undefined_Instruction_handler,"ax",%progbits
+ 1369              		.align	2
+ 1370              		.global	AT91F_Undefined_Instruction_handler
+ 1372              	AT91F_Undefined_Instruction_handler:
+ 1373              	.LFB390:
+ 738:interrupts.c  **** 
+ 739:interrupts.c  **** /*
+ 740:interrupts.c  **** AT91C_MC_UNDADD       ((unsigned int) 0x1 <<  0) // (MC) Undefined Address Abort Status
+ 741:interrupts.c  **** AT91C_MC_MISADD       ((unsigned int) 0x1 <<  1) // (MC) Misaligned Address Abort Status
+ 742:interrupts.c  **** AT91C_MC_MPU          ((unsigned int) 0x1 <<  2) // (MC) Memory protection Unit Abort Status
+ 743:interrupts.c  **** AT91C_MC_ABTSZ        ((unsigned int) 0x3 <<  8) // (MC) Abort Size Status
+ 744:interrupts.c  **** 	AT91C_MC_ABTSZ_BYTE                 ((unsigned int) 0x0 <<  8) // (MC) Byte
+ 745:interrupts.c  **** 	AT91C_MC_ABTSZ_HWORD                ((unsigned int) 0x1 <<  8) // (MC) Half-word
+ 746:interrupts.c  **** 	AT91C_MC_ABTSZ_WORD                 ((unsigned int) 0x2 <<  8) // (MC) Word
+ 747:interrupts.c  **** AT91C_MC_ABTTYP       ((unsigned int) 0x3 << 10) // (MC) Abort Type Status
+ 748:interrupts.c  **** 	AT91C_MC_ABTTYP_DATAR                ((unsigned int) 0x0 << 10) // (MC) Data Read
+ 749:interrupts.c  **** 	AT91C_MC_ABTTYP_DATAW                ((unsigned int) 0x1 << 10) // (MC) Data Write
+ 750:interrupts.c  **** 	AT91C_MC_ABTTYP_FETCH                ((unsigned int) 0x2 << 10) // (MC) Code Fetch
+ 751:interrupts.c  **** AT91C_MC_MST0         ((unsigned int) 0x1 << 16) // (MC) Master 0 Abort Source
+ 752:interrupts.c  **** AT91C_MC_MST1         ((unsigned int) 0x1 << 17) // (MC) Master 1 Abort Source
+ 753:interrupts.c  **** AT91C_MC_SVMST0       ((unsigned int) 0x1 << 24) // (MC) Saved Master 0 Abort Source
+ 754:interrupts.c  **** AT91C_MC_SVMST1       ((unsigned int) 0x1 << 25) // (MC) Saved Master 1 Abort Source
+ 755:interrupts.c  **** */
+ 756:interrupts.c  **** 
+ 757:interrupts.c  **** }
+ 758:interrupts.c  **** // -----------------------------------------------------------
+ 759:interrupts.c  **** 
+ 760:interrupts.c  **** 
+ 761:interrupts.c  **** // -----------------------------------------------------------
+ 762:interrupts.c  **** // Function Name       : AT91F_Undefined_Instruction_handler
+ 763:interrupts.c  **** // Undefined Interrupt will send Debug Message then Restart
+ 764:interrupts.c  **** // -----------------------------------------------------------
+ 765:interrupts.c  **** /* void AT91F_Undefined_Instruction_handler( void ) __attribute__ ((naked,noreturn)) */
+ 766:interrupts.c  **** void AT91F_Undefined_Instruction_handler( void )
+ 767:interrupts.c  **** {
+ 1374              		.loc 1 767 0
+ 1375              		.cfi_startproc
+ 1376              		@ Function supports interworking.
+ 1377              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1378              		@ Volatile: function does not return.
+ 1379              		@ args = 0, pretend = 0, frame = 0
+ 1380              		@ frame_needed = 0, uses_anonymous_args = 0
+ 768:interrupts.c  **** register int *lnk_ptr;
+ 769:interrupts.c  **** 
+ 770:interrupts.c  **** __asm__ __volatile__ (
+ 1381              		.loc 1 770 0
+ 1382              	@ 770 "interrupts.c" 1
+ 1383 0000 04E04EE2 		sub lr, lr, #4
+ 1384 0004 0E10A0E1 	mov r1, lr
+ 1385              	@ 0 "" 2
+ 1386              	.LVL94:
+ 771:interrupts.c  ****       "sub lr, lr, #4\n"
+ 772:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 773:interrupts.c  ****       );
+ 774:interrupts.c  ****       
+ 775:interrupts.c  **** DebugAbortMessage( DEBUG_UNDEFINED_INSTRUCTION_MESSAGE, lnk_ptr );
+ 1387              		.loc 1 775 0
+ 1388 0008 0000A0E3 		mov	r0, #0
+ 1389 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1390              	.LVL95:
+ 1391              		.cfi_endproc
+ 1392              	.LFE390:
+ 1394              		.section	.text.AT91F_Prefetch_Abort_handler,"ax",%progbits
+ 1395              		.align	2
+ 1396              		.global	AT91F_Prefetch_Abort_handler
+ 1398              	AT91F_Prefetch_Abort_handler:
+ 1399              	.LFB391:
+ 776:interrupts.c  **** }
+ 777:interrupts.c  **** // -----------------------------------------------------------
+ 778:interrupts.c  **** 
+ 779:interrupts.c  **** 
+ 780:interrupts.c  **** // -----------------------------------------------------------
+ 781:interrupts.c  **** // Function Name       : AT91F_Prefetch_Abort_handler
+ 782:interrupts.c  **** // Prefetch Abort Interrupt will send Debug Message then Restart
+ 783:interrupts.c  **** // -----------------------------------------------------------
+ 784:interrupts.c  **** /* void AT91F_Prefetch_Abort_handler( void ) __attribute__((naked,noreturn)) */
+ 785:interrupts.c  **** void AT91F_Prefetch_Abort_handler( void )
+ 786:interrupts.c  **** {
+ 1400              		.loc 1 786 0
+ 1401              		.cfi_startproc
+ 1402              		@ Function supports interworking.
+ 1403              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1404              		@ Volatile: function does not return.
+ 1405              		@ args = 0, pretend = 0, frame = 0
+ 1406              		@ frame_needed = 0, uses_anonymous_args = 0
+ 787:interrupts.c  **** register int *lnk_ptr;
+ 788:interrupts.c  **** 
+ 789:interrupts.c  **** __asm__ __volatile__ (
+ 1407              		.loc 1 789 0
+ 1408              	@ 789 "interrupts.c" 1
+ 1409 0000 04E04EE2 		sub lr, lr, #4
+ 1410 0004 0E10A0E1 	mov r1, lr
+ 1411              	@ 0 "" 2
+ 1412              	.LVL96:
+ 790:interrupts.c  ****       "sub lr, lr, #4\n"
+ 791:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 792:interrupts.c  ****       );
+ 793:interrupts.c  ****       
+ 794:interrupts.c  **** DebugAbortMessage( DEBUG_PREFETCH_ABORT_MESSAGE, lnk_ptr );
+ 1413              		.loc 1 794 0
+ 1414 0008 0100A0E3 		mov	r0, #1
+ 1415 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1416              	.LVL97:
+ 1417              		.cfi_endproc
+ 1418              	.LFE391:
+ 1420              		.section	.text.AT91F_Data_Abort_handler,"ax",%progbits
+ 1421              		.align	2
+ 1422              		.global	AT91F_Data_Abort_handler
+ 1424              	AT91F_Data_Abort_handler:
+ 1425              	.LFB392:
+ 795:interrupts.c  **** }
+ 796:interrupts.c  **** // -----------------------------------------------------------
+ 797:interrupts.c  **** 
+ 798:interrupts.c  **** 
+ 799:interrupts.c  **** // -----------------------------------------------------------
+ 800:interrupts.c  **** // Function Name       : AT91F_Data_Abort_handler
+ 801:interrupts.c  **** // Data Abort Interrupt will send Debug Message then Restart
+ 802:interrupts.c  **** // -----------------------------------------------------------
+ 803:interrupts.c  **** /* void AT91F_Data_Abort_handler( void ) __attribute__((naked,noreturn)) */
+ 804:interrupts.c  **** void AT91F_Data_Abort_handler( void )
+ 805:interrupts.c  **** {
+ 1426              		.loc 1 805 0
+ 1427              		.cfi_startproc
+ 1428              		@ Function supports interworking.
+ 1429              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1430              		@ Volatile: function does not return.
+ 1431              		@ args = 0, pretend = 0, frame = 0
+ 1432              		@ frame_needed = 0, uses_anonymous_args = 0
+ 806:interrupts.c  **** register int *lnk_ptr;
+ 807:interrupts.c  **** 
+ 808:interrupts.c  **** __asm__ __volatile__ (
+ 1433              		.loc 1 808 0
+ 1434              	@ 808 "interrupts.c" 1
+ 1435 0000 08E04EE2 		sub lr, lr, #8
+ 1436 0004 0E10A0E1 	mov r1, lr
+ 1437              	@ 0 "" 2
+ 1438              	.LVL98:
+ 809:interrupts.c  ****       "sub lr, lr, #8\n"
+ 810:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 811:interrupts.c  ****       );
+ 812:interrupts.c  ****       
+ 813:interrupts.c  **** DebugAbortMessage( DEBUG_DATA_ABORT_MESSAGE, lnk_ptr );
+ 1439              		.loc 1 813 0
+ 1440 0008 0300A0E3 		mov	r0, #3
+ 1441 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1442              	.LVL99:
+ 1443              		.cfi_endproc
+ 1444              	.LFE392:
+ 1446              		.section	.text.AT91F_Reserved_handler,"ax",%progbits
+ 1447              		.align	2
+ 1448              		.global	AT91F_Reserved_handler
+ 1450              	AT91F_Reserved_handler:
+ 1451              	.LFB393:
+ 814:interrupts.c  **** }
+ 815:interrupts.c  **** // -----------------------------------------------------------
+ 816:interrupts.c  **** 
+ 817:interrupts.c  **** 
+ 818:interrupts.c  **** // -----------------------------------------------------------
+ 819:interrupts.c  **** // Function Name       : AT91F_Reserved_handler
+ 820:interrupts.c  **** // Reserved Interrupt will send Debug Message then Restart
+ 821:interrupts.c  **** // -----------------------------------------------------------
+ 822:interrupts.c  **** /* void AT91F_Reserved_handler( void ) __attribute__((naked,noreturn)) */ 
+ 823:interrupts.c  **** void AT91F_Reserved_handler( void )
+ 824:interrupts.c  **** {
+ 1452              		.loc 1 824 0
+ 1453              		.cfi_startproc
+ 1454              		@ Function supports interworking.
+ 1455              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1456              		@ Volatile: function does not return.
+ 1457              		@ args = 0, pretend = 0, frame = 0
+ 1458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 825:interrupts.c  **** register int *lnk_ptr;
+ 826:interrupts.c  **** 
+ 827:interrupts.c  **** __asm__ __volatile__ (
+ 1459              		.loc 1 827 0
+ 1460              	@ 827 "interrupts.c" 1
+ 1461 0000 04E04EE2 		sub lr, lr, #4
+ 1462 0004 0E10A0E1 	mov r1, lr
+ 1463              	@ 0 "" 2
+ 1464              	.LVL100:
+ 828:interrupts.c  ****       "sub lr, lr, #4\n"
+ 829:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 830:interrupts.c  ****       );
+ 831:interrupts.c  ****       
+ 832:interrupts.c  **** DebugAbortMessage( DEBUG_RESERVED_IRQ_MESSAGE, lnk_ptr );
+ 1465              		.loc 1 832 0
+ 1466 0008 0200A0E3 		mov	r0, #2
+ 1467 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1468              	.LVL101:
+ 1469              		.cfi_endproc
+ 1470              	.LFE393:
+ 1472              		.section	.text.AT91F_Default_FIQ_handler,"ax",%progbits
+ 1473              		.align	2
+ 1474              		.global	AT91F_Default_FIQ_handler
+ 1476              	AT91F_Default_FIQ_handler:
+ 1477              	.LFB394:
+ 833:interrupts.c  **** }
+ 834:interrupts.c  **** // -----------------------------------------------------------
+ 835:interrupts.c  **** 
+ 836:interrupts.c  **** 
+ 837:interrupts.c  **** // -----------------------------------------------------------
+ 838:interrupts.c  **** // Function Name       : AT91F_Default_FIQ_handler
+ 839:interrupts.c  **** // Default FIQ Interrupt will send Debug Message then Restart
+ 840:interrupts.c  **** // -----------------------------------------------------------
+ 841:interrupts.c  **** /* void AT91F_Default_FIQ_handler( void ) __attribute__((naked,noreturn)) */
+ 842:interrupts.c  **** void AT91F_Default_FIQ_handler( void )
+ 843:interrupts.c  **** {
+ 1478              		.loc 1 843 0
+ 1479              		.cfi_startproc
+ 1480              		@ Function supports interworking.
+ 1481              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1482              		@ Volatile: function does not return.
+ 1483              		@ args = 0, pretend = 0, frame = 0
+ 1484              		@ frame_needed = 0, uses_anonymous_args = 0
+ 844:interrupts.c  **** register int *lnk_ptr;
+ 845:interrupts.c  **** 
+ 846:interrupts.c  **** __asm__ __volatile__ (
+ 1485              		.loc 1 846 0
+ 1486              	@ 846 "interrupts.c" 1
+ 1487 0000 04E04EE2 		sub lr, lr, #4
+ 1488 0004 0E10A0E1 	mov r1, lr
+ 1489              	@ 0 "" 2
+ 1490              	.LVL102:
+ 847:interrupts.c  ****       "sub lr, lr, #4\n"
+ 848:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 849:interrupts.c  ****       );
+ 850:interrupts.c  ****       
+ 851:interrupts.c  **** DebugAbortMessage( DEBUG_FIQ_MESSAGE, lnk_ptr );
+ 1491              		.loc 1 851 0
+ 1492 0008 0400A0E3 		mov	r0, #4
+ 1493 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1494              	.LVL103:
+ 1495              		.cfi_endproc
+ 1496              	.LFE394:
+ 1498              		.section	.text.AT91F_Default_IRQ_handler,"ax",%progbits
+ 1499              		.align	2
+ 1500              		.global	AT91F_Default_IRQ_handler
+ 1502              	AT91F_Default_IRQ_handler:
+ 1503              	.LFB395:
+ 852:interrupts.c  **** }
+ 853:interrupts.c  **** // -----------------------------------------------------------
+ 854:interrupts.c  **** 
+ 855:interrupts.c  **** 
+ 856:interrupts.c  **** // -----------------------------------------------------------
+ 857:interrupts.c  **** // Function Name       : AT91F_Default_IRQ_handler
+ 858:interrupts.c  **** // Data IRQ Interrupt will send Debug Message then Restart
+ 859:interrupts.c  **** // -----------------------------------------------------------
+ 860:interrupts.c  **** /* void AT91F_Default_IRQ_handler( void ) __attribute__((naked,noreturn)) */
+ 861:interrupts.c  **** void AT91F_Default_IRQ_handler( void )
+ 862:interrupts.c  **** {
+ 1504              		.loc 1 862 0
+ 1505              		.cfi_startproc
+ 1506              		@ Function supports interworking.
+ 1507              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1508              		@ Volatile: function does not return.
+ 1509              		@ args = 0, pretend = 0, frame = 0
+ 1510              		@ frame_needed = 0, uses_anonymous_args = 0
+ 863:interrupts.c  **** register int *lnk_ptr;
+ 864:interrupts.c  **** 
+ 865:interrupts.c  **** __asm__ __volatile__ (
+ 1511              		.loc 1 865 0
+ 1512              	@ 865 "interrupts.c" 1
+ 1513 0000 04E04EE2 		sub lr, lr, #4
+ 1514 0004 0E10A0E1 	mov r1, lr
+ 1515              	@ 0 "" 2
+ 1516              	.LVL104:
+ 866:interrupts.c  ****       "sub lr, lr, #4\n"
+ 867:interrupts.c  ****       "mov %0, lr" : "=r" (lnk_ptr)
+ 868:interrupts.c  ****       );
+ 869:interrupts.c  ****       
+ 870:interrupts.c  **** DebugAbortMessage( DEBUG_IRQ_MESSAGE, lnk_ptr );
+ 1517              		.loc 1 870 0
+ 1518 0008 0500A0E3 		mov	r0, #5
+ 1519 000c FEFFFFEB 		bl	DebugAbortMessage
+ 1520              	.LVL105:
+ 1521              		.cfi_endproc
+ 1522              	.LFE395:
+ 1524              		.section	.text.AT91F_Spurious_handler,"ax",%progbits
+ 1525              		.align	2
+ 1526              		.global	AT91F_Spurious_handler
+ 1528              	AT91F_Spurious_handler:
+ 1529              	.LFB396:
+ 871:interrupts.c  **** }
+ 872:interrupts.c  **** // -----------------------------------------------------------
+ 873:interrupts.c  **** 
+ 874:interrupts.c  **** 
+ 875:interrupts.c  **** // -----------------------------------------------------------
+ 876:interrupts.c  **** // Function Name       : AT91F_Spurious_handler
+ 877:interrupts.c  **** // Spurious Handler will just return to code
+ 878:interrupts.c  **** // -----------------------------------------------------------
+ 879:interrupts.c  **** /* void AT91F_Spurious_handler( void ) __attribute__((interrupt("IRQ"))) */
+ 880:interrupts.c  **** void AT91F_Spurious_handler( void )
+ 881:interrupts.c  **** {
+ 1530              		.loc 1 881 0
+ 1531              		.cfi_startproc
+ 1532              		@ Interrupt Service Routine.
+ 1533              		@ args = 0, pretend = 0, frame = 0
+ 1534              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1535              		@ link register save eliminated.
+ 1536 0000 0C002DE9 		stmfd	sp!, {r2, r3}
+ 1537              	.LCFI8:
+ 1538              		.cfi_def_cfa_offset 8
+ 1539              		.cfi_offset 2, -8
+ 1540              		.cfi_offset 3, -4
+ 882:interrupts.c  **** 
+ 883:interrupts.c  **** AT91C_BASE_AIC->AIC_EOICR = AT91C_ID_FIQ;
+ 1541              		.loc 1 883 0
+ 1542 0004 0020A0E3 		mov	r2, #0
+ 1543 0008 0030E0E3 		mvn	r3, #0
+ 1544 000c CF2E03E5 		str	r2, [r3, #-3791]
+ 884:interrupts.c  **** }
+ 1545              		.loc 1 884 0
+ 1546 0010 0C00BDE8 		ldmfd	sp!, {r2, r3}
+ 1547 0014 04F05EE2 		subs	pc, lr, #4
+ 1548              		.cfi_endproc
+ 1549              	.LFE396:
+ 1551              		.global	DebugMessage
+ 1552              		.comm	POWERtaskhandle,4,4
+ 1553              		.comm	TWItaskhandle,4,4
+ 1554              		.comm	SetTime,4,4
+ 1555              		.section	.bss.BaleDiaVoltsAccumMultSamples.8078,"aw",%nobits
+ 1556              		.align	2
+ 1557              		.set	.LANCHOR14,. + 0
+ 1560              	BaleDiaVoltsAccumMultSamples.8078:
+ 1561 0000 00000000 		.space	4
+ 1562              		.section	.bss.count.8031,"aw",%nobits
+ 1563              		.align	1
+ 1564              		.set	.LANCHOR10,. + 0
+ 1567              	count.8031:
+ 1568 0000 0000     		.space	2
+ 1569              		.section	.bss.tlast.8020,"aw",%nobits
+ 1570              		.align	2
+ 1571              		.set	.LANCHOR5,. + 0
+ 1574              	tlast.8020:
+ 1575 0000 00000000 		.space	4
+ 1576              		.section	.bss.time.8030,"aw",%nobits
+ 1577              		.align	1
+ 1578              		.set	.LANCHOR8,. + 0
+ 1581              	time.8030:
+ 1582 0000 0000     		.space	2
+ 1583              		.section	.bss.tlast.8025,"aw",%nobits
+ 1584              		.align	2
+ 1585              		.set	.LANCHOR6,. + 0
+ 1588              	tlast.8025:
+ 1589 0000 00000000 		.space	4
+ 1590              		.section	.bss.fnow.8006,"aw",%nobits
+ 1591              		.set	.LANCHOR0,. + 0
+ 1594              	fnow.8006:
+ 1595 0000 00       		.space	1
+ 1596              		.section	.bss.stime.8032,"aw",%nobits
+ 1597              		.align	2
+ 1598              		.set	.LANCHOR9,. + 0
+ 1601              	stime.8032:
+ 1602 0000 00000000 		.space	4
+ 1603              		.section	.bss.tlast.8033,"aw",%nobits
+ 1604              		.align	2
+ 1605              		.set	.LANCHOR11,. + 0
+ 1608              	tlast.8033:
+ 1609 0000 00000000 		.space	4
+ 1610              		.section	.bss.SampleCount.8077,"aw",%nobits
+ 1611              		.set	.LANCHOR13,. + 0
+ 1614              	SampleCount.8077:
+ 1615 0000 00       		.space	1
+ 1616              		.section	.rodata.DebugMessage,"a",%progbits
+ 1617              		.align	2
+ 1618              		.set	.LANCHOR18,. + 0
+ 1621              	DebugMessage:
+ 1622 0000 24000000 		.word	.LC6
+ 1623 0004 34000000 		.word	.LC7
+ 1624 0008 44000000 		.word	.LC8
+ 1625 000c 54000000 		.word	.LC9
+ 1626 0010 64000000 		.word	.LC10
+ 1627 0014 74000000 		.word	.LC11
+ 1628              		.section	.bss.stime.8004,"aw",%nobits
+ 1629              		.align	2
+ 1630              		.set	.LANCHOR2,. + 0
+ 1633              	stime.8004:
+ 1634 0000 00000000 		.space	4
+ 1635              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1636              		.align	2
+ 1637              	.LC0:
+ 1638 0000 0D0A00   		.ascii	"\015\012\000"
+ 1639 0003 00       		.space	1
+ 1640              	.LC1:
+ 1641 0004 2C204164 		.ascii	", Add: \000"
+ 1641      643A2000 
+ 1642              	.LC2:
+ 1643 000c 20537461 		.ascii	" Sta: \000"
+ 1643      3A2000
+ 1644 0013 00       		.space	1
+ 1645              	.LC3:
+ 1646 0014 2C204C50 		.ascii	", LP \000"
+ 1646      2000
+ 1647 001a 0000     		.space	2
+ 1648              	.LC4:
+ 1649 001c 202800   		.ascii	" (\000"
+ 1650 001f 00       		.space	1
+ 1651              	.LC5:
+ 1652 0020 290D0A00 		.ascii	")\015\012\000"
+ 1653              	.LC6:
+ 1654 0024 0D0A556E 		.ascii	"\015\012Undefined IRQ\000"
+ 1654      64656669 
+ 1654      6E656420 
+ 1654      49525100 
+ 1655              	.LC7:
+ 1656 0034 0D0A5072 		.ascii	"\015\012Prefetch  IRQ\000"
+ 1656      65666574 
+ 1656      63682020 
+ 1656      49525100 
+ 1657              	.LC8:
+ 1658 0044 0D0A5265 		.ascii	"\015\012Reserved  IRQ\000"
+ 1658      73657276 
+ 1658      65642020 
+ 1658      49525100 
+ 1659              	.LC9:
+ 1660 0054 0D0A4461 		.ascii	"\015\012DataAbort IRQ\000"
+ 1660      74614162 
+ 1660      6F727420 
+ 1660      49525100 
+ 1661              	.LC10:
+ 1662 0064 0D0A4465 		.ascii	"\015\012Default   FIQ\000"
+ 1662      6661756C 
+ 1662      74202020 
+ 1662      46495100 
+ 1663              	.LC11:
+ 1664 0074 0D0A4465 		.ascii	"\015\012Default   IRQ\000"
+ 1664      6661756C 
+ 1664      74202020 
+ 1664      49525100 
+ 1665              		.section	.bss.count.8003,"aw",%nobits
+ 1666              		.align	1
+ 1667              		.set	.LANCHOR3,. + 0
+ 1670              	count.8003:
+ 1671 0000 0000     		.space	2
+ 1672              		.section	.bss.fnow.8034,"aw",%nobits
+ 1673              		.set	.LANCHOR7,. + 0
+ 1676              	fnow.8034:
+ 1677 0000 00       		.space	1
+ 1678              		.section	.bss.time.8002,"aw",%nobits
+ 1679              		.align	1
+ 1680              		.set	.LANCHOR1,. + 0
+ 1683              	time.8002:
+ 1684 0000 0000     		.space	2
+ 1685              		.section	.bss.DensityPresVoltsAccumMultSamples.8079,"aw",%nobits
+ 1686              		.align	2
+ 1687              		.set	.LANCHOR15,. + 0
+ 1690              	DensityPresVoltsAccumMultSamples.8079:
+ 1691 0000 00000000 		.space	4
+ 1692              		.section	.bss.Vcount.8076,"aw",%nobits
+ 1693              		.set	.LANCHOR12,. + 0
+ 1696              	Vcount.8076:
+ 1697 0000 00       		.space	1
+ 1698              		.section	.bss.tlast.8005,"aw",%nobits
+ 1699              		.align	2
+ 1700              		.set	.LANCHOR4,. + 0
+ 1703              	tlast.8005:
+ 1704 0000 00000000 		.space	4
+ 1705              		.section	.bss.BaleShapeVoltsAccumMultSamples.8080,"aw",%nobits
+ 1706              		.align	2
+ 1707              		.set	.LANCHOR16,. + 0
+ 1710              	BaleShapeVoltsAccumMultSamples.8080:
+ 1711 0000 00000000 		.space	4
+ 1712              		.section	.bss.KnifePresVoltsAccumMultSamples.8081,"aw",%nobits
+ 1713              		.align	2
+ 1714              		.set	.LANCHOR17,. + 0
+ 1717              	KnifePresVoltsAccumMultSamples.8081:
+ 1718 0000 00000000 		.space	4
+ 1719              		.text
+ 1720              	.Letext0:
+ 1721              		.file 2 "./include/AT91SAM7A3.h"
+ 1722              		.file 3 "./include/task.h"
+ 1723              		.file 4 "./include/queue.h"
+ 1724              		.file 5 "./include/semphr.h"
+ 1725              		.file 6 "Board.h"
+ 1726              		.file 7 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/stdlib.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 interrupts.c
+  C:\Temp\cc7FCz7M.s:17     .text.TC0_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:20     .text.TC0_irq_handler:00000000 TC0_irq_handler
+  C:\Temp\cc7FCz7M.s:172    .text.TC0_irq_handler:00000164 $d
+  C:\Temp\cc7FCz7M.s:185    .text.TC1_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:188    .text.TC1_irq_handler:00000000 TC1_irq_handler
+  C:\Temp\cc7FCz7M.s:311    .text.TC1_irq_handler:00000128 $d
+  C:\Temp\cc7FCz7M.s:323    .text.TC4_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:326    .text.TC4_irq_handler:00000000 TC4_irq_handler
+  C:\Temp\cc7FCz7M.s:393    .text.TC4_irq_handler:0000008c $d
+  C:\Temp\cc7FCz7M.s:400    .text.TC5_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:403    .text.TC5_irq_handler:00000000 TC5_irq_handler
+  C:\Temp\cc7FCz7M.s:470    .text.TC5_irq_handler:0000008c $d
+  C:\Temp\cc7FCz7M.s:477    .text.TC6_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:480    .text.TC6_irq_handler:00000000 TC6_irq_handler
+  C:\Temp\cc7FCz7M.s:669    .text.TC6_irq_handler:000001d8 $d
+  C:\Temp\cc7FCz7M.s:685    .text.PIOB_irq_function:00000000 $a
+  C:\Temp\cc7FCz7M.s:688    .text.PIOB_irq_function:00000000 PIOB_irq_function
+  C:\Temp\cc7FCz7M.s:734    .text.PIOB_irq_function:00000048 $d
+                            *COM*:00000004 POWERtaskhandle
+  C:\Temp\cc7FCz7M.s:740    .text.PIOB_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:743    .text.PIOB_irq_handler:00000000 PIOB_irq_handler
+  C:\Temp\cc7FCz7M.s:807    .text.PIOB_irq_handler:00000098 $d
+  C:\Temp\cc7FCz7M.s:813    .text.ADC0_irq_function:00000000 $a
+  C:\Temp\cc7FCz7M.s:816    .text.ADC0_irq_function:00000000 ADC0_irq_function
+  C:\Temp\cc7FCz7M.s:988    .text.ADC0_irq_function:00000170 $d
+  C:\Temp\cc7FCz7M.s:1005   .text.ADC0_irq_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1008   .text.ADC0_irq_handler:00000000 ADC0_irq_handler
+  C:\Temp\cc7FCz7M.s:1072   .text.ADC0_irq_handler:00000098 $d
+  C:\Temp\cc7FCz7M.s:1078   .text.debug_serial_setup:00000000 $a
+  C:\Temp\cc7FCz7M.s:1081   .text.debug_serial_setup:00000000 debug_serial_setup
+  C:\Temp\cc7FCz7M.s:1122   .text.debug_message_wait:00000000 $a
+  C:\Temp\cc7FCz7M.s:1125   .text.debug_message_wait:00000000 debug_message_wait
+  C:\Temp\cc7FCz7M.s:1146   .text.debug_message:00000000 $a
+  C:\Temp\cc7FCz7M.s:1149   .text.debug_message:00000000 debug_message
+  C:\Temp\cc7FCz7M.s:1185   .text.IntToString:00000000 $a
+  C:\Temp\cc7FCz7M.s:1188   .text.IntToString:00000000 IntToString
+  C:\Temp\cc7FCz7M.s:1268   .text.IntToString:0000009c $d
+  C:\Temp\cc7FCz7M.s:1274   .text.DebugAbortMessage:00000000 $a
+  C:\Temp\cc7FCz7M.s:1277   .text.DebugAbortMessage:00000000 DebugAbortMessage
+  C:\Temp\cc7FCz7M.s:1358   .text.DebugAbortMessage:00000088 $d
+  C:\Temp\cc7FCz7M.s:1369   .text.AT91F_Undefined_Instruction_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1372   .text.AT91F_Undefined_Instruction_handler:00000000 AT91F_Undefined_Instruction_handler
+  C:\Temp\cc7FCz7M.s:1395   .text.AT91F_Prefetch_Abort_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1398   .text.AT91F_Prefetch_Abort_handler:00000000 AT91F_Prefetch_Abort_handler
+  C:\Temp\cc7FCz7M.s:1421   .text.AT91F_Data_Abort_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1424   .text.AT91F_Data_Abort_handler:00000000 AT91F_Data_Abort_handler
+  C:\Temp\cc7FCz7M.s:1447   .text.AT91F_Reserved_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1450   .text.AT91F_Reserved_handler:00000000 AT91F_Reserved_handler
+  C:\Temp\cc7FCz7M.s:1473   .text.AT91F_Default_FIQ_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1476   .text.AT91F_Default_FIQ_handler:00000000 AT91F_Default_FIQ_handler
+  C:\Temp\cc7FCz7M.s:1499   .text.AT91F_Default_IRQ_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1502   .text.AT91F_Default_IRQ_handler:00000000 AT91F_Default_IRQ_handler
+  C:\Temp\cc7FCz7M.s:1525   .text.AT91F_Spurious_handler:00000000 $a
+  C:\Temp\cc7FCz7M.s:1528   .text.AT91F_Spurious_handler:00000000 AT91F_Spurious_handler
+  C:\Temp\cc7FCz7M.s:1621   .rodata.DebugMessage:00000000 DebugMessage
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\cc7FCz7M.s:1556   .bss.BaleDiaVoltsAccumMultSamples.8078:00000000 $d
+  C:\Temp\cc7FCz7M.s:1560   .bss.BaleDiaVoltsAccumMultSamples.8078:00000000 BaleDiaVoltsAccumMultSamples.8078
+  C:\Temp\cc7FCz7M.s:1563   .bss.count.8031:00000000 $d
+  C:\Temp\cc7FCz7M.s:1567   .bss.count.8031:00000000 count.8031
+  C:\Temp\cc7FCz7M.s:1570   .bss.tlast.8020:00000000 $d
+  C:\Temp\cc7FCz7M.s:1574   .bss.tlast.8020:00000000 tlast.8020
+  C:\Temp\cc7FCz7M.s:1577   .bss.time.8030:00000000 $d
+  C:\Temp\cc7FCz7M.s:1581   .bss.time.8030:00000000 time.8030
+  C:\Temp\cc7FCz7M.s:1584   .bss.tlast.8025:00000000 $d
+  C:\Temp\cc7FCz7M.s:1588   .bss.tlast.8025:00000000 tlast.8025
+  C:\Temp\cc7FCz7M.s:1594   .bss.fnow.8006:00000000 fnow.8006
+  C:\Temp\cc7FCz7M.s:1595   .bss.fnow.8006:00000000 $d
+  C:\Temp\cc7FCz7M.s:1597   .bss.stime.8032:00000000 $d
+  C:\Temp\cc7FCz7M.s:1601   .bss.stime.8032:00000000 stime.8032
+  C:\Temp\cc7FCz7M.s:1604   .bss.tlast.8033:00000000 $d
+  C:\Temp\cc7FCz7M.s:1608   .bss.tlast.8033:00000000 tlast.8033
+  C:\Temp\cc7FCz7M.s:1614   .bss.SampleCount.8077:00000000 SampleCount.8077
+  C:\Temp\cc7FCz7M.s:1615   .bss.SampleCount.8077:00000000 $d
+  C:\Temp\cc7FCz7M.s:1617   .rodata.DebugMessage:00000000 $d
+  C:\Temp\cc7FCz7M.s:1629   .bss.stime.8004:00000000 $d
+  C:\Temp\cc7FCz7M.s:1633   .bss.stime.8004:00000000 stime.8004
+  C:\Temp\cc7FCz7M.s:1636   .rodata.str1.4:00000000 $d
+  C:\Temp\cc7FCz7M.s:1666   .bss.count.8003:00000000 $d
+  C:\Temp\cc7FCz7M.s:1670   .bss.count.8003:00000000 count.8003
+  C:\Temp\cc7FCz7M.s:1676   .bss.fnow.8034:00000000 fnow.8034
+  C:\Temp\cc7FCz7M.s:1677   .bss.fnow.8034:00000000 $d
+  C:\Temp\cc7FCz7M.s:1679   .bss.time.8002:00000000 $d
+  C:\Temp\cc7FCz7M.s:1683   .bss.time.8002:00000000 time.8002
+  C:\Temp\cc7FCz7M.s:1686   .bss.DensityPresVoltsAccumMultSamples.8079:00000000 $d
+  C:\Temp\cc7FCz7M.s:1690   .bss.DensityPresVoltsAccumMultSamples.8079:00000000 DensityPresVoltsAccumMultSamples.8079
+  C:\Temp\cc7FCz7M.s:1696   .bss.Vcount.8076:00000000 Vcount.8076
+  C:\Temp\cc7FCz7M.s:1697   .bss.Vcount.8076:00000000 $d
+  C:\Temp\cc7FCz7M.s:1699   .bss.tlast.8005:00000000 $d
+  C:\Temp\cc7FCz7M.s:1703   .bss.tlast.8005:00000000 tlast.8005
+  C:\Temp\cc7FCz7M.s:1706   .bss.BaleShapeVoltsAccumMultSamples.8080:00000000 $d
+  C:\Temp\cc7FCz7M.s:1710   .bss.BaleShapeVoltsAccumMultSamples.8080:00000000 BaleShapeVoltsAccumMultSamples.8080
+  C:\Temp\cc7FCz7M.s:1713   .bss.KnifePresVoltsAccumMultSamples.8081:00000000 $d
+  C:\Temp\cc7FCz7M.s:1717   .bss.KnifePresVoltsAccumMultSamples.8081:00000000 KnifePresVoltsAccumMultSamples.8081
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.46fbfa20fa232e47f00874f3e1c302d6
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.stddef.h.161.e50ff8a9d5d1abbc15641da28ac571bf
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.161.c6104a0666cf681b6269ddc9b4f516d4
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.53.c69c7609933ff56d59c757cec2d13230
+
+UNDEFINED SYMBOLS
+f0time
+f0count
+TC1_interrupt_count
+TC1_count0
+AllTime
+mcm
+buzz_length
+off_length
+buzz_count
+tl_confimation_delay
+tl_target_count
+f6time
+f6count
+NetPulseCount
+BeakEngagePulseCount
+NetMetresPulseCount
+newf6
+xTaskResumeFromISR
+vTaskSwitchContext
+PowerSwitchedOff
+ulCriticalNesting
+pxCurrentTCB
+EOC7_interrupt_count
+BaleDiaVoltsTotAccumMultSamples
+DensityPresVoltsTotAccumMultSamples
+BaleShapeVoltsTotAccumMultSamples
+KnifePresVoltsTotAccumMultSamples
+buffer
+binHex
+exit

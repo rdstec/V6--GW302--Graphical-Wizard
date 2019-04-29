@@ -1,0 +1,2570 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"queue.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.prvCopyDataFromQueue,"ax",%progbits
+  18              		.align	2
+  19              		.code	16
+  20              		.thumb_func
+  22              	prvCopyDataFromQueue:
+  23              	.LFB9:
+  24              		.file 1 "queue.c"
+   1:queue.c       **** /*
+   2:queue.c       ****     FreeRTOS V6.1.0 - Copyright (C) 2010 Real Time Engineers Ltd.
+   3:queue.c       **** 
+   4:queue.c       ****     ***************************************************************************
+   5:queue.c       ****     *                                                                         *
+   6:queue.c       ****     * If you are:                                                             *
+   7:queue.c       ****     *                                                                         *
+   8:queue.c       ****     *    + New to FreeRTOS,                                                   *
+   9:queue.c       ****     *    + Wanting to learn FreeRTOS or multitasking in general quickly       *
+  10:queue.c       ****     *    + Looking for basic training,                                        *
+  11:queue.c       ****     *    + Wanting to improve your FreeRTOS skills and productivity           *
+  12:queue.c       ****     *                                                                         *
+  13:queue.c       ****     * then take a look at the FreeRTOS books - available as PDF or paperback  *
+  14:queue.c       ****     *                                                                         *
+  15:queue.c       ****     *        "Using the FreeRTOS Real Time Kernel - a Practical Guide"        *
+  16:queue.c       ****     *                  http://www.FreeRTOS.org/Documentation                  *
+  17:queue.c       ****     *                                                                         *
+  18:queue.c       ****     * A pdf reference manual is also available.  Both are usually delivered   *
+  19:queue.c       ****     * to your inbox within 20 minutes to two hours when purchased between 8am *
+  20:queue.c       ****     * and 8pm GMT (although please allow up to 24 hours in case of            *
+  21:queue.c       ****     * exceptional circumstances).  Thank you for your support!                *
+  22:queue.c       ****     *                                                                         *
+  23:queue.c       ****     ***************************************************************************
+  24:queue.c       **** 
+  25:queue.c       ****     This file is part of the FreeRTOS distribution.
+  26:queue.c       **** 
+  27:queue.c       ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:queue.c       ****     the terms of the GNU General Public License (version 2) as published by the
+  29:queue.c       ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:queue.c       ****     ***NOTE*** The exception to the GPL is included to allow you to distribute
+  31:queue.c       ****     a combined work that includes FreeRTOS without being obliged to provide the
+  32:queue.c       ****     source code for proprietary components outside of the FreeRTOS kernel.
+  33:queue.c       ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT
+  34:queue.c       ****     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  35:queue.c       ****     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:queue.c       ****     more details. You should have received a copy of the GNU General Public 
+  37:queue.c       ****     License and the FreeRTOS license exception along with FreeRTOS; if not it 
+  38:queue.c       ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained 
+  39:queue.c       ****     by writing to Richard Barry, contact details for whom are available on the
+  40:queue.c       ****     FreeRTOS WEB site.
+  41:queue.c       **** 
+  42:queue.c       ****     1 tab == 4 spaces!
+  43:queue.c       **** 
+  44:queue.c       ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:queue.c       ****     contact details.
+  46:queue.c       **** 
+  47:queue.c       ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:queue.c       ****     critical systems.
+  49:queue.c       **** 
+  50:queue.c       ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:queue.c       ****     licensing and training services.
+  52:queue.c       **** */
+  53:queue.c       **** 
+  54:queue.c       **** #include <stdlib.h>
+  55:queue.c       **** #include <string.h>
+  56:queue.c       **** 
+  57:queue.c       **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  58:queue.c       **** all the API functions to use the MPU wrappers.  That should only be done when
+  59:queue.c       **** task.h is included from an application file. */
+  60:queue.c       **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  61:queue.c       **** 
+  62:queue.c       **** #include "FreeRTOS.h"
+  63:queue.c       **** #include "task.h"
+  64:queue.c       **** #include "croutine.h"
+  65:queue.c       **** 
+  66:queue.c       **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  67:queue.c       **** 
+  68:queue.c       **** /*-----------------------------------------------------------
+  69:queue.c       ****  * PUBLIC LIST API documented in list.h
+  70:queue.c       ****  *----------------------------------------------------------*/
+  71:queue.c       **** 
+  72:queue.c       **** /* Constants used with the cRxLock and cTxLock structure members. */
+  73:queue.c       **** #define queueUNLOCKED					( ( signed portBASE_TYPE ) -1 )
+  74:queue.c       **** #define queueLOCKED_UNMODIFIED			( ( signed portBASE_TYPE ) 0 )
+  75:queue.c       **** 
+  76:queue.c       **** #define queueERRONEOUS_UNBLOCK			( -1 )
+  77:queue.c       **** 
+  78:queue.c       **** /* For internal use only. */
+  79:queue.c       **** #define	queueSEND_TO_BACK				( 0 )
+  80:queue.c       **** #define	queueSEND_TO_FRONT				( 1 )
+  81:queue.c       **** 
+  82:queue.c       **** /* Effectively make a union out of the xQUEUE structure. */
+  83:queue.c       **** #define pxMutexHolder					pcTail
+  84:queue.c       **** #define uxQueueType						pcHead
+  85:queue.c       **** #define uxRecursiveCallCount			pcReadFrom
+  86:queue.c       **** #define queueQUEUE_IS_MUTEX				NULL
+  87:queue.c       **** 
+  88:queue.c       **** /* Semaphores do not actually store or copy data, so have an items size of
+  89:queue.c       **** zero. */
+  90:queue.c       **** #define queueSEMAPHORE_QUEUE_ITEM_LENGTH ( 0 )
+  91:queue.c       **** #define queueDONT_BLOCK					 ( ( portTickType ) 0 )
+  92:queue.c       **** #define queueMUTEX_GIVE_BLOCK_TIME		 ( ( portTickType ) 0 )
+  93:queue.c       **** 
+  94:queue.c       **** /*
+  95:queue.c       ****  * Definition of the queue used by the scheduler.
+  96:queue.c       ****  * Items are queued by copy, not reference.
+  97:queue.c       ****  */
+  98:queue.c       **** typedef struct QueueDefinition
+  99:queue.c       **** {
+ 100:queue.c       **** 	signed char *pcHead;				/*< Points to the beginning of the queue storage area. */
+ 101:queue.c       **** 	signed char *pcTail;				/*< Points to the byte at the end of the queue storage area.  Once more by
+ 102:queue.c       **** 
+ 103:queue.c       **** 	signed char *pcWriteTo;				/*< Points to the free next place in the storage area. */
+ 104:queue.c       **** 	signed char *pcReadFrom;			/*< Points to the last place that a queued item was read from. */
+ 105:queue.c       **** 
+ 106:queue.c       **** 	xList xTasksWaitingToSend;				/*< List of tasks that are blocked waiting to post onto this queue. 
+ 107:queue.c       **** 	xList xTasksWaitingToReceive;			/*< List of tasks that are blocked waiting to read from this queue
+ 108:queue.c       **** 
+ 109:queue.c       **** 	volatile unsigned portBASE_TYPE uxMessagesWaiting;/*< The number of items currently in the queue. 
+ 110:queue.c       **** 	unsigned portBASE_TYPE uxLength;		/*< The length of the queue defined as the number of items it wi
+ 111:queue.c       **** 	unsigned portBASE_TYPE uxItemSize;		/*< The size of each items that the queue will hold. */
+ 112:queue.c       **** 
+ 113:queue.c       **** 	signed portBASE_TYPE xRxLock;			/*< Stores the number of items received from the queue (removed fr
+ 114:queue.c       **** 	signed portBASE_TYPE xTxLock;			/*< Stores the number of items transmitted to the queue (added to 
+ 115:queue.c       **** 
+ 116:queue.c       **** } xQUEUE;
+ 117:queue.c       **** /*-----------------------------------------------------------*/
+ 118:queue.c       **** 
+ 119:queue.c       **** /*
+ 120:queue.c       ****  * Inside this file xQueueHandle is a pointer to a xQUEUE structure.
+ 121:queue.c       ****  * To keep the definition private the API header file defines it as a
+ 122:queue.c       ****  * pointer to void.
+ 123:queue.c       ****  */
+ 124:queue.c       **** typedef xQUEUE * xQueueHandle;
+ 125:queue.c       **** 
+ 126:queue.c       **** /*
+ 127:queue.c       ****  * Prototypes for public functions are included here so we don't have to
+ 128:queue.c       ****  * include the API header file (as it defines xQueueHandle differently).  These
+ 129:queue.c       ****  * functions are documented in the API header file.
+ 130:queue.c       ****  */
+ 131:queue.c       **** xQueueHandle xQueueCreate( unsigned portBASE_TYPE uxQueueLength, unsigned portBASE_TYPE uxItemSize 
+ 132:queue.c       **** signed portBASE_TYPE xQueueGenericSend( xQueueHandle xQueue, const void * const pvItemToQueue, port
+ 133:queue.c       **** unsigned portBASE_TYPE uxQueueMessagesWaiting( const xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 134:queue.c       **** void vQueueDelete( xQueueHandle xQueue ) PRIVILEGED_FUNCTION;
+ 135:queue.c       **** signed portBASE_TYPE xQueueGenericSendFromISR( xQueueHandle pxQueue, const void * const pvItemToQue
+ 136:queue.c       **** signed portBASE_TYPE xQueueGenericReceive( xQueueHandle pxQueue, void * const pvBuffer, portTickTyp
+ 137:queue.c       **** signed portBASE_TYPE xQueueReceiveFromISR( xQueueHandle pxQueue, void * const pvBuffer, signed port
+ 138:queue.c       **** xQueueHandle xQueueCreateMutex( void ) PRIVILEGED_FUNCTION;
+ 139:queue.c       **** xQueueHandle xQueueCreateCountingSemaphore( unsigned portBASE_TYPE uxCountValue, unsigned portBASE_
+ 140:queue.c       **** portBASE_TYPE xQueueTakeMutexRecursive( xQueueHandle xMutex, portTickType xBlockTime ) PRIVILEGED_F
+ 141:queue.c       **** portBASE_TYPE xQueueGiveMutexRecursive( xQueueHandle xMutex ) PRIVILEGED_FUNCTION;
+ 142:queue.c       **** signed portBASE_TYPE xQueueAltGenericSend( xQueueHandle pxQueue, const void * const pvItemToQueue, 
+ 143:queue.c       **** signed portBASE_TYPE xQueueAltGenericReceive( xQueueHandle pxQueue, void * const pvBuffer, portTick
+ 144:queue.c       **** signed portBASE_TYPE xQueueIsQueueEmptyFromISR( const xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 145:queue.c       **** signed portBASE_TYPE xQueueIsQueueFullFromISR( const xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 146:queue.c       **** unsigned portBASE_TYPE uxQueueMessagesWaitingFromISR( const xQueueHandle pxQueue ) PRIVILEGED_FUNCT
+ 147:queue.c       **** 
+ 148:queue.c       **** /*
+ 149:queue.c       ****  * Co-routine queue functions differ from task queue functions.  Co-routines are
+ 150:queue.c       ****  * an optional component.
+ 151:queue.c       ****  */
+ 152:queue.c       **** #if configUSE_CO_ROUTINES == 1
+ 153:queue.c       **** 	signed portBASE_TYPE xQueueCRSendFromISR( xQueueHandle pxQueue, const void *pvItemToQueue, signed 
+ 154:queue.c       **** 	signed portBASE_TYPE xQueueCRReceiveFromISR( xQueueHandle pxQueue, void *pvBuffer, signed portBASE
+ 155:queue.c       **** 	signed portBASE_TYPE xQueueCRSend( xQueueHandle pxQueue, const void *pvItemToQueue, portTickType x
+ 156:queue.c       **** 	signed portBASE_TYPE xQueueCRReceive( xQueueHandle pxQueue, void *pvBuffer, portTickType xTicksToW
+ 157:queue.c       **** #endif
+ 158:queue.c       **** 
+ 159:queue.c       **** /*
+ 160:queue.c       ****  * The queue registry is just a means for kernel aware debuggers to locate
+ 161:queue.c       ****  * queue structures.  It has no other purpose so is an optional component.
+ 162:queue.c       ****  */
+ 163:queue.c       **** #if configQUEUE_REGISTRY_SIZE > 0
+ 164:queue.c       **** 
+ 165:queue.c       **** 	/* The type stored within the queue registry array.  This allows a name
+ 166:queue.c       **** 	to be assigned to each queue making kernel aware debugging a little
+ 167:queue.c       **** 	more user friendly. */
+ 168:queue.c       **** 	typedef struct QUEUE_REGISTRY_ITEM
+ 169:queue.c       **** 	{
+ 170:queue.c       **** 		signed char *pcQueueName;
+ 171:queue.c       **** 		xQueueHandle xHandle;
+ 172:queue.c       **** 	} xQueueRegistryItem;
+ 173:queue.c       **** 
+ 174:queue.c       **** 	/* The queue registry is simply an array of xQueueRegistryItem structures.
+ 175:queue.c       **** 	The pcQueueName member of a structure being NULL is indicative of the
+ 176:queue.c       **** 	array position being vacant. */
+ 177:queue.c       **** 	xQueueRegistryItem xQueueRegistry[ configQUEUE_REGISTRY_SIZE ];
+ 178:queue.c       **** 
+ 179:queue.c       **** 	/* Removes a queue from the registry by simply setting the pcQueueName
+ 180:queue.c       **** 	member to NULL. */
+ 181:queue.c       **** 	static void vQueueUnregisterQueue( xQueueHandle xQueue ) PRIVILEGED_FUNCTION;
+ 182:queue.c       **** 	void vQueueAddToRegistry( xQueueHandle xQueue, signed char *pcQueueName ) PRIVILEGED_FUNCTION;
+ 183:queue.c       **** #endif
+ 184:queue.c       **** 
+ 185:queue.c       **** /*
+ 186:queue.c       ****  * Unlocks a queue locked by a call to prvLockQueue.  Locking a queue does not
+ 187:queue.c       ****  * prevent an ISR from adding or removing items to the queue, but does prevent
+ 188:queue.c       ****  * an ISR from removing tasks from the queue event lists.  If an ISR finds a
+ 189:queue.c       ****  * queue is locked it will instead increment the appropriate queue lock count
+ 190:queue.c       ****  * to indicate that a task may require unblocking.  When the queue in unlocked
+ 191:queue.c       ****  * these lock counts are inspected, and the appropriate action taken.
+ 192:queue.c       ****  */
+ 193:queue.c       **** static void prvUnlockQueue( xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 194:queue.c       **** 
+ 195:queue.c       **** /*
+ 196:queue.c       ****  * Uses a critical section to determine if there is any data in a queue.
+ 197:queue.c       ****  *
+ 198:queue.c       ****  * @return pdTRUE if the queue contains no items, otherwise pdFALSE.
+ 199:queue.c       ****  */
+ 200:queue.c       **** static signed portBASE_TYPE prvIsQueueEmpty( const xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 201:queue.c       **** 
+ 202:queue.c       **** /*
+ 203:queue.c       ****  * Uses a critical section to determine if there is any space in a queue.
+ 204:queue.c       ****  *
+ 205:queue.c       ****  * @return pdTRUE if there is no space, otherwise pdFALSE;
+ 206:queue.c       ****  */
+ 207:queue.c       **** static signed portBASE_TYPE prvIsQueueFull( const xQueueHandle pxQueue ) PRIVILEGED_FUNCTION;
+ 208:queue.c       **** 
+ 209:queue.c       **** /*
+ 210:queue.c       ****  * Copies an item into the queue, either at the front of the queue or the
+ 211:queue.c       ****  * back of the queue.
+ 212:queue.c       ****  */
+ 213:queue.c       **** static void prvCopyDataToQueue( xQUEUE *pxQueue, const void *pvItemToQueue, portBASE_TYPE xPosition
+ 214:queue.c       **** 
+ 215:queue.c       **** /*
+ 216:queue.c       ****  * Copies an item out of a queue.
+ 217:queue.c       ****  */
+ 218:queue.c       **** static void prvCopyDataFromQueue( xQUEUE * const pxQueue, const void *pvBuffer ) PRIVILEGED_FUNCTIO
+ 219:queue.c       **** /*-----------------------------------------------------------*/
+ 220:queue.c       **** 
+ 221:queue.c       **** /*
+ 222:queue.c       ****  * Macro to mark a queue as locked.  Locking a queue prevents an ISR from
+ 223:queue.c       ****  * accessing the queue event lists.
+ 224:queue.c       ****  */
+ 225:queue.c       **** #define prvLockQueue( pxQueue )							\
+ 226:queue.c       **** {														\
+ 227:queue.c       **** 	taskENTER_CRITICAL();								\
+ 228:queue.c       **** 	{													\
+ 229:queue.c       **** 		if( pxQueue->xRxLock == queueUNLOCKED )			\
+ 230:queue.c       **** 		{												\
+ 231:queue.c       **** 			pxQueue->xRxLock = queueLOCKED_UNMODIFIED;	\
+ 232:queue.c       **** 		}												\
+ 233:queue.c       **** 		if( pxQueue->xTxLock == queueUNLOCKED )			\
+ 234:queue.c       **** 		{												\
+ 235:queue.c       **** 			pxQueue->xTxLock = queueLOCKED_UNMODIFIED;	\
+ 236:queue.c       **** 		}												\
+ 237:queue.c       **** 	}													\
+ 238:queue.c       **** 	taskEXIT_CRITICAL();								\
+ 239:queue.c       **** }
+ 240:queue.c       **** /*-----------------------------------------------------------*/
+ 241:queue.c       **** 
+ 242:queue.c       **** 
+ 243:queue.c       **** /*-----------------------------------------------------------
+ 244:queue.c       ****  * PUBLIC QUEUE MANAGEMENT API documented in queue.h
+ 245:queue.c       ****  *----------------------------------------------------------*/
+ 246:queue.c       **** 
+ 247:queue.c       **** xQueueHandle xQueueCreate( unsigned portBASE_TYPE uxQueueLength, unsigned portBASE_TYPE uxItemSize 
+ 248:queue.c       **** {
+ 249:queue.c       **** xQUEUE *pxNewQueue;
+ 250:queue.c       **** size_t xQueueSizeInBytes;
+ 251:queue.c       **** 
+ 252:queue.c       **** 	/* Allocate the new queue structure. */
+ 253:queue.c       **** 	if( uxQueueLength > ( unsigned portBASE_TYPE ) 0 )
+ 254:queue.c       **** 	{
+ 255:queue.c       **** 		pxNewQueue = ( xQUEUE * ) pvPortMalloc( sizeof( xQUEUE ) );
+ 256:queue.c       **** 		if( pxNewQueue != NULL )
+ 257:queue.c       **** 		{
+ 258:queue.c       **** 			/* Create the list of pointers to queue items.  The queue is one byte
+ 259:queue.c       **** 			longer than asked for to make wrap checking easier/faster. */
+ 260:queue.c       **** 			xQueueSizeInBytes = ( size_t ) ( uxQueueLength * uxItemSize ) + ( size_t ) 1;
+ 261:queue.c       **** 
+ 262:queue.c       **** 			pxNewQueue->pcHead = ( signed char * ) pvPortMalloc( xQueueSizeInBytes );
+ 263:queue.c       **** 			if( pxNewQueue->pcHead != NULL )
+ 264:queue.c       **** 			{
+ 265:queue.c       **** 				/* Initialise the queue members as described above where the
+ 266:queue.c       **** 				queue type is defined. */
+ 267:queue.c       **** 				pxNewQueue->pcTail = pxNewQueue->pcHead + ( uxQueueLength * uxItemSize );
+ 268:queue.c       **** 				pxNewQueue->uxMessagesWaiting = 0;
+ 269:queue.c       **** 				pxNewQueue->pcWriteTo = pxNewQueue->pcHead;
+ 270:queue.c       **** 				pxNewQueue->pcReadFrom = pxNewQueue->pcHead + ( ( uxQueueLength - 1 ) * uxItemSize );
+ 271:queue.c       **** 				pxNewQueue->uxLength = uxQueueLength;
+ 272:queue.c       **** 				pxNewQueue->uxItemSize = uxItemSize;
+ 273:queue.c       **** 				pxNewQueue->xRxLock = queueUNLOCKED;
+ 274:queue.c       **** 				pxNewQueue->xTxLock = queueUNLOCKED;
+ 275:queue.c       **** 
+ 276:queue.c       **** 				/* Likewise ensure the event queues start with the correct state. */
+ 277:queue.c       **** 				vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+ 278:queue.c       **** 				vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+ 279:queue.c       **** 
+ 280:queue.c       **** 				traceQUEUE_CREATE( pxNewQueue );
+ 281:queue.c       **** 				return  pxNewQueue;
+ 282:queue.c       **** 			}
+ 283:queue.c       **** 			else
+ 284:queue.c       **** 			{
+ 285:queue.c       **** 				traceQUEUE_CREATE_FAILED();
+ 286:queue.c       **** 				vPortFree( pxNewQueue );
+ 287:queue.c       **** 			}
+ 288:queue.c       **** 		}
+ 289:queue.c       **** 	}
+ 290:queue.c       **** 
+ 291:queue.c       **** 	/* Will only reach here if we could not allocate enough memory or no memory
+ 292:queue.c       **** 	was required. */
+ 293:queue.c       **** 	return NULL;
+ 294:queue.c       **** }
+ 295:queue.c       **** /*-----------------------------------------------------------*/
+ 296:queue.c       **** 
+ 297:queue.c       **** #if ( configUSE_MUTEXES == 1 )
+ 298:queue.c       **** 
+ 299:queue.c       **** 	xQueueHandle xQueueCreateMutex( void )
+ 300:queue.c       **** 	{
+ 301:queue.c       **** 	xQUEUE *pxNewQueue;
+ 302:queue.c       **** 
+ 303:queue.c       **** 		/* Allocate the new queue structure. */
+ 304:queue.c       **** 		pxNewQueue = ( xQUEUE * ) pvPortMalloc( sizeof( xQUEUE ) );
+ 305:queue.c       **** 		if( pxNewQueue != NULL )
+ 306:queue.c       **** 		{
+ 307:queue.c       **** 			/* Information required for priority inheritance. */
+ 308:queue.c       **** 			pxNewQueue->pxMutexHolder = NULL;
+ 309:queue.c       **** 			pxNewQueue->uxQueueType = queueQUEUE_IS_MUTEX;
+ 310:queue.c       **** 
+ 311:queue.c       **** 			/* Queues used as a mutex no data is actually copied into or out
+ 312:queue.c       **** 			of the queue. */
+ 313:queue.c       **** 			pxNewQueue->pcWriteTo = NULL;
+ 314:queue.c       **** 			pxNewQueue->pcReadFrom = NULL;
+ 315:queue.c       **** 
+ 316:queue.c       **** 			/* Each mutex has a length of 1 (like a binary semaphore) and
+ 317:queue.c       **** 			an item size of 0 as nothing is actually copied into or out
+ 318:queue.c       **** 			of the mutex. */
+ 319:queue.c       **** 			pxNewQueue->uxMessagesWaiting = 0;
+ 320:queue.c       **** 			pxNewQueue->uxLength = 1;
+ 321:queue.c       **** 			pxNewQueue->uxItemSize = 0;
+ 322:queue.c       **** 			pxNewQueue->xRxLock = queueUNLOCKED;
+ 323:queue.c       **** 			pxNewQueue->xTxLock = queueUNLOCKED;
+ 324:queue.c       **** 
+ 325:queue.c       **** 			/* Ensure the event queues start with the correct state. */
+ 326:queue.c       **** 			vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+ 327:queue.c       **** 			vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+ 328:queue.c       **** 
+ 329:queue.c       **** 			/* Start with the semaphore in the expected state. */
+ 330:queue.c       **** 			xQueueGenericSend( pxNewQueue, NULL, 0, queueSEND_TO_BACK );
+ 331:queue.c       **** 
+ 332:queue.c       **** 			traceCREATE_MUTEX( pxNewQueue );
+ 333:queue.c       **** 		}
+ 334:queue.c       **** 		else
+ 335:queue.c       **** 		{
+ 336:queue.c       **** 			traceCREATE_MUTEX_FAILED();
+ 337:queue.c       **** 		}
+ 338:queue.c       **** 
+ 339:queue.c       **** 		return pxNewQueue;
+ 340:queue.c       **** 	}
+ 341:queue.c       **** 
+ 342:queue.c       **** #endif /* configUSE_MUTEXES */
+ 343:queue.c       **** /*-----------------------------------------------------------*/
+ 344:queue.c       **** 
+ 345:queue.c       **** #if configUSE_RECURSIVE_MUTEXES == 1
+ 346:queue.c       **** 
+ 347:queue.c       **** 	portBASE_TYPE xQueueGiveMutexRecursive( xQueueHandle pxMutex )
+ 348:queue.c       **** 	{
+ 349:queue.c       **** 	portBASE_TYPE xReturn;
+ 350:queue.c       **** 
+ 351:queue.c       **** 		/* If this is the task that holds the mutex then pxMutexHolder will not
+ 352:queue.c       **** 		change outside of this task.  If this task does not hold the mutex then
+ 353:queue.c       **** 		pxMutexHolder can never coincidentally equal the tasks handle, and as
+ 354:queue.c       **** 		this is the only condition we are interested in it does not matter if
+ 355:queue.c       **** 		pxMutexHolder is accessed simultaneously by another task.  Therefore no
+ 356:queue.c       **** 		mutual exclusion is required to test the pxMutexHolder variable. */
+ 357:queue.c       **** 		if( pxMutex->pxMutexHolder == xTaskGetCurrentTaskHandle() )
+ 358:queue.c       **** 		{
+ 359:queue.c       **** 			traceGIVE_MUTEX_RECURSIVE( pxMutex );
+ 360:queue.c       **** 
+ 361:queue.c       **** 			/* uxRecursiveCallCount cannot be zero if pxMutexHolder is equal to
+ 362:queue.c       **** 			the task handle, therefore no underflow check is required.  Also,
+ 363:queue.c       **** 			uxRecursiveCallCount is only modified by the mutex holder, and as
+ 364:queue.c       **** 			there can only be one, no mutual exclusion is required to modify the
+ 365:queue.c       **** 			uxRecursiveCallCount member. */
+ 366:queue.c       **** 			( pxMutex->uxRecursiveCallCount )--;
+ 367:queue.c       **** 
+ 368:queue.c       **** 			/* Have we unwound the call count? */
+ 369:queue.c       **** 			if( pxMutex->uxRecursiveCallCount == 0 )
+ 370:queue.c       **** 			{
+ 371:queue.c       **** 				/* Return the mutex.  This will automatically unblock any other
+ 372:queue.c       **** 				task that might be waiting to access the mutex. */
+ 373:queue.c       **** 				xQueueGenericSend( pxMutex, NULL, queueMUTEX_GIVE_BLOCK_TIME, queueSEND_TO_BACK );
+ 374:queue.c       **** 			}
+ 375:queue.c       **** 
+ 376:queue.c       **** 			xReturn = pdPASS;
+ 377:queue.c       **** 		}
+ 378:queue.c       **** 		else
+ 379:queue.c       **** 		{
+ 380:queue.c       **** 			/* We cannot give the mutex because we are not the holder. */
+ 381:queue.c       **** 			xReturn = pdFAIL;
+ 382:queue.c       **** 
+ 383:queue.c       **** 			traceGIVE_MUTEX_RECURSIVE_FAILED( pxMutex );
+ 384:queue.c       **** 		}
+ 385:queue.c       **** 
+ 386:queue.c       **** 		return xReturn;
+ 387:queue.c       **** 	}
+ 388:queue.c       **** 
+ 389:queue.c       **** #endif /* configUSE_RECURSIVE_MUTEXES */
+ 390:queue.c       **** /*-----------------------------------------------------------*/
+ 391:queue.c       **** 
+ 392:queue.c       **** #if configUSE_RECURSIVE_MUTEXES == 1
+ 393:queue.c       **** 
+ 394:queue.c       **** 	portBASE_TYPE xQueueTakeMutexRecursive( xQueueHandle pxMutex, portTickType xBlockTime )
+ 395:queue.c       **** 	{
+ 396:queue.c       **** 	portBASE_TYPE xReturn;
+ 397:queue.c       **** 
+ 398:queue.c       **** 		/* Comments regarding mutual exclusion as per those within
+ 399:queue.c       **** 		xQueueGiveMutexRecursive(). */
+ 400:queue.c       **** 
+ 401:queue.c       **** 		traceTAKE_MUTEX_RECURSIVE( pxMutex );
+ 402:queue.c       **** 
+ 403:queue.c       **** 		if( pxMutex->pxMutexHolder == xTaskGetCurrentTaskHandle() )
+ 404:queue.c       **** 		{
+ 405:queue.c       **** 			( pxMutex->uxRecursiveCallCount )++;
+ 406:queue.c       **** 			xReturn = pdPASS;
+ 407:queue.c       **** 		}
+ 408:queue.c       **** 		else
+ 409:queue.c       **** 		{
+ 410:queue.c       **** 			xReturn = xQueueGenericReceive( pxMutex, NULL, xBlockTime, pdFALSE );
+ 411:queue.c       **** 
+ 412:queue.c       **** 			/* pdPASS will only be returned if we successfully obtained the mutex,
+ 413:queue.c       **** 			we may have blocked to reach here. */
+ 414:queue.c       **** 			if( xReturn == pdPASS )
+ 415:queue.c       **** 			{
+ 416:queue.c       **** 				( pxMutex->uxRecursiveCallCount )++;
+ 417:queue.c       **** 			}
+ 418:queue.c       **** 		}
+ 419:queue.c       **** 
+ 420:queue.c       **** 		return xReturn;
+ 421:queue.c       **** 	}
+ 422:queue.c       **** 
+ 423:queue.c       **** #endif /* configUSE_RECURSIVE_MUTEXES */
+ 424:queue.c       **** /*-----------------------------------------------------------*/
+ 425:queue.c       **** 
+ 426:queue.c       **** #if configUSE_COUNTING_SEMAPHORES == 1
+ 427:queue.c       **** 
+ 428:queue.c       **** 	xQueueHandle xQueueCreateCountingSemaphore( unsigned portBASE_TYPE uxCountValue, unsigned portBASE
+ 429:queue.c       **** 	{
+ 430:queue.c       **** 	xQueueHandle pxHandle;
+ 431:queue.c       **** 
+ 432:queue.c       **** 		pxHandle = xQueueCreate( ( unsigned portBASE_TYPE ) uxCountValue, queueSEMAPHORE_QUEUE_ITEM_LENGT
+ 433:queue.c       **** 
+ 434:queue.c       **** 		if( pxHandle != NULL )
+ 435:queue.c       **** 		{
+ 436:queue.c       **** 			pxHandle->uxMessagesWaiting = uxInitialCount;
+ 437:queue.c       **** 
+ 438:queue.c       **** 			traceCREATE_COUNTING_SEMAPHORE();
+ 439:queue.c       **** 		}
+ 440:queue.c       **** 		else
+ 441:queue.c       **** 		{
+ 442:queue.c       **** 			traceCREATE_COUNTING_SEMAPHORE_FAILED();
+ 443:queue.c       **** 		}
+ 444:queue.c       **** 
+ 445:queue.c       **** 		return pxHandle;
+ 446:queue.c       **** 	}
+ 447:queue.c       **** 
+ 448:queue.c       **** #endif /* configUSE_COUNTING_SEMAPHORES */
+ 449:queue.c       **** /*-----------------------------------------------------------*/
+ 450:queue.c       **** 
+ 451:queue.c       **** signed portBASE_TYPE xQueueGenericSend( xQueueHandle pxQueue, const void * const pvItemToQueue, por
+ 452:queue.c       **** {
+ 453:queue.c       **** signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 454:queue.c       **** xTimeOutType xTimeOut;
+ 455:queue.c       **** 
+ 456:queue.c       **** 	/* This function relaxes the coding standard somewhat to allow return
+ 457:queue.c       **** 	statements within the function itself.  This is done in the interest
+ 458:queue.c       **** 	of execution time efficiency. */
+ 459:queue.c       **** 	for( ;; )
+ 460:queue.c       **** 	{
+ 461:queue.c       **** 		taskENTER_CRITICAL();
+ 462:queue.c       **** 		{
+ 463:queue.c       **** 			/* Is there room on the queue now?  To be running we must be
+ 464:queue.c       **** 			the highest priority task wanting to access the queue. */
+ 465:queue.c       **** 			if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 466:queue.c       **** 			{
+ 467:queue.c       **** 				traceQUEUE_SEND( pxQueue );
+ 468:queue.c       **** 				prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
+ 469:queue.c       **** 
+ 470:queue.c       **** 				/* If there was a task waiting for data to arrive on the
+ 471:queue.c       **** 				queue then unblock it now. */
+ 472:queue.c       **** 				if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+ 473:queue.c       **** 				{
+ 474:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) == pdTRUE )
+ 475:queue.c       **** 					{
+ 476:queue.c       **** 						/* The unblocked task has a priority higher than
+ 477:queue.c       **** 						our own so yield immediately.  Yes it is ok to do
+ 478:queue.c       **** 						this from within the critical section - the kernel
+ 479:queue.c       **** 						takes care of that. */
+ 480:queue.c       **** 						portYIELD_WITHIN_API();
+ 481:queue.c       **** 					}
+ 482:queue.c       **** 				}
+ 483:queue.c       **** 
+ 484:queue.c       **** 				taskEXIT_CRITICAL();
+ 485:queue.c       **** 
+ 486:queue.c       **** 				/* Return to the original privilege level before exiting the
+ 487:queue.c       **** 				function. */
+ 488:queue.c       **** 				return pdPASS;
+ 489:queue.c       **** 			}
+ 490:queue.c       **** 			else
+ 491:queue.c       **** 			{
+ 492:queue.c       **** 				if( xTicksToWait == ( portTickType ) 0 )
+ 493:queue.c       **** 				{
+ 494:queue.c       **** 					/* The queue was full and no block time is specified (or
+ 495:queue.c       **** 					the block time has expired) so leave now. */
+ 496:queue.c       **** 					taskEXIT_CRITICAL();
+ 497:queue.c       **** 
+ 498:queue.c       **** 					/* Return to the original privilege level before exiting
+ 499:queue.c       **** 					the function. */
+ 500:queue.c       **** 					traceQUEUE_SEND_FAILED( pxQueue );
+ 501:queue.c       **** 					return errQUEUE_FULL;
+ 502:queue.c       **** 				}
+ 503:queue.c       **** 				else if( xEntryTimeSet == pdFALSE )
+ 504:queue.c       **** 				{
+ 505:queue.c       **** 					/* The queue was full and a block time was specified so
+ 506:queue.c       **** 					configure the timeout structure. */
+ 507:queue.c       **** 					vTaskSetTimeOutState( &xTimeOut );
+ 508:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 509:queue.c       **** 				}
+ 510:queue.c       **** 			}
+ 511:queue.c       **** 		}
+ 512:queue.c       **** 		taskEXIT_CRITICAL();
+ 513:queue.c       **** 
+ 514:queue.c       **** 		/* Interrupts and other tasks can send to and receive from the queue
+ 515:queue.c       **** 		now the critical section has been exited. */
+ 516:queue.c       **** 
+ 517:queue.c       **** 		vTaskSuspendAll();
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 519:queue.c       **** 
+ 520:queue.c       **** 		/* Update the timeout state to see if it has expired yet. */
+ 521:queue.c       **** 		if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 522:queue.c       **** 		{
+ 523:queue.c       **** 			if( prvIsQueueFull( pxQueue ) )
+ 524:queue.c       **** 			{
+ 525:queue.c       **** 				traceBLOCKING_ON_QUEUE_SEND( pxQueue );
+ 526:queue.c       **** 				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToSend ), xTicksToWait );
+ 527:queue.c       **** 
+ 528:queue.c       **** 				/* Unlocking the queue means queue events can effect the
+ 529:queue.c       **** 				event list.  It is possible	that interrupts occurring now
+ 530:queue.c       **** 				remove this task from the event	list again - but as the
+ 531:queue.c       **** 				scheduler is suspended the task will go onto the pending
+ 532:queue.c       **** 				ready last instead of the actual ready list. */
+ 533:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 534:queue.c       **** 
+ 535:queue.c       **** 				/* Resuming the scheduler will move tasks from the pending
+ 536:queue.c       **** 				ready list into the ready list - so it is feasible that this
+ 537:queue.c       **** 				task is already in a ready list before it yields - in which
+ 538:queue.c       **** 				case the yield will not cause a context switch unless there
+ 539:queue.c       **** 				is also a higher priority task in the pending ready list. */
+ 540:queue.c       **** 				if( !xTaskResumeAll() )
+ 541:queue.c       **** 				{
+ 542:queue.c       **** 					portYIELD_WITHIN_API();
+ 543:queue.c       **** 				}
+ 544:queue.c       **** 			}
+ 545:queue.c       **** 			else
+ 546:queue.c       **** 			{
+ 547:queue.c       **** 				/* Try again. */
+ 548:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 549:queue.c       **** 				( void ) xTaskResumeAll();
+ 550:queue.c       **** 			}
+ 551:queue.c       **** 		}
+ 552:queue.c       **** 		else
+ 553:queue.c       **** 		{
+ 554:queue.c       **** 			/* The timeout has expired. */
+ 555:queue.c       **** 			prvUnlockQueue( pxQueue );
+ 556:queue.c       **** 			( void ) xTaskResumeAll();
+ 557:queue.c       **** 
+ 558:queue.c       **** 			/* Return to the original privilege level before exiting the
+ 559:queue.c       **** 			function. */
+ 560:queue.c       **** 			traceQUEUE_SEND_FAILED( pxQueue );
+ 561:queue.c       **** 			return errQUEUE_FULL;
+ 562:queue.c       **** 		}
+ 563:queue.c       **** 	}
+ 564:queue.c       **** }
+ 565:queue.c       **** /*-----------------------------------------------------------*/
+ 566:queue.c       **** 
+ 567:queue.c       **** #if configUSE_ALTERNATIVE_API == 1
+ 568:queue.c       **** 
+ 569:queue.c       **** 	signed portBASE_TYPE xQueueAltGenericSend( xQueueHandle pxQueue, const void * const pvItemToQueue,
+ 570:queue.c       **** 	{
+ 571:queue.c       **** 	signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 572:queue.c       **** 	xTimeOutType xTimeOut;
+ 573:queue.c       **** 
+ 574:queue.c       **** 		for( ;; )
+ 575:queue.c       **** 		{
+ 576:queue.c       **** 			taskENTER_CRITICAL();
+ 577:queue.c       **** 			{
+ 578:queue.c       **** 				/* Is there room on the queue now?  To be running we must be
+ 579:queue.c       **** 				the highest priority task wanting to access the queue. */
+ 580:queue.c       **** 				if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 581:queue.c       **** 				{
+ 582:queue.c       **** 					traceQUEUE_SEND( pxQueue );
+ 583:queue.c       **** 					prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
+ 584:queue.c       **** 
+ 585:queue.c       **** 					/* If there was a task waiting for data to arrive on the
+ 586:queue.c       **** 					queue then unblock it now. */
+ 587:queue.c       **** 					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+ 588:queue.c       **** 					{
+ 589:queue.c       **** 						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) == pdTRUE )
+ 590:queue.c       **** 						{
+ 591:queue.c       **** 							/* The unblocked task has a priority higher than
+ 592:queue.c       **** 							our own so yield immediately. */
+ 593:queue.c       **** 							portYIELD_WITHIN_API();
+ 594:queue.c       **** 						}
+ 595:queue.c       **** 					}
+ 596:queue.c       **** 
+ 597:queue.c       **** 					taskEXIT_CRITICAL();
+ 598:queue.c       **** 					return pdPASS;
+ 599:queue.c       **** 				}
+ 600:queue.c       **** 				else
+ 601:queue.c       **** 				{
+ 602:queue.c       **** 					if( xTicksToWait == ( portTickType ) 0 )
+ 603:queue.c       **** 					{
+ 604:queue.c       **** 						taskEXIT_CRITICAL();
+ 605:queue.c       **** 						return errQUEUE_FULL;
+ 606:queue.c       **** 					}
+ 607:queue.c       **** 					else if( xEntryTimeSet == pdFALSE )
+ 608:queue.c       **** 					{
+ 609:queue.c       **** 						vTaskSetTimeOutState( &xTimeOut );
+ 610:queue.c       **** 						xEntryTimeSet = pdTRUE;
+ 611:queue.c       **** 					}
+ 612:queue.c       **** 				}
+ 613:queue.c       **** 			}
+ 614:queue.c       **** 			taskEXIT_CRITICAL();
+ 615:queue.c       **** 
+ 616:queue.c       **** 			taskENTER_CRITICAL();
+ 617:queue.c       **** 			{
+ 618:queue.c       **** 				if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 619:queue.c       **** 				{
+ 620:queue.c       **** 					if( prvIsQueueFull( pxQueue ) )
+ 621:queue.c       **** 					{
+ 622:queue.c       **** 						traceBLOCKING_ON_QUEUE_SEND( pxQueue );
+ 623:queue.c       **** 						vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToSend ), xTicksToWait );
+ 624:queue.c       **** 						portYIELD_WITHIN_API();
+ 625:queue.c       **** 					}
+ 626:queue.c       **** 				}
+ 627:queue.c       **** 				else
+ 628:queue.c       **** 				{
+ 629:queue.c       **** 					taskEXIT_CRITICAL();
+ 630:queue.c       **** 					traceQUEUE_SEND_FAILED( pxQueue );
+ 631:queue.c       **** 					return errQUEUE_FULL;
+ 632:queue.c       **** 				}
+ 633:queue.c       **** 			}
+ 634:queue.c       **** 			taskEXIT_CRITICAL();
+ 635:queue.c       **** 		}
+ 636:queue.c       **** 	}
+ 637:queue.c       **** 
+ 638:queue.c       **** #endif /* configUSE_ALTERNATIVE_API */
+ 639:queue.c       **** /*-----------------------------------------------------------*/
+ 640:queue.c       **** 
+ 641:queue.c       **** #if configUSE_ALTERNATIVE_API == 1
+ 642:queue.c       **** 
+ 643:queue.c       **** 	signed portBASE_TYPE xQueueAltGenericReceive( xQueueHandle pxQueue, void * const pvBuffer, portTic
+ 644:queue.c       **** 	{
+ 645:queue.c       **** 	signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 646:queue.c       **** 	xTimeOutType xTimeOut;
+ 647:queue.c       **** 	signed char *pcOriginalReadPosition;
+ 648:queue.c       **** 
+ 649:queue.c       **** 		for( ;; )
+ 650:queue.c       **** 		{
+ 651:queue.c       **** 			taskENTER_CRITICAL();
+ 652:queue.c       **** 			{
+ 653:queue.c       **** 				if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 654:queue.c       **** 				{
+ 655:queue.c       **** 					/* Remember our read position in case we are just peeking. */
+ 656:queue.c       **** 					pcOriginalReadPosition = pxQueue->pcReadFrom;
+ 657:queue.c       **** 
+ 658:queue.c       **** 					prvCopyDataFromQueue( pxQueue, pvBuffer );
+ 659:queue.c       **** 
+ 660:queue.c       **** 					if( xJustPeeking == pdFALSE )
+ 661:queue.c       **** 					{
+ 662:queue.c       **** 						traceQUEUE_RECEIVE( pxQueue );
+ 663:queue.c       **** 
+ 664:queue.c       **** 						/* We are actually removing data. */
+ 665:queue.c       **** 						--( pxQueue->uxMessagesWaiting );
+ 666:queue.c       **** 
+ 667:queue.c       **** 						#if ( configUSE_MUTEXES == 1 )
+ 668:queue.c       **** 						{
+ 669:queue.c       **** 							if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+ 670:queue.c       **** 							{
+ 671:queue.c       **** 								/* Record the information required to implement
+ 672:queue.c       **** 								priority inheritance should it become necessary. */
+ 673:queue.c       **** 								pxQueue->pxMutexHolder = xTaskGetCurrentTaskHandle();
+ 674:queue.c       **** 							}
+ 675:queue.c       **** 						}
+ 676:queue.c       **** 						#endif
+ 677:queue.c       **** 
+ 678:queue.c       **** 						if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+ 679:queue.c       **** 						{
+ 680:queue.c       **** 							if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) == pdTRUE )
+ 681:queue.c       **** 							{
+ 682:queue.c       **** 								portYIELD_WITHIN_API();
+ 683:queue.c       **** 							}
+ 684:queue.c       **** 						}
+ 685:queue.c       **** 					}
+ 686:queue.c       **** 					else
+ 687:queue.c       **** 					{
+ 688:queue.c       **** 						traceQUEUE_PEEK( pxQueue );
+ 689:queue.c       **** 
+ 690:queue.c       **** 						/* We are not removing the data, so reset our read
+ 691:queue.c       **** 						pointer. */
+ 692:queue.c       **** 						pxQueue->pcReadFrom = pcOriginalReadPosition;
+ 693:queue.c       **** 
+ 694:queue.c       **** 						/* The data is being left in the queue, so see if there are
+ 695:queue.c       **** 						any other tasks waiting for the data. */
+ 696:queue.c       **** 						if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 697:queue.c       **** 						{
+ 698:queue.c       **** 							/* Tasks that are removed from the event list will get added to
+ 699:queue.c       **** 							the pending ready list as the scheduler is still suspended. */
+ 700:queue.c       **** 							if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 701:queue.c       **** 							{
+ 702:queue.c       **** 								/* The task waiting has a higher priority than this task. */
+ 703:queue.c       **** 								portYIELD_WITHIN_API();
+ 704:queue.c       **** 							}
+ 705:queue.c       **** 						}
+ 706:queue.c       **** 
+ 707:queue.c       **** 					}
+ 708:queue.c       **** 
+ 709:queue.c       **** 					taskEXIT_CRITICAL();
+ 710:queue.c       **** 					return pdPASS;
+ 711:queue.c       **** 				}
+ 712:queue.c       **** 				else
+ 713:queue.c       **** 				{
+ 714:queue.c       **** 					if( xTicksToWait == ( portTickType ) 0 )
+ 715:queue.c       **** 					{
+ 716:queue.c       **** 						taskEXIT_CRITICAL();
+ 717:queue.c       **** 						traceQUEUE_RECEIVE_FAILED( pxQueue );
+ 718:queue.c       **** 						return errQUEUE_EMPTY;
+ 719:queue.c       **** 					}
+ 720:queue.c       **** 					else if( xEntryTimeSet == pdFALSE )
+ 721:queue.c       **** 					{
+ 722:queue.c       **** 						vTaskSetTimeOutState( &xTimeOut );
+ 723:queue.c       **** 						xEntryTimeSet = pdTRUE;
+ 724:queue.c       **** 					}
+ 725:queue.c       **** 				}
+ 726:queue.c       **** 			}
+ 727:queue.c       **** 			taskEXIT_CRITICAL();
+ 728:queue.c       **** 
+ 729:queue.c       **** 			taskENTER_CRITICAL();
+ 730:queue.c       **** 			{
+ 731:queue.c       **** 				if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 732:queue.c       **** 				{
+ 733:queue.c       **** 					if( prvIsQueueEmpty( pxQueue ) )
+ 734:queue.c       **** 					{
+ 735:queue.c       **** 						traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
+ 736:queue.c       **** 
+ 737:queue.c       **** 						#if ( configUSE_MUTEXES == 1 )
+ 738:queue.c       **** 						{
+ 739:queue.c       **** 							if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+ 740:queue.c       **** 							{
+ 741:queue.c       **** 								portENTER_CRITICAL();
+ 742:queue.c       **** 									vTaskPriorityInherit( ( void * ) pxQueue->pxMutexHolder );
+ 743:queue.c       **** 								portEXIT_CRITICAL();
+ 744:queue.c       **** 							}
+ 745:queue.c       **** 						}
+ 746:queue.c       **** 						#endif
+ 747:queue.c       **** 
+ 748:queue.c       **** 						vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
+ 749:queue.c       **** 						portYIELD_WITHIN_API();
+ 750:queue.c       **** 					}
+ 751:queue.c       **** 				}
+ 752:queue.c       **** 				else
+ 753:queue.c       **** 				{
+ 754:queue.c       **** 					taskEXIT_CRITICAL();
+ 755:queue.c       **** 					traceQUEUE_RECEIVE_FAILED( pxQueue );
+ 756:queue.c       **** 					return errQUEUE_EMPTY;
+ 757:queue.c       **** 				}
+ 758:queue.c       **** 			}
+ 759:queue.c       **** 			taskEXIT_CRITICAL();
+ 760:queue.c       **** 		}
+ 761:queue.c       **** 	}
+ 762:queue.c       **** 
+ 763:queue.c       **** 
+ 764:queue.c       **** #endif /* configUSE_ALTERNATIVE_API */
+ 765:queue.c       **** /*-----------------------------------------------------------*/
+ 766:queue.c       **** 
+ 767:queue.c       **** signed portBASE_TYPE xQueueGenericSendFromISR( xQueueHandle pxQueue, const void * const pvItemToQue
+ 768:queue.c       **** {
+ 769:queue.c       **** signed portBASE_TYPE xReturn;
+ 770:queue.c       **** unsigned portBASE_TYPE uxSavedInterruptStatus;
+ 771:queue.c       **** 
+ 772:queue.c       **** 	/* Similar to xQueueGenericSend, except we don't block if there is no room
+ 773:queue.c       **** 	in the queue.  Also we don't directly wake a task that was blocked on a
+ 774:queue.c       **** 	queue read, instead we return a flag to say whether a context switch is
+ 775:queue.c       **** 	required or not (i.e. has a task with a higher priority than us been woken
+ 776:queue.c       **** 	by this	post). */
+ 777:queue.c       **** 	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
+ 778:queue.c       **** 	{
+ 779:queue.c       **** 		if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 780:queue.c       **** 		{
+ 781:queue.c       **** 			traceQUEUE_SEND_FROM_ISR( pxQueue );
+ 782:queue.c       **** 
+ 783:queue.c       **** 			prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
+ 784:queue.c       **** 
+ 785:queue.c       **** 			/* If the queue is locked we do not alter the event list.  This will
+ 786:queue.c       **** 			be done when the queue is unlocked later. */
+ 787:queue.c       **** 			if( pxQueue->xTxLock == queueUNLOCKED )
+ 788:queue.c       **** 			{
+ 789:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 790:queue.c       **** 				{
+ 791:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 792:queue.c       **** 					{
+ 793:queue.c       **** 						/* The task waiting has a higher priority so record that a
+ 794:queue.c       **** 						context	switch is required. */
+ 795:queue.c       **** 						*pxHigherPriorityTaskWoken = pdTRUE;
+ 796:queue.c       **** 					}
+ 797:queue.c       **** 				}
+ 798:queue.c       **** 			}
+ 799:queue.c       **** 			else
+ 800:queue.c       **** 			{
+ 801:queue.c       **** 				/* Increment the lock count so the task that unlocks the queue
+ 802:queue.c       **** 				knows that data was posted while it was locked. */
+ 803:queue.c       **** 				++( pxQueue->xTxLock );
+ 804:queue.c       **** 			}
+ 805:queue.c       **** 
+ 806:queue.c       **** 			xReturn = pdPASS;
+ 807:queue.c       **** 		}
+ 808:queue.c       **** 		else
+ 809:queue.c       **** 		{
+ 810:queue.c       **** 			traceQUEUE_SEND_FROM_ISR_FAILED( pxQueue );
+ 811:queue.c       **** 			xReturn = errQUEUE_FULL;
+ 812:queue.c       **** 		}
+ 813:queue.c       **** 	}
+ 814:queue.c       **** 	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
+ 815:queue.c       **** 
+ 816:queue.c       **** 	return xReturn;
+ 817:queue.c       **** }
+ 818:queue.c       **** /*-----------------------------------------------------------*/
+ 819:queue.c       **** 
+ 820:queue.c       **** signed portBASE_TYPE xQueueGenericReceive( xQueueHandle pxQueue, void * const pvBuffer, portTickTyp
+ 821:queue.c       **** {
+ 822:queue.c       **** signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 823:queue.c       **** xTimeOutType xTimeOut;
+ 824:queue.c       **** signed char *pcOriginalReadPosition;
+ 825:queue.c       **** 
+ 826:queue.c       **** 	/* This function relaxes the coding standard somewhat to allow return
+ 827:queue.c       **** 	statements within the function itself.  This is done in the interest
+ 828:queue.c       **** 	of execution time efficiency. */
+ 829:queue.c       **** 
+ 830:queue.c       **** 	for( ;; )
+ 831:queue.c       **** 	{
+ 832:queue.c       **** 		taskENTER_CRITICAL();
+ 833:queue.c       **** 		{
+ 834:queue.c       **** 			/* Is there data in the queue now?  To be running we must be
+ 835:queue.c       **** 			the highest priority task wanting to access the queue. */
+ 836:queue.c       **** 			if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 837:queue.c       **** 			{
+ 838:queue.c       **** 				/* Remember our read position in case we are just peeking. */
+ 839:queue.c       **** 				pcOriginalReadPosition = pxQueue->pcReadFrom;
+ 840:queue.c       **** 
+ 841:queue.c       **** 				prvCopyDataFromQueue( pxQueue, pvBuffer );
+ 842:queue.c       **** 
+ 843:queue.c       **** 				if( xJustPeeking == pdFALSE )
+ 844:queue.c       **** 				{
+ 845:queue.c       **** 					traceQUEUE_RECEIVE( pxQueue );
+ 846:queue.c       **** 
+ 847:queue.c       **** 					/* We are actually removing data. */
+ 848:queue.c       **** 					--( pxQueue->uxMessagesWaiting );
+ 849:queue.c       **** 
+ 850:queue.c       **** 					#if ( configUSE_MUTEXES == 1 )
+ 851:queue.c       **** 					{
+ 852:queue.c       **** 						if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+ 853:queue.c       **** 						{
+ 854:queue.c       **** 							/* Record the information required to implement
+ 855:queue.c       **** 							priority inheritance should it become necessary. */
+ 856:queue.c       **** 							pxQueue->pxMutexHolder = xTaskGetCurrentTaskHandle();
+ 857:queue.c       **** 						}
+ 858:queue.c       **** 					}
+ 859:queue.c       **** 					#endif
+ 860:queue.c       **** 
+ 861:queue.c       **** 					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+ 862:queue.c       **** 					{
+ 863:queue.c       **** 						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) == pdTRUE )
+ 864:queue.c       **** 						{
+ 865:queue.c       **** 							portYIELD_WITHIN_API();
+ 866:queue.c       **** 						}
+ 867:queue.c       **** 					}
+ 868:queue.c       **** 				}
+ 869:queue.c       **** 				else
+ 870:queue.c       **** 				{
+ 871:queue.c       **** 					traceQUEUE_PEEK( pxQueue );
+ 872:queue.c       **** 
+ 873:queue.c       **** 					/* We are not removing the data, so reset our read
+ 874:queue.c       **** 					pointer. */
+ 875:queue.c       **** 					pxQueue->pcReadFrom = pcOriginalReadPosition;
+ 876:queue.c       **** 
+ 877:queue.c       **** 					/* The data is being left in the queue, so see if there are
+ 878:queue.c       **** 					any other tasks waiting for the data. */
+ 879:queue.c       **** 					if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 880:queue.c       **** 					{
+ 881:queue.c       **** 						/* Tasks that are removed from the event list will get added to
+ 882:queue.c       **** 						the pending ready list as the scheduler is still suspended. */
+ 883:queue.c       **** 						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 884:queue.c       **** 						{
+ 885:queue.c       **** 							/* The task waiting has a higher priority than this task. */
+ 886:queue.c       **** 							portYIELD_WITHIN_API();
+ 887:queue.c       **** 						}
+ 888:queue.c       **** 					}
+ 889:queue.c       **** 
+ 890:queue.c       **** 				}
+ 891:queue.c       **** 
+ 892:queue.c       **** 				taskEXIT_CRITICAL();
+ 893:queue.c       **** 				return pdPASS;
+ 894:queue.c       **** 			}
+ 895:queue.c       **** 			else
+ 896:queue.c       **** 			{
+ 897:queue.c       **** 				if( xTicksToWait == ( portTickType ) 0 )
+ 898:queue.c       **** 				{
+ 899:queue.c       **** 					/* The queue was empty and no block time is specified (or
+ 900:queue.c       **** 					the block time has expired) so leave now. */
+ 901:queue.c       **** 					taskEXIT_CRITICAL();
+ 902:queue.c       **** 					traceQUEUE_RECEIVE_FAILED( pxQueue );
+ 903:queue.c       **** 					return errQUEUE_EMPTY;
+ 904:queue.c       **** 				}
+ 905:queue.c       **** 				else if( xEntryTimeSet == pdFALSE )
+ 906:queue.c       **** 				{
+ 907:queue.c       **** 					/* The queue was empty and a block time was specified so
+ 908:queue.c       **** 					configure the timeout structure. */
+ 909:queue.c       **** 					vTaskSetTimeOutState( &xTimeOut );
+ 910:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 911:queue.c       **** 				}
+ 912:queue.c       **** 			}
+ 913:queue.c       **** 		}
+ 914:queue.c       **** 		taskEXIT_CRITICAL();
+ 915:queue.c       **** 
+ 916:queue.c       **** 		/* Interrupts and other tasks can send to and receive from the queue
+ 917:queue.c       **** 		now the critical section has been exited. */
+ 918:queue.c       **** 
+ 919:queue.c       **** 		vTaskSuspendAll();
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 921:queue.c       **** 
+ 922:queue.c       **** 		/* Update the timeout state to see if it has expired yet. */
+ 923:queue.c       **** 		if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 924:queue.c       **** 		{
+ 925:queue.c       **** 			if( prvIsQueueEmpty( pxQueue ) )
+ 926:queue.c       **** 			{
+ 927:queue.c       **** 				traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
+ 928:queue.c       **** 
+ 929:queue.c       **** 				#if ( configUSE_MUTEXES == 1 )
+ 930:queue.c       **** 				{
+ 931:queue.c       **** 					if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+ 932:queue.c       **** 					{
+ 933:queue.c       **** 						portENTER_CRITICAL();
+ 934:queue.c       **** 						{
+ 935:queue.c       **** 							vTaskPriorityInherit( ( void * ) pxQueue->pxMutexHolder );
+ 936:queue.c       **** 						}
+ 937:queue.c       **** 						portEXIT_CRITICAL();
+ 938:queue.c       **** 					}
+ 939:queue.c       **** 				}
+ 940:queue.c       **** 				#endif
+ 941:queue.c       **** 
+ 942:queue.c       **** 				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
+ 943:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 944:queue.c       **** 				if( !xTaskResumeAll() )
+ 945:queue.c       **** 				{
+ 946:queue.c       **** 					portYIELD_WITHIN_API();
+ 947:queue.c       **** 				}
+ 948:queue.c       **** 			}
+ 949:queue.c       **** 			else
+ 950:queue.c       **** 			{
+ 951:queue.c       **** 				/* Try again. */
+ 952:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 953:queue.c       **** 				( void ) xTaskResumeAll();
+ 954:queue.c       **** 			}
+ 955:queue.c       **** 		}
+ 956:queue.c       **** 		else
+ 957:queue.c       **** 		{
+ 958:queue.c       **** 			prvUnlockQueue( pxQueue );
+ 959:queue.c       **** 			( void ) xTaskResumeAll();
+ 960:queue.c       **** 			traceQUEUE_RECEIVE_FAILED( pxQueue );
+ 961:queue.c       **** 			return errQUEUE_EMPTY;
+ 962:queue.c       **** 		}
+ 963:queue.c       **** 	}
+ 964:queue.c       **** }
+ 965:queue.c       **** /*-----------------------------------------------------------*/
+ 966:queue.c       **** 
+ 967:queue.c       **** signed portBASE_TYPE xQueueReceiveFromISR( xQueueHandle pxQueue, void * const pvBuffer, signed port
+ 968:queue.c       **** {
+ 969:queue.c       **** signed portBASE_TYPE xReturn;
+ 970:queue.c       **** unsigned portBASE_TYPE uxSavedInterruptStatus;
+ 971:queue.c       **** 
+ 972:queue.c       **** 	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
+ 973:queue.c       **** 	{
+ 974:queue.c       **** 		/* We cannot block from an ISR, so check there is data available. */
+ 975:queue.c       **** 		if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 976:queue.c       **** 		{
+ 977:queue.c       **** 			traceQUEUE_RECEIVE_FROM_ISR( pxQueue );
+ 978:queue.c       **** 
+ 979:queue.c       **** 			prvCopyDataFromQueue( pxQueue, pvBuffer );
+ 980:queue.c       **** 			--( pxQueue->uxMessagesWaiting );
+ 981:queue.c       **** 
+ 982:queue.c       **** 			/* If the queue is locked we will not modify the event list.  Instead
+ 983:queue.c       **** 			we update the lock count so the task that unlocks the queue will know
+ 984:queue.c       **** 			that an ISR has removed data while the queue was locked. */
+ 985:queue.c       **** 			if( pxQueue->xRxLock == queueUNLOCKED )
+ 986:queue.c       **** 			{
+ 987:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) )
+ 988:queue.c       **** 				{
+ 989:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+ 990:queue.c       **** 					{
+ 991:queue.c       **** 						/* The task waiting has a higher priority than us so
+ 992:queue.c       **** 						force a context switch. */
+ 993:queue.c       **** 						*pxTaskWoken = pdTRUE;
+ 994:queue.c       **** 					}
+ 995:queue.c       **** 				}
+ 996:queue.c       **** 			}
+ 997:queue.c       **** 			else
+ 998:queue.c       **** 			{
+ 999:queue.c       **** 				/* Increment the lock count so the task that unlocks the queue
+1000:queue.c       **** 				knows that data was removed while it was locked. */
+1001:queue.c       **** 				++( pxQueue->xRxLock );
+1002:queue.c       **** 			}
+1003:queue.c       **** 
+1004:queue.c       **** 			xReturn = pdPASS;
+1005:queue.c       **** 		}
+1006:queue.c       **** 		else
+1007:queue.c       **** 		{
+1008:queue.c       **** 			xReturn = pdFAIL;
+1009:queue.c       **** 			traceQUEUE_RECEIVE_FROM_ISR_FAILED( pxQueue );
+1010:queue.c       **** 		}
+1011:queue.c       **** 	}
+1012:queue.c       **** 	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
+1013:queue.c       **** 
+1014:queue.c       **** 	return xReturn;
+1015:queue.c       **** }
+1016:queue.c       **** /*-----------------------------------------------------------*/
+1017:queue.c       **** 
+1018:queue.c       **** unsigned portBASE_TYPE uxQueueMessagesWaiting( const xQueueHandle pxQueue )
+1019:queue.c       **** {
+1020:queue.c       **** unsigned portBASE_TYPE uxReturn;
+1021:queue.c       **** 
+1022:queue.c       **** 	taskENTER_CRITICAL();
+1023:queue.c       **** 		uxReturn = pxQueue->uxMessagesWaiting;
+1024:queue.c       **** 	taskEXIT_CRITICAL();
+1025:queue.c       **** 
+1026:queue.c       **** 	return uxReturn;
+1027:queue.c       **** }
+1028:queue.c       **** /*-----------------------------------------------------------*/
+1029:queue.c       **** 
+1030:queue.c       **** unsigned portBASE_TYPE uxQueueMessagesWaitingFromISR( const xQueueHandle pxQueue )
+1031:queue.c       **** {
+1032:queue.c       **** unsigned portBASE_TYPE uxReturn;
+1033:queue.c       **** 
+1034:queue.c       **** 	uxReturn = pxQueue->uxMessagesWaiting;
+1035:queue.c       **** 
+1036:queue.c       **** 	return uxReturn;
+1037:queue.c       **** }
+1038:queue.c       **** /*-----------------------------------------------------------*/
+1039:queue.c       **** 
+1040:queue.c       **** void vQueueDelete( xQueueHandle pxQueue )
+1041:queue.c       **** {
+1042:queue.c       **** 	traceQUEUE_DELETE( pxQueue );
+1043:queue.c       **** 	vQueueUnregisterQueue( pxQueue );
+1044:queue.c       **** 	vPortFree( pxQueue->pcHead );
+1045:queue.c       **** 	vPortFree( pxQueue );
+1046:queue.c       **** }
+1047:queue.c       **** /*-----------------------------------------------------------*/
+1048:queue.c       **** 
+1049:queue.c       **** static void prvCopyDataToQueue( xQUEUE *pxQueue, const void *pvItemToQueue, portBASE_TYPE xPosition
+1050:queue.c       **** {
+1051:queue.c       **** 	if( pxQueue->uxItemSize == ( unsigned portBASE_TYPE ) 0 )
+1052:queue.c       **** 	{
+1053:queue.c       **** 		#if ( configUSE_MUTEXES == 1 )
+1054:queue.c       **** 		{
+1055:queue.c       **** 			if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+1056:queue.c       **** 			{
+1057:queue.c       **** 				/* The mutex is no longer being held. */
+1058:queue.c       **** 				vTaskPriorityDisinherit( ( void * ) pxQueue->pxMutexHolder );
+1059:queue.c       **** 				pxQueue->pxMutexHolder = NULL;
+1060:queue.c       **** 			}
+1061:queue.c       **** 		}
+1062:queue.c       **** 		#endif
+1063:queue.c       **** 	}
+1064:queue.c       **** 	else if( xPosition == queueSEND_TO_BACK )
+1065:queue.c       **** 	{
+1066:queue.c       **** 		memcpy( ( void * ) pxQueue->pcWriteTo, pvItemToQueue, ( unsigned ) pxQueue->uxItemSize );
+1067:queue.c       **** 		pxQueue->pcWriteTo += pxQueue->uxItemSize;
+1068:queue.c       **** 		if( pxQueue->pcWriteTo >= pxQueue->pcTail )
+1069:queue.c       **** 		{
+1070:queue.c       **** 			pxQueue->pcWriteTo = pxQueue->pcHead;
+1071:queue.c       **** 		}
+1072:queue.c       **** 	}
+1073:queue.c       **** 	else
+1074:queue.c       **** 	{
+1075:queue.c       **** 		memcpy( ( void * ) pxQueue->pcReadFrom, pvItemToQueue, ( unsigned ) pxQueue->uxItemSize );
+1076:queue.c       **** 		pxQueue->pcReadFrom -= pxQueue->uxItemSize;
+1077:queue.c       **** 		if( pxQueue->pcReadFrom < pxQueue->pcHead )
+1078:queue.c       **** 		{
+1079:queue.c       **** 			pxQueue->pcReadFrom = ( pxQueue->pcTail - pxQueue->uxItemSize );
+1080:queue.c       **** 		}
+1081:queue.c       **** 	}
+1082:queue.c       **** 
+1083:queue.c       **** 	++( pxQueue->uxMessagesWaiting );
+1084:queue.c       **** }
+1085:queue.c       **** /*-----------------------------------------------------------*/
+1086:queue.c       **** 
+1087:queue.c       **** static void prvCopyDataFromQueue( xQUEUE * const pxQueue, const void *pvBuffer )
+1088:queue.c       **** {
+  25              		.loc 1 1088 0
+  26              		.cfi_startproc
+  27              	.LVL0:
+  28 0000 38B5     		push	{r3, r4, r5, lr}
+  29              	.LCFI0:
+  30              		.cfi_def_cfa_offset 16
+  31              		.cfi_offset 3, -16
+  32              		.cfi_offset 4, -12
+  33              		.cfi_offset 5, -8
+  34              		.cfi_offset 14, -4
+1089:queue.c       **** 	if( pxQueue->uxQueueType != queueQUEUE_IS_MUTEX )
+  35              		.loc 1 1089 0
+  36 0002 0468     		ldr	r4, [r0]
+  37 0004 002C     		cmp	r4, #0
+  38 0006 0CD0     		beq	.L1
+1090:queue.c       **** 	{
+1091:queue.c       **** 		pxQueue->pcReadFrom += pxQueue->uxItemSize;
+  39              		.loc 1 1091 0
+  40 0008 026C     		ldr	r2, [r0, #64]
+  41 000a C568     		ldr	r5, [r0, #12]
+  42 000c AB18     		add	r3, r5, r2
+  43 000e C360     		str	r3, [r0, #12]
+1092:queue.c       **** 		if( pxQueue->pcReadFrom >= pxQueue->pcTail )
+  44              		.loc 1 1092 0
+  45 0010 4568     		ldr	r5, [r0, #4]
+  46 0012 AB42     		cmp	r3, r5
+  47 0014 00D3     		bcc	.L3
+1093:queue.c       **** 		{
+1094:queue.c       **** 			pxQueue->pcReadFrom = pxQueue->pcHead;
+  48              		.loc 1 1094 0
+  49 0016 C460     		str	r4, [r0, #12]
+  50              	.L3:
+1095:queue.c       **** 		}
+1096:queue.c       **** 		memcpy( ( void * ) pvBuffer, ( void * ) pxQueue->pcReadFrom, ( unsigned ) pxQueue->uxItemSize );
+  51              		.loc 1 1096 0
+  52 0018 C368     		ldr	r3, [r0, #12]
+  53 001a 081C     		mov	r0, r1
+  54              	.LVL1:
+  55 001c 191C     		mov	r1, r3
+  56              	.LVL2:
+  57 001e FFF7FEFF 		bl	memcpy
+  58              	.LVL3:
+  59              	.L1:
+1097:queue.c       **** 	}
+1098:queue.c       **** }
+  60              		.loc 1 1098 0
+  61              		@ sp needed for prologue
+  62 0022 38BC     		pop	{r3, r4, r5}
+  63 0024 01BC     		pop	{r0}
+  64 0026 0047     		bx	r0
+  65              		.cfi_endproc
+  66              	.LFE9:
+  68              		.section	.text.prvCopyDataToQueue,"ax",%progbits
+  69              		.align	2
+  70              		.code	16
+  71              		.thumb_func
+  73              	prvCopyDataToQueue:
+  74              	.LFB8:
+1050:queue.c       **** {
+  75              		.loc 1 1050 0
+  76              		.cfi_startproc
+  77              	.LVL4:
+  78 0000 10B5     		push	{r4, lr}
+  79              	.LCFI1:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 4, -8
+  82              		.cfi_offset 14, -4
+  83 0002 041C     		mov	r4, r0
+1051:queue.c       **** 	if( pxQueue->uxItemSize == ( unsigned portBASE_TYPE ) 0 )
+  84              		.loc 1 1051 0
+  85 0004 036C     		ldr	r3, [r0, #64]
+  86 0006 002B     		cmp	r3, #0
+  87 0008 1ED0     		beq	.L5
+1064:queue.c       **** 	else if( xPosition == queueSEND_TO_BACK )
+  88              		.loc 1 1064 0
+  89 000a 002A     		cmp	r2, #0
+  90 000c 0DD1     		bne	.L6
+1066:queue.c       **** 		memcpy( ( void * ) pxQueue->pcWriteTo, pvItemToQueue, ( unsigned ) pxQueue->uxItemSize );
+  91              		.loc 1 1066 0
+  92 000e 8068     		ldr	r0, [r0, #8]
+  93              	.LVL5:
+  94 0010 1A1C     		mov	r2, r3
+  95              	.LVL6:
+  96 0012 FFF7FEFF 		bl	memcpy
+  97              	.LVL7:
+1067:queue.c       **** 		pxQueue->pcWriteTo += pxQueue->uxItemSize;
+  98              		.loc 1 1067 0
+  99 0016 A168     		ldr	r1, [r4, #8]
+ 100 0018 226C     		ldr	r2, [r4, #64]
+ 101 001a 8B18     		add	r3, r1, r2
+ 102 001c A360     		str	r3, [r4, #8]
+1068:queue.c       **** 		if( pxQueue->pcWriteTo >= pxQueue->pcTail )
+ 103              		.loc 1 1068 0
+ 104 001e 6168     		ldr	r1, [r4, #4]
+ 105 0020 8B42     		cmp	r3, r1
+ 106 0022 11D3     		bcc	.L5
+1070:queue.c       **** 			pxQueue->pcWriteTo = pxQueue->pcHead;
+ 107              		.loc 1 1070 0
+ 108 0024 2268     		ldr	r2, [r4]
+ 109 0026 A260     		str	r2, [r4, #8]
+ 110 0028 0EE0     		b	.L5
+ 111              	.LVL8:
+ 112              	.L6:
+1075:queue.c       **** 		memcpy( ( void * ) pxQueue->pcReadFrom, pvItemToQueue, ( unsigned ) pxQueue->uxItemSize );
+ 113              		.loc 1 1075 0
+ 114 002a C068     		ldr	r0, [r0, #12]
+ 115              	.LVL9:
+ 116 002c 1A1C     		mov	r2, r3
+ 117              	.LVL10:
+ 118 002e FFF7FEFF 		bl	memcpy
+ 119              	.LVL11:
+1076:queue.c       **** 		pxQueue->pcReadFrom -= pxQueue->uxItemSize;
+ 120              		.loc 1 1076 0
+ 121 0032 236C     		ldr	r3, [r4, #64]
+ 122 0034 5A42     		neg	r2, r3
+ 123 0036 E168     		ldr	r1, [r4, #12]
+ 124 0038 8B18     		add	r3, r1, r2
+ 125 003a E360     		str	r3, [r4, #12]
+1077:queue.c       **** 		if( pxQueue->pcReadFrom < pxQueue->pcHead )
+ 126              		.loc 1 1077 0
+ 127 003c 2168     		ldr	r1, [r4]
+ 128 003e 8B42     		cmp	r3, r1
+ 129 0040 02D2     		bcs	.L5
+1079:queue.c       **** 			pxQueue->pcReadFrom = ( pxQueue->pcTail - pxQueue->uxItemSize );
+ 130              		.loc 1 1079 0
+ 131 0042 6368     		ldr	r3, [r4, #4]
+ 132 0044 9A18     		add	r2, r3, r2
+ 133 0046 E260     		str	r2, [r4, #12]
+ 134              	.L5:
+1083:queue.c       **** 	++( pxQueue->uxMessagesWaiting );
+ 135              		.loc 1 1083 0
+ 136 0048 A36B     		ldr	r3, [r4, #56]
+ 137 004a 0133     		add	r3, r3, #1
+ 138 004c A363     		str	r3, [r4, #56]
+1084:queue.c       **** }
+ 139              		.loc 1 1084 0
+ 140              		@ sp needed for prologue
+ 141              	.LVL12:
+ 142 004e 10BC     		pop	{r4}
+ 143 0050 01BC     		pop	{r0}
+ 144 0052 0047     		bx	r0
+ 145              		.cfi_endproc
+ 146              	.LFE8:
+ 148              		.section	.text.prvUnlockQueue,"ax",%progbits
+ 149              		.align	2
+ 150              		.code	16
+ 151              		.thumb_func
+ 153              	prvUnlockQueue:
+ 154              	.LFB10:
+1099:queue.c       **** /*-----------------------------------------------------------*/
+1100:queue.c       **** 
+1101:queue.c       **** static void prvUnlockQueue( xQueueHandle pxQueue )
+1102:queue.c       **** {
+ 155              		.loc 1 1102 0
+ 156              		.cfi_startproc
+ 157              	.LVL13:
+ 158 0000 38B5     		push	{r3, r4, r5, lr}
+ 159              	.LCFI2:
+ 160              		.cfi_def_cfa_offset 16
+ 161              		.cfi_offset 3, -16
+ 162              		.cfi_offset 4, -12
+ 163              		.cfi_offset 5, -8
+ 164              		.cfi_offset 14, -4
+ 165 0002 041C     		mov	r4, r0
+1103:queue.c       **** 	/* THIS FUNCTION MUST BE CALLED WITH THE SCHEDULER SUSPENDED. */
+1104:queue.c       **** 
+1105:queue.c       **** 	/* The lock counts contains the number of extra data items placed or
+1106:queue.c       **** 	removed from the queue while the queue was locked.  When a queue is
+1107:queue.c       **** 	locked items can be added or removed, but the event lists cannot be
+1108:queue.c       **** 	updated. */
+1109:queue.c       **** 	taskENTER_CRITICAL();
+ 166              		.loc 1 1109 0
+ 167 0004 FFF7FEFF 		bl	vPortEnterCritical
+ 168              	.LVL14:
+1110:queue.c       **** 	{
+1111:queue.c       **** 		/* See if data was added to the queue while it was locked. */
+1112:queue.c       **** 		while( pxQueue->xTxLock > queueLOCKED_UNMODIFIED )
+ 169              		.loc 1 1112 0
+ 170 0008 A36C     		ldr	r3, [r4, #72]
+ 171 000a 002B     		cmp	r3, #0
+ 172 000c 14DD     		ble	.L8
+1113:queue.c       **** 		{
+1114:queue.c       **** 			/* Data was posted while the queue was locked.  Are any tasks
+1115:queue.c       **** 			blocked waiting for data to become available? */
+1116:queue.c       **** 			if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 173              		.loc 1 1116 0
+ 174 000e 636A     		ldr	r3, [r4, #36]
+1117:queue.c       **** 			{
+1118:queue.c       **** 				/* Tasks that are removed from the event list will get added to
+1119:queue.c       **** 				the pending ready list as the scheduler is still suspended. */
+1120:queue.c       **** 				if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 175              		.loc 1 1120 0
+ 176 0010 251C     		mov	r5, r4
+ 177 0012 2435     		add	r5, r5, #36
+1116:queue.c       **** 			if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 178              		.loc 1 1116 0
+ 179 0014 002B     		cmp	r3, #0
+ 180 0016 03D1     		bne	.L16
+ 181 0018 0EE0     		b	.L8
+ 182              	.L11:
+ 183 001a 636A     		ldr	r3, [r4, #36]
+ 184 001c 002B     		cmp	r3, #0
+ 185 001e 0BD0     		beq	.L8
+ 186              	.L16:
+ 187              		.loc 1 1120 0
+ 188 0020 281C     		mov	r0, r5
+ 189 0022 FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 190              	.LVL15:
+ 191 0026 0028     		cmp	r0, #0
+ 192 0028 01D0     		beq	.L10
+1121:queue.c       **** 				{
+1122:queue.c       **** 					/* The task waiting has a higher priority so record that a
+1123:queue.c       **** 					context	switch is required. */
+1124:queue.c       **** 					vTaskMissedYield();
+ 193              		.loc 1 1124 0
+ 194 002a FFF7FEFF 		bl	vTaskMissedYield
+ 195              	.LVL16:
+ 196              	.L10:
+1125:queue.c       **** 				}
+1126:queue.c       **** 
+1127:queue.c       **** 				--( pxQueue->xTxLock );
+ 197              		.loc 1 1127 0
+ 198 002e A36C     		ldr	r3, [r4, #72]
+ 199 0030 013B     		sub	r3, r3, #1
+ 200 0032 A364     		str	r3, [r4, #72]
+1112:queue.c       **** 		while( pxQueue->xTxLock > queueLOCKED_UNMODIFIED )
+ 201              		.loc 1 1112 0
+ 202 0034 002B     		cmp	r3, #0
+ 203 0036 F0DC     		bgt	.L11
+ 204              	.L8:
+1128:queue.c       **** 			}
+1129:queue.c       **** 			else
+1130:queue.c       **** 			{
+1131:queue.c       **** 				break;
+1132:queue.c       **** 			}
+1133:queue.c       **** 		}
+1134:queue.c       **** 
+1135:queue.c       **** 		pxQueue->xTxLock = queueUNLOCKED;
+ 205              		.loc 1 1135 0
+ 206 0038 0123     		mov	r3, #1
+ 207 003a 5B42     		neg	r3, r3
+ 208 003c A364     		str	r3, [r4, #72]
+1136:queue.c       **** 	}
+1137:queue.c       **** 	taskEXIT_CRITICAL();
+ 209              		.loc 1 1137 0
+ 210 003e FFF7FEFF 		bl	vPortExitCritical
+ 211              	.LVL17:
+1138:queue.c       **** 
+1139:queue.c       **** 	/* Do the same for the Rx lock. */
+1140:queue.c       **** 	taskENTER_CRITICAL();
+ 212              		.loc 1 1140 0
+ 213 0042 FFF7FEFF 		bl	vPortEnterCritical
+ 214              	.LVL18:
+1141:queue.c       **** 	{
+1142:queue.c       **** 		while( pxQueue->xRxLock > queueLOCKED_UNMODIFIED )
+ 215              		.loc 1 1142 0
+ 216 0046 636C     		ldr	r3, [r4, #68]
+ 217 0048 002B     		cmp	r3, #0
+ 218 004a 14DD     		ble	.L12
+1143:queue.c       **** 		{
+1144:queue.c       **** 			if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) )
+ 219              		.loc 1 1144 0
+ 220 004c 2369     		ldr	r3, [r4, #16]
+1145:queue.c       **** 			{
+1146:queue.c       **** 				if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+ 221              		.loc 1 1146 0
+ 222 004e 251C     		mov	r5, r4
+ 223 0050 1035     		add	r5, r5, #16
+1144:queue.c       **** 			if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) )
+ 224              		.loc 1 1144 0
+ 225 0052 002B     		cmp	r3, #0
+ 226 0054 03D1     		bne	.L17
+ 227 0056 0EE0     		b	.L12
+ 228              	.L15:
+ 229 0058 2369     		ldr	r3, [r4, #16]
+ 230 005a 002B     		cmp	r3, #0
+ 231 005c 0BD0     		beq	.L12
+ 232              	.L17:
+ 233              		.loc 1 1146 0
+ 234 005e 281C     		mov	r0, r5
+ 235 0060 FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 236              	.LVL19:
+ 237 0064 0028     		cmp	r0, #0
+ 238 0066 01D0     		beq	.L14
+1147:queue.c       **** 				{
+1148:queue.c       **** 					vTaskMissedYield();
+ 239              		.loc 1 1148 0
+ 240 0068 FFF7FEFF 		bl	vTaskMissedYield
+ 241              	.LVL20:
+ 242              	.L14:
+1149:queue.c       **** 				}
+1150:queue.c       **** 
+1151:queue.c       **** 				--( pxQueue->xRxLock );
+ 243              		.loc 1 1151 0
+ 244 006c 636C     		ldr	r3, [r4, #68]
+ 245 006e 013B     		sub	r3, r3, #1
+ 246 0070 6364     		str	r3, [r4, #68]
+1142:queue.c       **** 		while( pxQueue->xRxLock > queueLOCKED_UNMODIFIED )
+ 247              		.loc 1 1142 0
+ 248 0072 002B     		cmp	r3, #0
+ 249 0074 F0DC     		bgt	.L15
+ 250              	.L12:
+1152:queue.c       **** 			}
+1153:queue.c       **** 			else
+1154:queue.c       **** 			{
+1155:queue.c       **** 				break;
+1156:queue.c       **** 			}
+1157:queue.c       **** 		}
+1158:queue.c       **** 
+1159:queue.c       **** 		pxQueue->xRxLock = queueUNLOCKED;
+ 251              		.loc 1 1159 0
+ 252 0076 0123     		mov	r3, #1
+ 253 0078 5B42     		neg	r3, r3
+ 254 007a 6364     		str	r3, [r4, #68]
+1160:queue.c       **** 	}
+1161:queue.c       **** 	taskEXIT_CRITICAL();
+ 255              		.loc 1 1161 0
+ 256 007c FFF7FEFF 		bl	vPortExitCritical
+ 257              	.LVL21:
+1162:queue.c       **** }
+ 258              		.loc 1 1162 0
+ 259              		@ sp needed for prologue
+ 260              	.LVL22:
+ 261 0080 38BC     		pop	{r3, r4, r5}
+ 262 0082 01BC     		pop	{r0}
+ 263 0084 0047     		bx	r0
+ 264              		.cfi_endproc
+ 265              	.LFE10:
+ 267 0086 C046     		.section	.text.xQueueCreate,"ax",%progbits
+ 268              		.align	2
+ 269              		.global	xQueueCreate
+ 270              		.code	16
+ 271              		.thumb_func
+ 273              	xQueueCreate:
+ 274              	.LFB0:
+ 248:queue.c       **** {
+ 275              		.loc 1 248 0
+ 276              		.cfi_startproc
+ 277              	.LVL23:
+ 278 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 279              	.LCFI3:
+ 280              		.cfi_def_cfa_offset 24
+ 281              		.cfi_offset 3, -24
+ 282              		.cfi_offset 4, -20
+ 283              		.cfi_offset 5, -16
+ 284              		.cfi_offset 6, -12
+ 285              		.cfi_offset 7, -8
+ 286              		.cfi_offset 14, -4
+ 287 0002 051C     		mov	r5, r0
+ 288 0004 0E1C     		mov	r6, r1
+ 253:queue.c       **** 	if( uxQueueLength > ( unsigned portBASE_TYPE ) 0 )
+ 289              		.loc 1 253 0
+ 290 0006 0028     		cmp	r0, #0
+ 291 0008 2AD0     		beq	.L21
+ 255:queue.c       **** 		pxNewQueue = ( xQUEUE * ) pvPortMalloc( sizeof( xQUEUE ) );
+ 292              		.loc 1 255 0
+ 293 000a 4C20     		mov	r0, #76
+ 294              	.LVL24:
+ 295 000c FFF7FEFF 		bl	pvPortMalloc
+ 296              	.LVL25:
+ 297 0010 041C     		mov	r4, r0
+ 298              	.LVL26:
+ 256:queue.c       **** 		if( pxNewQueue != NULL )
+ 299              		.loc 1 256 0
+ 300 0012 0028     		cmp	r0, #0
+ 301 0014 25D0     		beq	.L19
+ 260:queue.c       **** 			xQueueSizeInBytes = ( size_t ) ( uxQueueLength * uxItemSize ) + ( size_t ) 1;
+ 302              		.loc 1 260 0
+ 303 0016 2F1C     		mov	r7, r5
+ 304 0018 7743     		mul	r7, r6
+ 305              	.LVL27:
+ 306 001a 781C     		add	r0, r7, #1
+ 307              	.LVL28:
+ 262:queue.c       **** 			pxNewQueue->pcHead = ( signed char * ) pvPortMalloc( xQueueSizeInBytes );
+ 308              		.loc 1 262 0
+ 309 001c FFF7FEFF 		bl	pvPortMalloc
+ 310              	.LVL29:
+ 311 0020 2060     		str	r0, [r4]
+ 263:queue.c       **** 			if( pxNewQueue->pcHead != NULL )
+ 312              		.loc 1 263 0
+ 313 0022 0028     		cmp	r0, #0
+ 314 0024 17D0     		beq	.L20
+ 267:queue.c       **** 				pxNewQueue->pcTail = pxNewQueue->pcHead + ( uxQueueLength * uxItemSize );
+ 315              		.loc 1 267 0
+ 316 0026 C719     		add	r7, r0, r7
+ 317              	.LVL30:
+ 318 0028 6760     		str	r7, [r4, #4]
+ 268:queue.c       **** 				pxNewQueue->uxMessagesWaiting = 0;
+ 319              		.loc 1 268 0
+ 320 002a 0022     		mov	r2, #0
+ 321 002c A263     		str	r2, [r4, #56]
+ 269:queue.c       **** 				pxNewQueue->pcWriteTo = pxNewQueue->pcHead;
+ 322              		.loc 1 269 0
+ 323 002e A060     		str	r0, [r4, #8]
+ 270:queue.c       **** 				pxNewQueue->pcReadFrom = pxNewQueue->pcHead + ( ( uxQueueLength - 1 ) * uxItemSize );
+ 324              		.loc 1 270 0
+ 325 0030 6A1E     		sub	r2, r5, #1
+ 326 0032 7243     		mul	r2, r6
+ 327 0034 8318     		add	r3, r0, r2
+ 328 0036 E360     		str	r3, [r4, #12]
+ 271:queue.c       **** 				pxNewQueue->uxLength = uxQueueLength;
+ 329              		.loc 1 271 0
+ 330 0038 E563     		str	r5, [r4, #60]
+ 272:queue.c       **** 				pxNewQueue->uxItemSize = uxItemSize;
+ 331              		.loc 1 272 0
+ 332 003a 2664     		str	r6, [r4, #64]
+ 273:queue.c       **** 				pxNewQueue->xRxLock = queueUNLOCKED;
+ 333              		.loc 1 273 0
+ 334 003c 0123     		mov	r3, #1
+ 335 003e 5B42     		neg	r3, r3
+ 336 0040 6364     		str	r3, [r4, #68]
+ 274:queue.c       **** 				pxNewQueue->xTxLock = queueUNLOCKED;
+ 337              		.loc 1 274 0
+ 338 0042 A364     		str	r3, [r4, #72]
+ 277:queue.c       **** 				vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+ 339              		.loc 1 277 0
+ 340 0044 201C     		mov	r0, r4
+ 341 0046 1030     		add	r0, r0, #16
+ 342 0048 FFF7FEFF 		bl	vListInitialise
+ 343              	.LVL31:
+ 278:queue.c       **** 				vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+ 344              		.loc 1 278 0
+ 345 004c 201C     		mov	r0, r4
+ 346 004e 2430     		add	r0, r0, #36
+ 347 0050 FFF7FEFF 		bl	vListInitialise
+ 348              	.LVL32:
+ 281:queue.c       **** 				return  pxNewQueue;
+ 349              		.loc 1 281 0
+ 350 0054 05E0     		b	.L19
+ 351              	.LVL33:
+ 352              	.L20:
+ 286:queue.c       **** 				vPortFree( pxNewQueue );
+ 353              		.loc 1 286 0
+ 354 0056 201C     		mov	r0, r4
+ 355 0058 FFF7FEFF 		bl	vPortFree
+ 356              	.LVL34:
+ 293:queue.c       **** 	return NULL;
+ 357              		.loc 1 293 0
+ 358 005c 0024     		mov	r4, #0
+ 359              	.LVL35:
+ 360 005e 00E0     		b	.L19
+ 361              	.LVL36:
+ 362              	.L21:
+ 363 0060 0024     		mov	r4, #0
+ 364              	.LVL37:
+ 365              	.L19:
+ 294:queue.c       **** }
+ 366              		.loc 1 294 0
+ 367 0062 201C     		mov	r0, r4
+ 368              		@ sp needed for prologue
+ 369              	.LVL38:
+ 370              	.LVL39:
+ 371 0064 F8BC     		pop	{r3, r4, r5, r6, r7}
+ 372 0066 02BC     		pop	{r1}
+ 373 0068 0847     		bx	r1
+ 374              		.cfi_endproc
+ 375              	.LFE0:
+ 377 006a C046     		.section	.text.xQueueGenericSend,"ax",%progbits
+ 378              		.align	2
+ 379              		.global	xQueueGenericSend
+ 380              		.code	16
+ 381              		.thumb_func
+ 383              	xQueueGenericSend:
+ 384              	.LFB1:
+ 452:queue.c       **** {
+ 385              		.loc 1 452 0
+ 386              		.cfi_startproc
+ 387              	.LVL40:
+ 388 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 389              	.LCFI4:
+ 390              		.cfi_def_cfa_offset 20
+ 391              		.cfi_offset 4, -20
+ 392              		.cfi_offset 5, -16
+ 393              		.cfi_offset 6, -12
+ 394              		.cfi_offset 7, -8
+ 395              		.cfi_offset 14, -4
+ 396 0002 5F46     		mov	r7, fp
+ 397 0004 5646     		mov	r6, sl
+ 398 0006 4D46     		mov	r5, r9
+ 399 0008 4446     		mov	r4, r8
+ 400 000a F0B4     		push	{r4, r5, r6, r7}
+ 401              	.LCFI5:
+ 402              		.cfi_def_cfa_offset 36
+ 403              		.cfi_offset 8, -36
+ 404              		.cfi_offset 9, -32
+ 405              		.cfi_offset 10, -28
+ 406              		.cfi_offset 11, -24
+ 407 000c 85B0     		sub	sp, sp, #20
+ 408              	.LCFI6:
+ 409              		.cfi_def_cfa_offset 56
+ 410 000e 041C     		mov	r4, r0
+ 411 0010 8946     		mov	r9, r1
+ 412 0012 0192     		str	r2, [sp, #4]
+ 413 0014 9846     		mov	r8, r3
+ 414              	.LVL41:
+ 453:queue.c       **** signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 415              		.loc 1 453 0
+ 416 0016 0025     		mov	r5, #0
+ 508:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 417              		.loc 1 508 0
+ 418 0018 0123     		mov	r3, #1
+ 419              	.LVL42:
+ 420 001a 9A46     		mov	sl, r3
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 421              		.loc 1 518 0
+ 422 001c AB46     		mov	fp, r5
+ 423              	.LVL43:
+ 424              	.L36:
+ 461:queue.c       **** 		taskENTER_CRITICAL();
+ 425              		.loc 1 461 0
+ 426 001e FFF7FEFF 		bl	vPortEnterCritical
+ 427              	.LVL44:
+ 465:queue.c       **** 			if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 428              		.loc 1 465 0
+ 429 0022 A06B     		ldr	r0, [r4, #56]
+ 430 0024 E36B     		ldr	r3, [r4, #60]
+ 431 0026 9842     		cmp	r0, r3
+ 432 0028 12D2     		bcs	.L24
+ 468:queue.c       **** 				prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
+ 433              		.loc 1 468 0
+ 434 002a 201C     		mov	r0, r4
+ 435 002c 4946     		mov	r1, r9
+ 436 002e 4246     		mov	r2, r8
+ 437 0030 FFF7FEFF 		bl	prvCopyDataToQueue
+ 438              	.LVL45:
+ 472:queue.c       **** 				if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+ 439              		.loc 1 472 0
+ 440 0034 636A     		ldr	r3, [r4, #36]
+ 441 0036 002B     		cmp	r3, #0
+ 442 0038 06D0     		beq	.L25
+ 474:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) == pdTRUE )
+ 443              		.loc 1 474 0
+ 444 003a 201C     		mov	r0, r4
+ 445 003c 2430     		add	r0, r0, #36
+ 446 003e FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 447              	.LVL46:
+ 448 0042 0128     		cmp	r0, #1
+ 449 0044 00D1     		bne	.L25
+ 480:queue.c       **** 						portYIELD_WITHIN_API();
+ 450              		.loc 1 480 0
+ 451              	@ 480 "queue.c" 1
+ 452 0046 00DF     		SWI 0
+ 453              	@ 0 "" 2
+ 454              		.code	16
+ 455              	.L25:
+ 484:queue.c       **** 				taskEXIT_CRITICAL();
+ 456              		.loc 1 484 0
+ 457 0048 FFF7FEFF 		bl	vPortExitCritical
+ 458              	.LVL47:
+ 488:queue.c       **** 				return pdPASS;
+ 459              		.loc 1 488 0
+ 460 004c 0120     		mov	r0, #1
+ 461 004e 46E0     		b	.L26
+ 462              	.L24:
+ 492:queue.c       **** 				if( xTicksToWait == ( portTickType ) 0 )
+ 463              		.loc 1 492 0
+ 464 0050 019B     		ldr	r3, [sp, #4]
+ 465 0052 002B     		cmp	r3, #0
+ 466 0054 03D1     		bne	.L27
+ 496:queue.c       **** 					taskEXIT_CRITICAL();
+ 467              		.loc 1 496 0
+ 468 0056 FFF7FEFF 		bl	vPortExitCritical
+ 469              	.LVL48:
+ 501:queue.c       **** 					return errQUEUE_FULL;
+ 470              		.loc 1 501 0
+ 471 005a 0020     		mov	r0, #0
+ 472 005c 3FE0     		b	.L26
+ 473              	.L27:
+ 503:queue.c       **** 				else if( xEntryTimeSet == pdFALSE )
+ 474              		.loc 1 503 0
+ 475 005e 002D     		cmp	r5, #0
+ 476 0060 03D1     		bne	.L28
+ 507:queue.c       **** 					vTaskSetTimeOutState( &xTimeOut );
+ 477              		.loc 1 507 0
+ 478 0062 02A8     		add	r0, sp, #8
+ 479 0064 FFF7FEFF 		bl	vTaskSetTimeOutState
+ 480              	.LVL49:
+ 508:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 481              		.loc 1 508 0
+ 482 0068 5546     		mov	r5, sl
+ 483              	.LVL50:
+ 484              	.L28:
+ 512:queue.c       **** 		taskEXIT_CRITICAL();
+ 485              		.loc 1 512 0
+ 486 006a FFF7FEFF 		bl	vPortExitCritical
+ 487              	.LVL51:
+ 517:queue.c       **** 		vTaskSuspendAll();
+ 488              		.loc 1 517 0
+ 489 006e FFF7FEFF 		bl	vTaskSuspendAll
+ 490              	.LVL52:
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 491              		.loc 1 518 0
+ 492 0072 FFF7FEFF 		bl	vPortEnterCritical
+ 493              	.LVL53:
+ 494 0076 636C     		ldr	r3, [r4, #68]
+ 495 0078 0133     		add	r3, r3, #1
+ 496 007a 01D1     		bne	.L29
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 497              		.loc 1 518 0 is_stmt 0 discriminator 1
+ 498 007c 5B46     		mov	r3, fp
+ 499 007e 6364     		str	r3, [r4, #68]
+ 500              	.L29:
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 501              		.loc 1 518 0 discriminator 2
+ 502 0080 A36C     		ldr	r3, [r4, #72]
+ 503 0082 0133     		add	r3, r3, #1
+ 504 0084 01D1     		bne	.L30
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 505              		.loc 1 518 0 discriminator 3
+ 506 0086 5B46     		mov	r3, fp
+ 507 0088 A364     		str	r3, [r4, #72]
+ 508              	.L30:
+ 518:queue.c       **** 		prvLockQueue( pxQueue );
+ 509              		.loc 1 518 0 discriminator 4
+ 510 008a FFF7FEFF 		bl	vPortExitCritical
+ 511              	.LVL54:
+ 521:queue.c       **** 		if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 512              		.loc 1 521 0 is_stmt 1 discriminator 4
+ 513 008e 02A8     		add	r0, sp, #8
+ 514 0090 01A9     		add	r1, sp, #4
+ 515 0092 FFF7FEFF 		bl	xTaskCheckForTimeOut
+ 516              	.LVL55:
+ 517 0096 0028     		cmp	r0, #0
+ 518 0098 1BD1     		bne	.L31
+ 519              	.LVL56:
+ 520              	.LBB4:
+ 521              	.LBB5:
+1163:queue.c       **** /*-----------------------------------------------------------*/
+1164:queue.c       **** 
+1165:queue.c       **** static signed portBASE_TYPE prvIsQueueEmpty( const xQueueHandle pxQueue )
+1166:queue.c       **** {
+1167:queue.c       **** signed portBASE_TYPE xReturn;
+1168:queue.c       **** 
+1169:queue.c       **** 	taskENTER_CRITICAL();
+1170:queue.c       **** 		xReturn = ( pxQueue->uxMessagesWaiting == ( unsigned portBASE_TYPE ) 0 );
+1171:queue.c       **** 	taskEXIT_CRITICAL();
+1172:queue.c       **** 
+1173:queue.c       **** 	return xReturn;
+1174:queue.c       **** }
+1175:queue.c       **** /*-----------------------------------------------------------*/
+1176:queue.c       **** 
+1177:queue.c       **** signed portBASE_TYPE xQueueIsQueueEmptyFromISR( const xQueueHandle pxQueue )
+1178:queue.c       **** {
+1179:queue.c       **** signed portBASE_TYPE xReturn;
+1180:queue.c       **** 
+1181:queue.c       **** 	xReturn = ( pxQueue->uxMessagesWaiting == ( unsigned portBASE_TYPE ) 0 );
+1182:queue.c       **** 
+1183:queue.c       **** 	return xReturn;
+1184:queue.c       **** }
+1185:queue.c       **** /*-----------------------------------------------------------*/
+1186:queue.c       **** 
+1187:queue.c       **** static signed portBASE_TYPE prvIsQueueFull( const xQueueHandle pxQueue )
+1188:queue.c       **** {
+1189:queue.c       **** signed portBASE_TYPE xReturn;
+1190:queue.c       **** 
+1191:queue.c       **** 	taskENTER_CRITICAL();
+ 522              		.loc 1 1191 0
+ 523 009a FFF7FEFF 		bl	vPortEnterCritical
+ 524              	.LVL57:
+1192:queue.c       **** 		xReturn = ( pxQueue->uxMessagesWaiting == pxQueue->uxLength );
+ 525              		.loc 1 1192 0
+ 526 009e A66B     		ldr	r6, [r4, #56]
+ 527 00a0 E76B     		ldr	r7, [r4, #60]
+ 528              	.LVL58:
+1193:queue.c       **** 	taskEXIT_CRITICAL();
+ 529              		.loc 1 1193 0
+ 530 00a2 FFF7FEFF 		bl	vPortExitCritical
+ 531              	.LVL59:
+ 532              	.LBE5:
+ 533              	.LBE4:
+ 523:queue.c       **** 			if( prvIsQueueFull( pxQueue ) )
+ 534              		.loc 1 523 0
+ 535 00a6 BE42     		cmp	r6, r7
+ 536 00a8 0DD1     		bne	.L32
+ 526:queue.c       **** 				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToSend ), xTicksToWait );
+ 537              		.loc 1 526 0
+ 538 00aa 201C     		mov	r0, r4
+ 539 00ac 1030     		add	r0, r0, #16
+ 540 00ae 0199     		ldr	r1, [sp, #4]
+ 541 00b0 FFF7FEFF 		bl	vTaskPlaceOnEventList
+ 542              	.LVL60:
+ 533:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 543              		.loc 1 533 0
+ 544 00b4 201C     		mov	r0, r4
+ 545 00b6 FFF7FEFF 		bl	prvUnlockQueue
+ 546              	.LVL61:
+ 540:queue.c       **** 				if( !xTaskResumeAll() )
+ 547              		.loc 1 540 0
+ 548 00ba FFF7FEFF 		bl	xTaskResumeAll
+ 549              	.LVL62:
+ 550 00be 0028     		cmp	r0, #0
+ 551 00c0 ADD1     		bne	.L36
+ 542:queue.c       **** 					portYIELD_WITHIN_API();
+ 552              		.loc 1 542 0
+ 553              	@ 542 "queue.c" 1
+ 554 00c2 00DF     		SWI 0
+ 555              	@ 0 "" 2
+ 556              		.code	16
+ 557 00c4 ABE7     		b	.L36
+ 558              	.L32:
+ 548:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 559              		.loc 1 548 0
+ 560 00c6 201C     		mov	r0, r4
+ 561 00c8 FFF7FEFF 		bl	prvUnlockQueue
+ 562              	.LVL63:
+ 549:queue.c       **** 				( void ) xTaskResumeAll();
+ 563              		.loc 1 549 0
+ 564 00cc FFF7FEFF 		bl	xTaskResumeAll
+ 565              	.LVL64:
+ 566 00d0 A5E7     		b	.L36
+ 567              	.LVL65:
+ 568              	.L31:
+ 555:queue.c       **** 			prvUnlockQueue( pxQueue );
+ 569              		.loc 1 555 0
+ 570 00d2 201C     		mov	r0, r4
+ 571 00d4 FFF7FEFF 		bl	prvUnlockQueue
+ 572              	.LVL66:
+ 556:queue.c       **** 			( void ) xTaskResumeAll();
+ 573              		.loc 1 556 0
+ 574 00d8 FFF7FEFF 		bl	xTaskResumeAll
+ 575              	.LVL67:
+ 561:queue.c       **** 			return errQUEUE_FULL;
+ 576              		.loc 1 561 0
+ 577 00dc 0020     		mov	r0, #0
+ 578              	.L26:
+ 564:queue.c       **** }
+ 579              		.loc 1 564 0
+ 580 00de 05B0     		add	sp, sp, #20
+ 581              		@ sp needed for prologue
+ 582              	.LVL68:
+ 583              	.LVL69:
+ 584              	.LVL70:
+ 585              	.LVL71:
+ 586 00e0 3CBC     		pop	{r2, r3, r4, r5}
+ 587 00e2 9046     		mov	r8, r2
+ 588 00e4 9946     		mov	r9, r3
+ 589 00e6 A246     		mov	sl, r4
+ 590 00e8 AB46     		mov	fp, r5
+ 591 00ea F0BC     		pop	{r4, r5, r6, r7}
+ 592 00ec 02BC     		pop	{r1}
+ 593 00ee 0847     		bx	r1
+ 594              		.cfi_endproc
+ 595              	.LFE1:
+ 597              		.section	.text.xQueueGenericSendFromISR,"ax",%progbits
+ 598              		.align	2
+ 599              		.global	xQueueGenericSendFromISR
+ 600              		.code	16
+ 601              		.thumb_func
+ 603              	xQueueGenericSendFromISR:
+ 604              	.LFB2:
+ 768:queue.c       **** {
+ 605              		.loc 1 768 0
+ 606              		.cfi_startproc
+ 607              	.LVL72:
+ 608 0000 70B5     		push	{r4, r5, r6, lr}
+ 609              	.LCFI7:
+ 610              		.cfi_def_cfa_offset 16
+ 611              		.cfi_offset 4, -16
+ 612              		.cfi_offset 5, -12
+ 613              		.cfi_offset 6, -8
+ 614              		.cfi_offset 14, -4
+ 615 0002 041C     		mov	r4, r0
+ 616 0004 161C     		mov	r6, r2
+ 617              	.LVL73:
+ 779:queue.c       **** 		if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 618              		.loc 1 779 0
+ 619 0006 856B     		ldr	r5, [r0, #56]
+ 811:queue.c       **** 			xReturn = errQUEUE_FULL;
+ 620              		.loc 1 811 0
+ 621 0008 0020     		mov	r0, #0
+ 622              	.LVL74:
+ 779:queue.c       **** 		if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
+ 623              		.loc 1 779 0
+ 624 000a E26B     		ldr	r2, [r4, #60]
+ 625              	.LVL75:
+ 626 000c 9542     		cmp	r5, r2
+ 627 000e 18D2     		bcs	.L38
+ 783:queue.c       **** 			prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
+ 628              		.loc 1 783 0
+ 629 0010 201C     		mov	r0, r4
+ 630 0012 1A1C     		mov	r2, r3
+ 631 0014 FFF7FEFF 		bl	prvCopyDataToQueue
+ 632              	.LVL76:
+ 787:queue.c       **** 			if( pxQueue->xTxLock == queueUNLOCKED )
+ 633              		.loc 1 787 0
+ 634 0018 A36C     		ldr	r3, [r4, #72]
+ 635 001a 5A1C     		add	r2, r3, #1
+ 636 001c 0ED1     		bne	.L39
+ 789:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 637              		.loc 1 789 0
+ 638 001e 636A     		ldr	r3, [r4, #36]
+ 806:queue.c       **** 			xReturn = pdPASS;
+ 639              		.loc 1 806 0
+ 640 0020 0120     		mov	r0, #1
+ 789:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 641              		.loc 1 789 0
+ 642 0022 002B     		cmp	r3, #0
+ 643 0024 0DD0     		beq	.L38
+ 791:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 644              		.loc 1 791 0
+ 645 0026 201C     		mov	r0, r4
+ 646 0028 2430     		add	r0, r0, #36
+ 647 002a FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 648              	.LVL77:
+ 649 002e 031C     		mov	r3, r0
+ 806:queue.c       **** 			xReturn = pdPASS;
+ 650              		.loc 1 806 0
+ 651 0030 0120     		mov	r0, #1
+ 791:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 652              		.loc 1 791 0
+ 653 0032 002B     		cmp	r3, #0
+ 654 0034 05D0     		beq	.L38
+ 795:queue.c       **** 						*pxHigherPriorityTaskWoken = pdTRUE;
+ 655              		.loc 1 795 0
+ 656 0036 0123     		mov	r3, #1
+ 657 0038 3360     		str	r3, [r6]
+ 658 003a 02E0     		b	.L38
+ 659              	.L39:
+ 803:queue.c       **** 				++( pxQueue->xTxLock );
+ 660              		.loc 1 803 0
+ 661 003c 0133     		add	r3, r3, #1
+ 662 003e A364     		str	r3, [r4, #72]
+ 806:queue.c       **** 			xReturn = pdPASS;
+ 663              		.loc 1 806 0
+ 664 0040 0120     		mov	r0, #1
+ 665              	.L38:
+ 666              	.LVL78:
+ 817:queue.c       **** }
+ 667              		.loc 1 817 0
+ 668              		@ sp needed for prologue
+ 669              	.LVL79:
+ 670              	.LVL80:
+ 671 0042 70BC     		pop	{r4, r5, r6}
+ 672 0044 02BC     		pop	{r1}
+ 673 0046 0847     		bx	r1
+ 674              		.cfi_endproc
+ 675              	.LFE2:
+ 677              		.section	.text.xQueueGenericReceive,"ax",%progbits
+ 678              		.align	2
+ 679              		.global	xQueueGenericReceive
+ 680              		.code	16
+ 681              		.thumb_func
+ 683              	xQueueGenericReceive:
+ 684              	.LFB3:
+ 821:queue.c       **** {
+ 685              		.loc 1 821 0
+ 686              		.cfi_startproc
+ 687              	.LVL81:
+ 688 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 689              	.LCFI8:
+ 690              		.cfi_def_cfa_offset 20
+ 691              		.cfi_offset 4, -20
+ 692              		.cfi_offset 5, -16
+ 693              		.cfi_offset 6, -12
+ 694              		.cfi_offset 7, -8
+ 695              		.cfi_offset 14, -4
+ 696 0002 5746     		mov	r7, sl
+ 697 0004 4E46     		mov	r6, r9
+ 698 0006 4546     		mov	r5, r8
+ 699 0008 E0B4     		push	{r5, r6, r7}
+ 700              	.LCFI9:
+ 701              		.cfi_def_cfa_offset 32
+ 702              		.cfi_offset 8, -32
+ 703              		.cfi_offset 9, -28
+ 704              		.cfi_offset 10, -24
+ 705 000a 84B0     		sub	sp, sp, #16
+ 706              	.LCFI10:
+ 707              		.cfi_def_cfa_offset 48
+ 708 000c 041C     		mov	r4, r0
+ 709 000e 8946     		mov	r9, r1
+ 710 0010 0192     		str	r2, [sp, #4]
+ 711 0012 9846     		mov	r8, r3
+ 712              	.LVL82:
+ 822:queue.c       **** signed portBASE_TYPE xEntryTimeSet = pdFALSE;
+ 713              		.loc 1 822 0
+ 714 0014 0025     		mov	r5, #0
+ 910:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 715              		.loc 1 910 0
+ 716 0016 0123     		mov	r3, #1
+ 717              	.LVL83:
+ 718 0018 9A46     		mov	sl, r3
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 719              		.loc 1 920 0
+ 720 001a 0026     		mov	r6, #0
+ 721              	.LVL84:
+ 722              	.L58:
+ 832:queue.c       **** 		taskENTER_CRITICAL();
+ 723              		.loc 1 832 0
+ 724 001c FFF7FEFF 		bl	vPortEnterCritical
+ 725              	.LVL85:
+ 836:queue.c       **** 			if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 726              		.loc 1 836 0
+ 727 0020 A26B     		ldr	r2, [r4, #56]
+ 728 0022 002A     		cmp	r2, #0
+ 729 0024 24D0     		beq	.L45
+ 839:queue.c       **** 				pcOriginalReadPosition = pxQueue->pcReadFrom;
+ 730              		.loc 1 839 0
+ 731 0026 E568     		ldr	r5, [r4, #12]
+ 732              	.LVL86:
+ 841:queue.c       **** 				prvCopyDataFromQueue( pxQueue, pvBuffer );
+ 733              		.loc 1 841 0
+ 734 0028 201C     		mov	r0, r4
+ 735 002a 4946     		mov	r1, r9
+ 736 002c FFF7FEFF 		bl	prvCopyDataFromQueue
+ 737              	.LVL87:
+ 843:queue.c       **** 				if( xJustPeeking == pdFALSE )
+ 738              		.loc 1 843 0
+ 739 0030 4346     		mov	r3, r8
+ 740 0032 002B     		cmp	r3, #0
+ 741 0034 0DD1     		bne	.L46
+ 742              	.LVL88:
+ 848:queue.c       **** 					--( pxQueue->uxMessagesWaiting );
+ 743              		.loc 1 848 0
+ 744 0036 A36B     		ldr	r3, [r4, #56]
+ 745              	.LVL89:
+ 746 0038 013B     		sub	r3, r3, #1
+ 747 003a A363     		str	r3, [r4, #56]
+ 861:queue.c       **** 					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+ 748              		.loc 1 861 0
+ 749 003c 2369     		ldr	r3, [r4, #16]
+ 750 003e 002B     		cmp	r3, #0
+ 751 0040 12D0     		beq	.L47
+ 863:queue.c       **** 						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) == pdTRUE )
+ 752              		.loc 1 863 0
+ 753 0042 201C     		mov	r0, r4
+ 754 0044 1030     		add	r0, r0, #16
+ 755 0046 FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 756              	.LVL90:
+ 757 004a 0128     		cmp	r0, #1
+ 758 004c 0CD1     		bne	.L47
+ 865:queue.c       **** 							portYIELD_WITHIN_API();
+ 759              		.loc 1 865 0
+ 760              	@ 865 "queue.c" 1
+ 761 004e 00DF     		SWI 0
+ 762              	@ 0 "" 2
+ 763              		.code	16
+ 764 0050 0AE0     		b	.L47
+ 765              	.LVL91:
+ 766              	.L46:
+ 875:queue.c       **** 					pxQueue->pcReadFrom = pcOriginalReadPosition;
+ 767              		.loc 1 875 0
+ 768 0052 E560     		str	r5, [r4, #12]
+ 879:queue.c       **** 					if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) )
+ 769              		.loc 1 879 0
+ 770 0054 636A     		ldr	r3, [r4, #36]
+ 771              	.LVL92:
+ 772 0056 002B     		cmp	r3, #0
+ 773 0058 06D0     		beq	.L47
+ 883:queue.c       **** 						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+ 774              		.loc 1 883 0
+ 775 005a 201C     		mov	r0, r4
+ 776 005c 2430     		add	r0, r0, #36
+ 777 005e FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 778              	.LVL93:
+ 779 0062 0028     		cmp	r0, #0
+ 780 0064 00D0     		beq	.L47
+ 886:queue.c       **** 							portYIELD_WITHIN_API();
+ 781              		.loc 1 886 0
+ 782              	@ 886 "queue.c" 1
+ 783 0066 00DF     		SWI 0
+ 784              	@ 0 "" 2
+ 785              		.code	16
+ 786              	.L47:
+ 892:queue.c       **** 				taskEXIT_CRITICAL();
+ 787              		.loc 1 892 0
+ 788 0068 FFF7FEFF 		bl	vPortExitCritical
+ 789              	.LVL94:
+ 893:queue.c       **** 				return pdPASS;
+ 790              		.loc 1 893 0
+ 791 006c 0120     		mov	r0, #1
+ 792 006e 43E0     		b	.L48
+ 793              	.LVL95:
+ 794              	.L45:
+ 897:queue.c       **** 				if( xTicksToWait == ( portTickType ) 0 )
+ 795              		.loc 1 897 0
+ 796 0070 019B     		ldr	r3, [sp, #4]
+ 797 0072 002B     		cmp	r3, #0
+ 798 0074 03D1     		bne	.L49
+ 901:queue.c       **** 					taskEXIT_CRITICAL();
+ 799              		.loc 1 901 0
+ 800 0076 FFF7FEFF 		bl	vPortExitCritical
+ 801              	.LVL96:
+ 903:queue.c       **** 					return errQUEUE_EMPTY;
+ 802              		.loc 1 903 0
+ 803 007a 0020     		mov	r0, #0
+ 804 007c 3CE0     		b	.L48
+ 805              	.L49:
+ 905:queue.c       **** 				else if( xEntryTimeSet == pdFALSE )
+ 806              		.loc 1 905 0
+ 807 007e 002D     		cmp	r5, #0
+ 808 0080 03D1     		bne	.L50
+ 909:queue.c       **** 					vTaskSetTimeOutState( &xTimeOut );
+ 809              		.loc 1 909 0
+ 810 0082 02A8     		add	r0, sp, #8
+ 811 0084 FFF7FEFF 		bl	vTaskSetTimeOutState
+ 812              	.LVL97:
+ 910:queue.c       **** 					xEntryTimeSet = pdTRUE;
+ 813              		.loc 1 910 0
+ 814 0088 5546     		mov	r5, sl
+ 815              	.LVL98:
+ 816              	.L50:
+ 914:queue.c       **** 		taskEXIT_CRITICAL();
+ 817              		.loc 1 914 0
+ 818 008a FFF7FEFF 		bl	vPortExitCritical
+ 819              	.LVL99:
+ 919:queue.c       **** 		vTaskSuspendAll();
+ 820              		.loc 1 919 0
+ 821 008e FFF7FEFF 		bl	vTaskSuspendAll
+ 822              	.LVL100:
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 823              		.loc 1 920 0
+ 824 0092 FFF7FEFF 		bl	vPortEnterCritical
+ 825              	.LVL101:
+ 826 0096 636C     		ldr	r3, [r4, #68]
+ 827 0098 0133     		add	r3, r3, #1
+ 828 009a 00D1     		bne	.L51
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 829              		.loc 1 920 0 is_stmt 0 discriminator 1
+ 830 009c 6664     		str	r6, [r4, #68]
+ 831              	.L51:
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 832              		.loc 1 920 0 discriminator 2
+ 833 009e A36C     		ldr	r3, [r4, #72]
+ 834 00a0 0133     		add	r3, r3, #1
+ 835 00a2 00D1     		bne	.L52
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 836              		.loc 1 920 0 discriminator 3
+ 837 00a4 A664     		str	r6, [r4, #72]
+ 838              	.L52:
+ 920:queue.c       **** 		prvLockQueue( pxQueue );
+ 839              		.loc 1 920 0 discriminator 4
+ 840 00a6 FFF7FEFF 		bl	vPortExitCritical
+ 841              	.LVL102:
+ 923:queue.c       **** 		if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+ 842              		.loc 1 923 0 is_stmt 1 discriminator 4
+ 843 00aa 02A8     		add	r0, sp, #8
+ 844 00ac 01A9     		add	r1, sp, #4
+ 845 00ae FFF7FEFF 		bl	xTaskCheckForTimeOut
+ 846              	.LVL103:
+ 847 00b2 0028     		cmp	r0, #0
+ 848 00b4 1AD1     		bne	.L53
+ 849              	.LVL104:
+ 850              	.LBB8:
+ 851              	.LBB9:
+1169:queue.c       **** 	taskENTER_CRITICAL();
+ 852              		.loc 1 1169 0
+ 853 00b6 FFF7FEFF 		bl	vPortEnterCritical
+ 854              	.LVL105:
+1170:queue.c       **** 		xReturn = ( pxQueue->uxMessagesWaiting == ( unsigned portBASE_TYPE ) 0 );
+ 855              		.loc 1 1170 0
+ 856 00ba A76B     		ldr	r7, [r4, #56]
+ 857              	.LVL106:
+1171:queue.c       **** 	taskEXIT_CRITICAL();
+ 858              		.loc 1 1171 0
+ 859 00bc FFF7FEFF 		bl	vPortExitCritical
+ 860              	.LVL107:
+ 861              	.LBE9:
+ 862              	.LBE8:
+ 925:queue.c       **** 			if( prvIsQueueEmpty( pxQueue ) )
+ 863              		.loc 1 925 0
+ 864 00c0 002F     		cmp	r7, #0
+ 865 00c2 0DD1     		bne	.L54
+ 942:queue.c       **** 				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
+ 866              		.loc 1 942 0
+ 867 00c4 201C     		mov	r0, r4
+ 868 00c6 2430     		add	r0, r0, #36
+ 869 00c8 0199     		ldr	r1, [sp, #4]
+ 870 00ca FFF7FEFF 		bl	vTaskPlaceOnEventList
+ 871              	.LVL108:
+ 943:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 872              		.loc 1 943 0
+ 873 00ce 201C     		mov	r0, r4
+ 874 00d0 FFF7FEFF 		bl	prvUnlockQueue
+ 875              	.LVL109:
+ 944:queue.c       **** 				if( !xTaskResumeAll() )
+ 876              		.loc 1 944 0
+ 877 00d4 FFF7FEFF 		bl	xTaskResumeAll
+ 878              	.LVL110:
+ 879 00d8 0028     		cmp	r0, #0
+ 880 00da 9FD1     		bne	.L58
+ 946:queue.c       **** 					portYIELD_WITHIN_API();
+ 881              		.loc 1 946 0
+ 882              	@ 946 "queue.c" 1
+ 883 00dc 00DF     		SWI 0
+ 884              	@ 0 "" 2
+ 885              		.code	16
+ 886 00de 9DE7     		b	.L58
+ 887              	.L54:
+ 952:queue.c       **** 				prvUnlockQueue( pxQueue );
+ 888              		.loc 1 952 0
+ 889 00e0 201C     		mov	r0, r4
+ 890 00e2 FFF7FEFF 		bl	prvUnlockQueue
+ 891              	.LVL111:
+ 953:queue.c       **** 				( void ) xTaskResumeAll();
+ 892              		.loc 1 953 0
+ 893 00e6 FFF7FEFF 		bl	xTaskResumeAll
+ 894              	.LVL112:
+ 895 00ea 97E7     		b	.L58
+ 896              	.LVL113:
+ 897              	.L53:
+ 958:queue.c       **** 			prvUnlockQueue( pxQueue );
+ 898              		.loc 1 958 0
+ 899 00ec 201C     		mov	r0, r4
+ 900 00ee FFF7FEFF 		bl	prvUnlockQueue
+ 901              	.LVL114:
+ 959:queue.c       **** 			( void ) xTaskResumeAll();
+ 902              		.loc 1 959 0
+ 903 00f2 FFF7FEFF 		bl	xTaskResumeAll
+ 904              	.LVL115:
+ 961:queue.c       **** 			return errQUEUE_EMPTY;
+ 905              		.loc 1 961 0
+ 906 00f6 0020     		mov	r0, #0
+ 907              	.LVL116:
+ 908              	.L48:
+ 964:queue.c       **** }
+ 909              		.loc 1 964 0
+ 910 00f8 04B0     		add	sp, sp, #16
+ 911              		@ sp needed for prologue
+ 912              	.LVL117:
+ 913              	.LVL118:
+ 914              	.LVL119:
+ 915 00fa 1CBC     		pop	{r2, r3, r4}
+ 916 00fc 9046     		mov	r8, r2
+ 917 00fe 9946     		mov	r9, r3
+ 918 0100 A246     		mov	sl, r4
+ 919 0102 F0BC     		pop	{r4, r5, r6, r7}
+ 920 0104 02BC     		pop	{r1}
+ 921 0106 0847     		bx	r1
+ 922              		.cfi_endproc
+ 923              	.LFE3:
+ 925              		.section	.text.xQueueReceiveFromISR,"ax",%progbits
+ 926              		.align	2
+ 927              		.global	xQueueReceiveFromISR
+ 928              		.code	16
+ 929              		.thumb_func
+ 931              	xQueueReceiveFromISR:
+ 932              	.LFB4:
+ 968:queue.c       **** {
+ 933              		.loc 1 968 0
+ 934              		.cfi_startproc
+ 935              	.LVL120:
+ 936 0000 38B5     		push	{r3, r4, r5, lr}
+ 937              	.LCFI11:
+ 938              		.cfi_def_cfa_offset 16
+ 939              		.cfi_offset 3, -16
+ 940              		.cfi_offset 4, -12
+ 941              		.cfi_offset 5, -8
+ 942              		.cfi_offset 14, -4
+ 943 0002 041C     		mov	r4, r0
+ 944 0004 151C     		mov	r5, r2
+ 945              	.LVL121:
+ 975:queue.c       **** 		if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 946              		.loc 1 975 0
+ 947 0006 836B     		ldr	r3, [r0, #56]
+1008:queue.c       **** 			xReturn = pdFAIL;
+ 948              		.loc 1 1008 0
+ 949 0008 0020     		mov	r0, #0
+ 950              	.LVL122:
+ 975:queue.c       **** 		if( pxQueue->uxMessagesWaiting > ( unsigned portBASE_TYPE ) 0 )
+ 951              		.loc 1 975 0
+ 952 000a 002B     		cmp	r3, #0
+ 953 000c 1AD0     		beq	.L60
+ 979:queue.c       **** 			prvCopyDataFromQueue( pxQueue, pvBuffer );
+ 954              		.loc 1 979 0
+ 955 000e 201C     		mov	r0, r4
+ 956 0010 FFF7FEFF 		bl	prvCopyDataFromQueue
+ 957              	.LVL123:
+ 980:queue.c       **** 			--( pxQueue->uxMessagesWaiting );
+ 958              		.loc 1 980 0
+ 959 0014 A36B     		ldr	r3, [r4, #56]
+ 960 0016 013B     		sub	r3, r3, #1
+ 961 0018 A363     		str	r3, [r4, #56]
+ 985:queue.c       **** 			if( pxQueue->xRxLock == queueUNLOCKED )
+ 962              		.loc 1 985 0
+ 963 001a 636C     		ldr	r3, [r4, #68]
+ 964 001c 5A1C     		add	r2, r3, #1
+ 965 001e 0ED1     		bne	.L61
+ 987:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) )
+ 966              		.loc 1 987 0
+ 967 0020 2369     		ldr	r3, [r4, #16]
+1004:queue.c       **** 			xReturn = pdPASS;
+ 968              		.loc 1 1004 0
+ 969 0022 0120     		mov	r0, #1
+ 987:queue.c       **** 				if( !listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) )
+ 970              		.loc 1 987 0
+ 971 0024 002B     		cmp	r3, #0
+ 972 0026 0DD0     		beq	.L60
+ 989:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+ 973              		.loc 1 989 0
+ 974 0028 201C     		mov	r0, r4
+ 975 002a 1030     		add	r0, r0, #16
+ 976 002c FFF7FEFF 		bl	xTaskRemoveFromEventList
+ 977              	.LVL124:
+ 978 0030 031C     		mov	r3, r0
+1004:queue.c       **** 			xReturn = pdPASS;
+ 979              		.loc 1 1004 0
+ 980 0032 0120     		mov	r0, #1
+ 989:queue.c       **** 					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+ 981              		.loc 1 989 0
+ 982 0034 002B     		cmp	r3, #0
+ 983 0036 05D0     		beq	.L60
+ 993:queue.c       **** 						*pxTaskWoken = pdTRUE;
+ 984              		.loc 1 993 0
+ 985 0038 0123     		mov	r3, #1
+ 986 003a 2B60     		str	r3, [r5]
+ 987 003c 02E0     		b	.L60
+ 988              	.L61:
+1001:queue.c       **** 				++( pxQueue->xRxLock );
+ 989              		.loc 1 1001 0
+ 990 003e 0133     		add	r3, r3, #1
+ 991 0040 6364     		str	r3, [r4, #68]
+1004:queue.c       **** 			xReturn = pdPASS;
+ 992              		.loc 1 1004 0
+ 993 0042 0120     		mov	r0, #1
+ 994              	.L60:
+ 995              	.LVL125:
+1015:queue.c       **** }
+ 996              		.loc 1 1015 0
+ 997              		@ sp needed for prologue
+ 998              	.LVL126:
+ 999              	.LVL127:
+ 1000 0044 38BC     		pop	{r3, r4, r5}
+ 1001 0046 02BC     		pop	{r1}
+ 1002 0048 0847     		bx	r1
+ 1003              		.cfi_endproc
+ 1004              	.LFE4:
+ 1006 004a C046     		.section	.text.uxQueueMessagesWaiting,"ax",%progbits
+ 1007              		.align	2
+ 1008              		.global	uxQueueMessagesWaiting
+ 1009              		.code	16
+ 1010              		.thumb_func
+ 1012              	uxQueueMessagesWaiting:
+ 1013              	.LFB5:
+1019:queue.c       **** {
+ 1014              		.loc 1 1019 0
+ 1015              		.cfi_startproc
+ 1016              	.LVL128:
+ 1017 0000 10B5     		push	{r4, lr}
+ 1018              	.LCFI12:
+ 1019              		.cfi_def_cfa_offset 8
+ 1020              		.cfi_offset 4, -8
+ 1021              		.cfi_offset 14, -4
+ 1022 0002 041C     		mov	r4, r0
+1022:queue.c       **** 	taskENTER_CRITICAL();
+ 1023              		.loc 1 1022 0
+ 1024 0004 FFF7FEFF 		bl	vPortEnterCritical
+ 1025              	.LVL129:
+1023:queue.c       **** 		uxReturn = pxQueue->uxMessagesWaiting;
+ 1026              		.loc 1 1023 0
+ 1027 0008 A46B     		ldr	r4, [r4, #56]
+ 1028              	.LVL130:
+1024:queue.c       **** 	taskEXIT_CRITICAL();
+ 1029              		.loc 1 1024 0
+ 1030 000a FFF7FEFF 		bl	vPortExitCritical
+ 1031              	.LVL131:
+1027:queue.c       **** }
+ 1032              		.loc 1 1027 0
+ 1033 000e 201C     		mov	r0, r4
+ 1034              		@ sp needed for prologue
+ 1035              	.LVL132:
+ 1036 0010 10BC     		pop	{r4}
+ 1037 0012 02BC     		pop	{r1}
+ 1038 0014 0847     		bx	r1
+ 1039              		.cfi_endproc
+ 1040              	.LFE5:
+ 1042 0016 C046     		.section	.text.uxQueueMessagesWaitingFromISR,"ax",%progbits
+ 1043              		.align	2
+ 1044              		.global	uxQueueMessagesWaitingFromISR
+ 1045              		.code	16
+ 1046              		.thumb_func
+ 1048              	uxQueueMessagesWaitingFromISR:
+ 1049              	.LFB6:
+1031:queue.c       **** {
+ 1050              		.loc 1 1031 0
+ 1051              		.cfi_startproc
+ 1052              	.LVL133:
+1034:queue.c       **** 	uxReturn = pxQueue->uxMessagesWaiting;
+ 1053              		.loc 1 1034 0
+ 1054 0000 806B     		ldr	r0, [r0, #56]
+ 1055              	.LVL134:
+1037:queue.c       **** }
+ 1056              		.loc 1 1037 0
+ 1057              		@ sp needed for prologue
+ 1058 0002 7047     		bx	lr
+ 1059              		.cfi_endproc
+ 1060              	.LFE6:
+ 1062              		.section	.text.vQueueDelete,"ax",%progbits
+ 1063              		.align	2
+ 1064              		.global	vQueueDelete
+ 1065              		.code	16
+ 1066              		.thumb_func
+ 1068              	vQueueDelete:
+ 1069              	.LFB7:
+1041:queue.c       **** {
+ 1070              		.loc 1 1041 0
+ 1071              		.cfi_startproc
+ 1072              	.LVL135:
+ 1073 0000 10B5     		push	{r4, lr}
+ 1074              	.LCFI13:
+ 1075              		.cfi_def_cfa_offset 8
+ 1076              		.cfi_offset 4, -8
+ 1077              		.cfi_offset 14, -4
+ 1078 0002 041C     		mov	r4, r0
+1044:queue.c       **** 	vPortFree( pxQueue->pcHead );
+ 1079              		.loc 1 1044 0
+ 1080 0004 0068     		ldr	r0, [r0]
+ 1081              	.LVL136:
+ 1082 0006 FFF7FEFF 		bl	vPortFree
+ 1083              	.LVL137:
+1045:queue.c       **** 	vPortFree( pxQueue );
+ 1084              		.loc 1 1045 0
+ 1085 000a 201C     		mov	r0, r4
+ 1086 000c FFF7FEFF 		bl	vPortFree
+ 1087              	.LVL138:
+1046:queue.c       **** }
+ 1088              		.loc 1 1046 0
+ 1089              		@ sp needed for prologue
+ 1090              	.LVL139:
+ 1091 0010 10BC     		pop	{r4}
+ 1092 0012 01BC     		pop	{r0}
+ 1093 0014 0047     		bx	r0
+ 1094              		.cfi_endproc
+ 1095              	.LFE7:
+ 1097 0016 C046     		.section	.text.xQueueIsQueueEmptyFromISR,"ax",%progbits
+ 1098              		.align	2
+ 1099              		.global	xQueueIsQueueEmptyFromISR
+ 1100              		.code	16
+ 1101              		.thumb_func
+ 1103              	xQueueIsQueueEmptyFromISR:
+ 1104              	.LFB12:
+1178:queue.c       **** {
+ 1105              		.loc 1 1178 0
+ 1106              		.cfi_startproc
+ 1107              	.LVL140:
+1181:queue.c       **** 	xReturn = ( pxQueue->uxMessagesWaiting == ( unsigned portBASE_TYPE ) 0 );
+ 1108              		.loc 1 1181 0
+ 1109 0000 806B     		ldr	r0, [r0, #56]
+ 1110              	.LVL141:
+ 1111 0002 4342     		neg	r3, r0
+ 1112 0004 5841     		adc	r0, r0, r3
+ 1113              	.LVL142:
+1184:queue.c       **** }
+ 1114              		.loc 1 1184 0
+ 1115              		@ sp needed for prologue
+ 1116 0006 7047     		bx	lr
+ 1117              		.cfi_endproc
+ 1118              	.LFE12:
+ 1120              		.section	.text.xQueueIsQueueFullFromISR,"ax",%progbits
+ 1121              		.align	2
+ 1122              		.global	xQueueIsQueueFullFromISR
+ 1123              		.code	16
+ 1124              		.thumb_func
+ 1126              	xQueueIsQueueFullFromISR:
+ 1127              	.LFB14:
+1194:queue.c       **** 
+1195:queue.c       **** 	return xReturn;
+1196:queue.c       **** }
+1197:queue.c       **** /*-----------------------------------------------------------*/
+1198:queue.c       **** 
+1199:queue.c       **** signed portBASE_TYPE xQueueIsQueueFullFromISR( const xQueueHandle pxQueue )
+1200:queue.c       **** {
+ 1128              		.loc 1 1200 0
+ 1129              		.cfi_startproc
+ 1130              	.LVL143:
+1201:queue.c       **** signed portBASE_TYPE xReturn;
+1202:queue.c       **** 
+1203:queue.c       **** 	xReturn = ( pxQueue->uxMessagesWaiting == pxQueue->uxLength );
+ 1131              		.loc 1 1203 0
+ 1132 0000 826B     		ldr	r2, [r0, #56]
+ 1133              	.LVL144:
+ 1134 0002 C36B     		ldr	r3, [r0, #60]
+ 1135 0004 D01A     		sub	r0, r2, r3
+ 1136              	.LVL145:
+ 1137 0006 4342     		neg	r3, r0
+ 1138 0008 5841     		adc	r0, r0, r3
+ 1139              	.LVL146:
+1204:queue.c       **** 
+1205:queue.c       **** 	return xReturn;
+1206:queue.c       **** }
+ 1140              		.loc 1 1206 0
+ 1141              		@ sp needed for prologue
+ 1142 000a 7047     		bx	lr
+ 1143              		.cfi_endproc
+ 1144              	.LFE14:
+ 1146              		.text
+ 1147              	.Letext0:
+ 1148              		.file 2 "c:\\gnuarm-471_eabi\\bin\\../lib/gcc/arm-none-eabi/4.7.1/include/stddef.h"
+ 1149              		.file 3 "./portmacro.h"
+ 1150              		.file 4 "./include/list.h"
+ 1151              		.file 5 "./include/task.h"
+ 1152              		.file 6 "./include/portable.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 queue.c
+  C:\Temp\ccon12Ns.s:18     .text.prvCopyDataFromQueue:00000000 $t
+  C:\Temp\ccon12Ns.s:22     .text.prvCopyDataFromQueue:00000000 prvCopyDataFromQueue
+  C:\Temp\ccon12Ns.s:69     .text.prvCopyDataToQueue:00000000 $t
+  C:\Temp\ccon12Ns.s:73     .text.prvCopyDataToQueue:00000000 prvCopyDataToQueue
+  C:\Temp\ccon12Ns.s:149    .text.prvUnlockQueue:00000000 $t
+  C:\Temp\ccon12Ns.s:153    .text.prvUnlockQueue:00000000 prvUnlockQueue
+  C:\Temp\ccon12Ns.s:268    .text.xQueueCreate:00000000 $t
+  C:\Temp\ccon12Ns.s:273    .text.xQueueCreate:00000000 xQueueCreate
+  C:\Temp\ccon12Ns.s:378    .text.xQueueGenericSend:00000000 $t
+  C:\Temp\ccon12Ns.s:383    .text.xQueueGenericSend:00000000 xQueueGenericSend
+  C:\Temp\ccon12Ns.s:598    .text.xQueueGenericSendFromISR:00000000 $t
+  C:\Temp\ccon12Ns.s:603    .text.xQueueGenericSendFromISR:00000000 xQueueGenericSendFromISR
+  C:\Temp\ccon12Ns.s:678    .text.xQueueGenericReceive:00000000 $t
+  C:\Temp\ccon12Ns.s:683    .text.xQueueGenericReceive:00000000 xQueueGenericReceive
+  C:\Temp\ccon12Ns.s:926    .text.xQueueReceiveFromISR:00000000 $t
+  C:\Temp\ccon12Ns.s:931    .text.xQueueReceiveFromISR:00000000 xQueueReceiveFromISR
+  C:\Temp\ccon12Ns.s:1007   .text.uxQueueMessagesWaiting:00000000 $t
+  C:\Temp\ccon12Ns.s:1012   .text.uxQueueMessagesWaiting:00000000 uxQueueMessagesWaiting
+  C:\Temp\ccon12Ns.s:1043   .text.uxQueueMessagesWaitingFromISR:00000000 $t
+  C:\Temp\ccon12Ns.s:1048   .text.uxQueueMessagesWaitingFromISR:00000000 uxQueueMessagesWaitingFromISR
+  C:\Temp\ccon12Ns.s:1063   .text.vQueueDelete:00000000 $t
+  C:\Temp\ccon12Ns.s:1068   .text.vQueueDelete:00000000 vQueueDelete
+  C:\Temp\ccon12Ns.s:1098   .text.xQueueIsQueueEmptyFromISR:00000000 $t
+  C:\Temp\ccon12Ns.s:1103   .text.xQueueIsQueueEmptyFromISR:00000000 xQueueIsQueueEmptyFromISR
+  C:\Temp\ccon12Ns.s:1121   .text.xQueueIsQueueFullFromISR:00000000 $t
+  C:\Temp\ccon12Ns.s:1126   .text.xQueueIsQueueFullFromISR:00000000 xQueueIsQueueFullFromISR
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.stddef.h.187.40b3a084f9bc2c020a9e00b9eabe9c14
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.349.31f4c5baff3fa2689010b32028da9c47
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.50.f5923f1950ced340a337f4676566f65a
+                           .group:00000000 wm4.cdefs.h.45.6b392759c8a421d1199268021d4987e3
+                           .group:00000000 wm4.stddef.h.235.d9f4f80b8c4429535175712282cda6a6
+                           .group:00000000 wm4.string.h.118.0034ce03f0efcb6576b1b96865c749d5
+                           .group:00000000 wm4.stddef.h.40.b60a1c1ee3f272eef5327a730cbabca6
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.croutine.h.62.7a885835e1b77e0feb2c6944a8b6bacf
+
+UNDEFINED SYMBOLS
+memcpy
+vPortEnterCritical
+xTaskRemoveFromEventList
+vTaskMissedYield
+vPortExitCritical
+pvPortMalloc
+vListInitialise
+vPortFree
+vTaskSetTimeOutState
+vTaskSuspendAll
+xTaskCheckForTimeOut
+vTaskPlaceOnEventList
+xTaskResumeAll

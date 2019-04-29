@@ -1,0 +1,690 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"syscalls.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text._read_r,"ax",%progbits
+  17              		.align	2
+  18              		.global	_read_r
+  20              	_read_r:
+  21              	.LFB376:
+  22              		.file 1 "syscalls.c"
+   1:syscalls.c    **** /***********************************************************************/
+   2:syscalls.c    **** /*                                                                     */
+   3:syscalls.c    **** /*  SYSCALLS.C:  System Calls                                          */
+   4:syscalls.c    **** /*  most of this is from newlib-lpc and a Keil-demo                    */
+   5:syscalls.c    **** /*                                                                     */
+   6:syscalls.c    **** /*  These are "reentrant functions" as needed by                       */
+   7:syscalls.c    **** /*  the WinARM-newlib-config, see newlib-manual.                       */
+   8:syscalls.c    **** /*  Collected and modified by Martin Thomas                            */
+   9:syscalls.c    **** /*                                                                     */
+  10:syscalls.c    **** /***********************************************************************/
+  11:syscalls.c    **** 
+  12:syscalls.c    **** /* adapted for the SAM7 "serial.h" mthomas 10/2005 */
+  13:syscalls.c    **** 
+  14:syscalls.c    **** // Include Standard files
+  15:syscalls.c    **** #include "Board.h"
+  16:syscalls.c    **** 
+  17:syscalls.c    **** #include <stdlib.h>
+  18:syscalls.c    **** #include <reent.h>
+  19:syscalls.c    **** #include <sys/stat.h>
+  20:syscalls.c    **** 
+  21:syscalls.c    **** _ssize_t _read_r(
+  22:syscalls.c    ****     struct _reent *r, 
+  23:syscalls.c    ****     int file, 
+  24:syscalls.c    ****     void *ptr, 
+  25:syscalls.c    ****     size_t len)
+  26:syscalls.c    **** {
+  23              		.loc 1 26 0
+  24              		.cfi_startproc
+  25              		@ Function supports interworking.
+  26              		@ args = 0, pretend = 0, frame = 8
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28              	.LVL0:
+  29 0000 F0412DE9 		stmfd	sp!, {r4, r5, r6, r7, r8, lr}
+  30              	.LCFI0:
+  31              		.cfi_def_cfa_offset 24
+  32              		.cfi_offset 4, -24
+  33              		.cfi_offset 5, -20
+  34              		.cfi_offset 6, -16
+  35              		.cfi_offset 7, -12
+  36              		.cfi_offset 8, -8
+  37              		.cfi_offset 14, -4
+  38 0004 08D04DE2 		sub	sp, sp, #8
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  41 0008 0270A0E1 		mov	r7, r2
+  42              	.LVL1:
+  27:syscalls.c    **** 	signed portCHAR cByteRxed;
+  28:syscalls.c    **** 	int  i;
+  29:syscalls.c    **** 	unsigned char *p;
+  30:syscalls.c    **** 	
+  31:syscalls.c    **** 	p = (unsigned char*)ptr;
+  32:syscalls.c    **** 	
+  33:syscalls.c    **** 	for( i = 0; i < len; i++ )
+  43              		.loc 1 33 0
+  44 000c 000053E3 		cmp	r3, #0
+  45 0010 1000000A 		beq	.L4
+  46              		.file 2 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/reent.h"
+   1:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** /* This header file provides the reentrancy.  */
+   2:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+   3:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** /* The reentrant system calls here serve two purposes:
+   4:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+   5:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    1) Provide reentrant versions of the system calls the ANSI C library
+   6:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       requires.
+   7:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    2) Provide these system calls in a namespace clean way.
+   8:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+   9:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    It is intended that *all* system calls that the ANSI C library needs
+  10:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    be declared here.  It documents them all in one place.  All library access
+  11:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    to the system is via some form of these functions.
+  12:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  13:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    The target may provide the needed syscalls by any of the following:
+  14:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  15:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    1) Define the reentrant versions of the syscalls directly.
+  16:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       (eg: _open_r, _close_r, etc.).  Please keep the namespace clean.
+  17:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       When you do this, set "syscall_dir" to "syscalls" and add
+  18:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       -DREENTRANT_SYSCALLS_PROVIDED to newlib_cflags in configure.host.
+  19:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  20:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    2) Define namespace clean versions of the system calls by prefixing
+  21:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       them with '_' (eg: _open, _close, etc.).  Technically, there won't be
+  22:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       true reentrancy at the syscall level, but the library will be namespace
+  23:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       clean.
+  24:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       When you do this, set "syscall_dir" to "syscalls" in configure.host.
+  25:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  26:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    3) Define or otherwise provide the regular versions of the syscalls
+  27:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       (eg: open, close, etc.).  The library won't be reentrant nor namespace
+  28:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       clean, but at least it will work.
+  29:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       When you do this, add -DMISSING_SYSCALL_NAMES to newlib_cflags in
+  30:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       configure.host.
+  31:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  32:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    4) Define or otherwise provide the regular versions of the syscalls,
+  33:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       and do not supply functional interfaces for any of the reentrant
+  34:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       calls. With this method, the reentrant syscalls are redefined to
+  35:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       directly call the regular system call without the reentrancy argument.
+  36:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       When you do this, specify both -DREENTRANT_SYSCALLS_PROVIDED and 
+  37:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       -DMISSING_SYSCALL_NAMES via newlib_cflags in configure.host and do
+  38:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****       not specify "syscall_dir".
+  39:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  40:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    Stubs of the reentrant versions of the syscalls exist in the libc/reent
+  41:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    source directory and are provided if REENTRANT_SYSCALLS_PROVIDED isn't 
+  42:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    defined.  These stubs call the native system calls: _open, _close, etc. 
+  43:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    if MISSING_SYSCALL_NAMES is *not* defined, otherwise they call the
+  44:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    non-underscored versions: open, close, etc. when MISSING_SYSCALL_NAMES
+  45:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    *is* defined.
+  46:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  47:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    By default, newlib functions call the reentrant syscalls internally,
+  48:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    passing a reentrancy structure as an argument.  This reentrancy structure
+  49:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    contains data that is thread-specific.  For example, the errno value is
+  50:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    kept in the reentrancy structure.  If multiple threads exist, each will
+  51:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    keep a separate errno value which is intuitive since the application flow
+  52:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    cannot check for failure reliably otherwise.
+  53:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  54:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    The reentrant syscalls are either provided by the platform, by the 
+  55:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    libc/reent stubs, or in the case of both MISSING_SYSCALL_NAMES and 
+  56:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    REENTRANT_SYSCALLS_PROVIDED being defined, the calls are redefined to
+  57:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    simply call the regular syscalls with no reentrancy struct argument.
+  58:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  59:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    A single-threaded application does not need to worry about the reentrancy
+  60:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    structure.  It is used internally.  
+  61:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  62:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    A multi-threaded application needs either to manually manage reentrancy 
+  63:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    structures or use dynamic reentrancy.
+  64:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    
+  65:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    Manually managing reentrancy structures entails calling special reentrant
+  66:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    versions of newlib functions that have an additional reentrancy argument.
+  67:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    For example, _printf_r.  By convention, the first argument is the
+  68:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    reentrancy structure.  By default, the normal version of the function
+  69:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    uses the default reentrancy structure: _REENT.  The reentrancy structure
+  70:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    is passed internally, eventually to the reentrant syscalls themselves.
+  71:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    How the structures are stored and accessed in this model is up to the
+  72:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    application.
+  73:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  74:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    Dynamic reentrancy is specified by the __DYNAMIC_REENT__ flag.  This
+  75:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    flag denotes setting up a macro to replace _REENT with a function call
+  76:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    to __getreent().  This function needs to be implemented by the platform
+  77:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    and it is meant to return the reentrancy structure for the current
+  78:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    thread.  When the regular C functions (e.g. printf) go to call internal
+  79:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    routines with the default _REENT structure, they end up calling with 
+  80:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    the reentrancy structure for the thread.  Thus, application code does not
+  81:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    need to call the _r routines nor worry about reentrancy structures.  */
+  82:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  83:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** /* WARNING: All identifiers here must begin with an underscore.  This file is
+  84:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    included by stdio.h and others and we therefore must only use identifiers
+  85:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h ****    in the namespace allotted to us.  */
+  86:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  87:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #ifndef _REENT_H_
+  88:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #ifdef __cplusplus
+  89:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern "C" {
+  90:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #endif
+  91:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _REENT_H_
+  92:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  93:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #include <sys/reent.h>
+  94:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #include <sys/_types.h>
+  95:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #include <machine/types.h>
+  96:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+  97:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define __need_size_t
+  98:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define __need_ptrdiff_t
+  99:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #include <stddef.h>
+ 100:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 101:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** /* FIXME: not namespace clean */
+ 102:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** struct stat;
+ 103:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** struct tms;
+ 104:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** struct timeval;
+ 105:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** struct timezone;
+ 106:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 107:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #if defined(REENTRANT_SYSCALLS_PROVIDED) && defined(MISSING_SYSCALL_NAMES)
+ 108:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 109:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _close_r(__reent, __fd)                   close(__fd)
+ 110:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _execve_r(__reent, __f, __arg, __env)     execve(__f, __arg, __env)
+ 111:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _fcntl_r(__reent, __fd, __cmd, __arg)     fcntl(__fd, __cmd, __arg)
+ 112:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _fork_r(__reent)                          fork()
+ 113:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _fstat_r(__reent, __fdes, __stat)         fstat(__fdes, __stat)
+ 114:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _getpid_r(__reent)                        getpid()
+ 115:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _isatty_r(__reent, __desc)                isatty(__desc)
+ 116:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _kill_r(__reent, __pid, __signal)         kill(__pid, __signal)
+ 117:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _link_r(__reent, __oldpath, __newpath)    link(__oldpath, __newpath)
+ 118:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _lseek_r(__reent, __fdes, __off, __w)     lseek(__fdes, __off, __w)
+ 119:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _mkdir_r(__reent, __path, __m)		  mkdir(__path, __m)
+ 120:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _open_r(__reent, __path, __flag, __m)     open(__path, __flag, __m)
+ 121:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _read_r(__reent, __fd, __buff, __cnt)     read(__fd, __buff, __cnt)
+ 122:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _rename_r(__reent, __old, __new)	  rename(__old, __new)
+ 123:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _sbrk_r(__reent, __incr)                  sbrk(__incr)
+ 124:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _stat_r(__reent, __path, __buff)          stat(__path, __buff)
+ 125:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _times_r(__reent, __time)                 times(__time)
+ 126:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _unlink_r(__reent, __path)                unlink(__path)
+ 127:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _wait_r(__reent, __status)                wait(__status)
+ 128:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _write_r(__reent, __fd, __buff, __cnt)    write(__fd, __buff, __cnt)
+ 129:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _gettimeofday_r(__reent, __tp, __tzp)     gettimeofday(__tp, __tzp)
+ 130:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 131:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #ifdef __LARGE64_FILES
+ 132:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _lseek64_r(__reent, __fd, __off, __w)     lseek64(__fd, __off, __w)
+ 133:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _fstat64_r(__reent, __fd, __buff)         fstat64(__fd, __buff)
+ 134:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #define _open64_r(__reent, __path, __flag, __m)   open64(__path, __flag, __m)
+ 135:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #endif
+ 136:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 137:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** #else
+ 138:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** /* Reentrant versions of system calls.  */
+ 139:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** 
+ 140:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _close_r _PARAMS ((struct _reent *, int));
+ 141:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _execve_r _PARAMS ((struct _reent *, const char *, char *const *, char *const *));
+ 142:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _fcntl_r _PARAMS ((struct _reent *, int, int, int));
+ 143:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _fork_r _PARAMS ((struct _reent *));
+ 144:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _fstat_r _PARAMS ((struct _reent *, int, struct stat *));
+ 145:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _getpid_r _PARAMS ((struct _reent *));
+ 146:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _isatty_r _PARAMS ((struct _reent *, int));
+ 147:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _kill_r _PARAMS ((struct _reent *, int, int));
+ 148:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _link_r _PARAMS ((struct _reent *, const char *, const char *));
+ 149:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern _off_t _lseek_r _PARAMS ((struct _reent *, int, _off_t, int));
+ 150:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _mkdir_r _PARAMS ((struct _reent *, const char *, int));
+ 151:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _open_r _PARAMS ((struct _reent *, const char *, int, int));
+ 152:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern _ssize_t _read_r _PARAMS ((struct _reent *, int, void *, size_t));
+  47              		.loc 2 152 0
+  48 0014 0380A0E1 		mov	r8, r3
+  49              		.loc 1 33 0
+  50 0018 0040A0E3 		mov	r4, #0
+  34:syscalls.c    ****       {
+  35:syscalls.c    ****       if( xQueueReceive( RxCOM0, &cByteRxed, comNO_BLOCK )== pdFALSE )
+  51              		.loc 1 35 0
+  52 001c 48609FE5 		ldr	r6, .L6
+  53 0020 0450A0E1 		mov	r5, r4
+  54              	.LVL2:
+  55              	.L3:
+  56 0024 000096E5 		ldr	r0, [r6, #0]
+  57 0028 07108DE2 		add	r1, sp, #7
+  58              	.LVL3:
+  59 002c 0520A0E1 		mov	r2, r5
+  60 0030 0530A0E1 		mov	r3, r5
+  61 0034 FEFFFFEB 		bl	xQueueGenericReceive
+  62              	.LVL4:
+  63 0038 000050E3 		cmp	r0, #0
+  64 003c 0600000A 		beq	.L2
+  65              	.LVL5:
+  36:syscalls.c    ****         {
+  37:syscalls.c    **** 	    break;
+  38:syscalls.c    **** 	    }
+  39:syscalls.c    ****       *p++ = cByteRxed;
+  66              		.loc 1 39 0
+  67 0040 0710DDE5 		ldrb	r1, [sp, #7]	@ zero_extendqisi2
+  68              	.LVL6:
+  69 0044 0410C7E7 		strb	r1, [r7, r4]
+  33:syscalls.c    **** 	for( i = 0; i < len; i++ )
+  70              		.loc 1 33 0
+  71 0048 014084E2 		add	r4, r4, #1
+  72              	.LVL7:
+  73 004c 080054E1 		cmp	r4, r8
+  74 0050 F3FFFF1A 		bne	.L3
+  75 0054 000000EA 		b	.L2
+  76              	.LVL8:
+  77              	.L4:
+  78 0058 0040A0E3 		mov	r4, #0
+  79              	.LVL9:
+  80              	.L2:
+  40:syscalls.c    **** 	  }
+  41:syscalls.c    **** 	
+  42:syscalls.c    **** return i;
+  43:syscalls.c    **** }
+  81              		.loc 1 43 0
+  82 005c 0400A0E1 		mov	r0, r4
+  83 0060 08D08DE2 		add	sp, sp, #8
+  84 0064 F041BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, lr}
+  85 0068 1EFF2FE1 		bx	lr
+  86              	.L7:
+  87              		.align	2
+  88              	.L6:
+  89 006c 00000000 		.word	RxCOM0
+  90              		.cfi_endproc
+  91              	.LFE376:
+  93              		.section	.text._write_r,"ax",%progbits
+  94              		.align	2
+  95              		.global	_write_r
+  97              	_write_r:
+  98              	.LFB377:
+  44:syscalls.c    **** 
+  45:syscalls.c    **** 
+  46:syscalls.c    **** _ssize_t _write_r (
+  47:syscalls.c    ****     struct _reent *r, 
+  48:syscalls.c    ****     int file, 
+  49:syscalls.c    ****     const void *ptr, 
+  50:syscalls.c    ****     size_t len)
+  51:syscalls.c    **** {
+  99              		.loc 1 51 0
+ 100              		.cfi_startproc
+ 101              		@ Function supports interworking.
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 104              	.LVL10:
+ 105 0000 F84F2DE9 		stmfd	sp!, {r3, r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 106              	.LCFI2:
+ 107              		.cfi_def_cfa_offset 40
+ 108              		.cfi_offset 3, -40
+ 109              		.cfi_offset 4, -36
+ 110              		.cfi_offset 5, -32
+ 111              		.cfi_offset 6, -28
+ 112              		.cfi_offset 7, -24
+ 113              		.cfi_offset 8, -20
+ 114              		.cfi_offset 9, -16
+ 115              		.cfi_offset 10, -12
+ 116              		.cfi_offset 11, -8
+ 117              		.cfi_offset 14, -4
+ 118 0004 0250A0E1 		mov	r5, r2
+ 119              	.LVL11:
+  52:syscalls.c    **** 	int i;
+  53:syscalls.c    **** 	const unsigned char *p;
+  54:syscalls.c    **** 	
+  55:syscalls.c    **** 	p = (const unsigned char*)ptr;
+  56:syscalls.c    **** 	
+  57:syscalls.c    **** 	for( i = 0; i < len; i++ )
+ 120              		.loc 1 57 0
+ 121 0008 000053E3 		cmp	r3, #0
+ 122 000c 1200000A 		beq	.L11
+ 153:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _rename_r _PARAMS ((struct _reent *, const char *, const char *));
+ 154:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern void *_sbrk_r _PARAMS ((struct _reent *, ptrdiff_t));
+ 155:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _stat_r _PARAMS ((struct _reent *, const char *, struct stat *));
+ 156:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern _CLOCK_T_ _times_r _PARAMS ((struct _reent *, struct tms *));
+ 157:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _unlink_r _PARAMS ((struct _reent *, const char *));
+ 158:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern int _wait_r _PARAMS ((struct _reent *, int *));
+ 159:c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include\reent.h **** extern _ssize_t _write_r _PARAMS ((struct _reent *, int, const void *, size_t));
+ 123              		.loc 2 159 0
+ 124 0010 03B0A0E1 		mov	fp, r3
+ 125              		.loc 1 57 0
+ 126 0014 0040A0E3 		mov	r4, #0
+  58:syscalls.c    **** 	  {
+  59:syscalls.c    ****       if( xQueueSend( TxCOM0, p++, comTX_BLOCK_TIME ) != pdPASS )
+ 127              		.loc 1 59 0
+ 128 0018 4C809FE5 		ldr	r8, .L13
+ 129 001c FA70A0E3 		mov	r7, #250
+ 130 0020 0460A0E1 		mov	r6, r4
+  60:syscalls.c    ****         {
+  61:syscalls.c    ****         break;
+  62:syscalls.c    ****         }
+  63:syscalls.c    **** 
+  64:syscalls.c    ****       /* Turn on the Tx interrupt so the ISR will remove the character from the
+  65:syscalls.c    ****          queue and send it. This does not need to be in a critical section as
+  66:syscalls.c    ****          if the interrupt has already removed the character the next interrupt
+  67:syscalls.c    ****          will simply turn off the Tx interrupt again. */
+  68:syscalls.c    **** //      AT91C_BASE_DBGU->DBGU_IER = AT91C_US_TXRDY;
+  69:syscalls.c    ****       AT91C_BASE_US0->US_IER = AT91C_US_TXRDY;
+ 131              		.loc 1 69 0
+ 132 0024 3F9AE0E3 		mvn	r9, #258048
+ 133 0028 02A0A0E3 		mov	sl, #2
+ 134              	.LVL12:
+ 135              	.L10:
+  59:syscalls.c    ****       if( xQueueSend( TxCOM0, p++, comTX_BLOCK_TIME ) != pdPASS )
+ 136              		.loc 1 59 0
+ 137 002c 000098E5 		ldr	r0, [r8, #0]
+ 138 0030 041085E0 		add	r1, r5, r4
+ 139 0034 0720A0E1 		mov	r2, r7
+ 140 0038 0630A0E1 		mov	r3, r6
+ 141 003c FEFFFFEB 		bl	xQueueGenericSend
+ 142              	.LVL13:
+ 143 0040 010050E3 		cmp	r0, #1
+ 144 0044 0500001A 		bne	.L9
+ 145              		.loc 1 69 0
+ 146 0048 F7AF09E5 		str	sl, [r9, #-4087]
+  57:syscalls.c    **** 	for( i = 0; i < len; i++ )
+ 147              		.loc 1 57 0
+ 148 004c 014084E2 		add	r4, r4, #1
+ 149              	.LVL14:
+ 150 0050 0B0054E1 		cmp	r4, fp
+ 151 0054 F4FFFF1A 		bne	.L10
+ 152 0058 000000EA 		b	.L9
+ 153              	.LVL15:
+ 154              	.L11:
+ 155 005c 0040A0E3 		mov	r4, #0
+ 156              	.LVL16:
+ 157              	.L9:
+  70:syscalls.c    **** 	  }
+  71:syscalls.c    **** 	
+  72:syscalls.c    **** return i;
+  73:syscalls.c    **** }
+ 158              		.loc 1 73 0
+ 159 0060 0400A0E1 		mov	r0, r4
+ 160 0064 F84FBDE8 		ldmfd	sp!, {r3, r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 161 0068 1EFF2FE1 		bx	lr
+ 162              	.L14:
+ 163              		.align	2
+ 164              	.L13:
+ 165 006c 00000000 		.word	TxCOM0
+ 166              		.cfi_endproc
+ 167              	.LFE377:
+ 169              		.section	.text._close_r,"ax",%progbits
+ 170              		.align	2
+ 171              		.global	_close_r
+ 173              	_close_r:
+ 174              	.LFB378:
+  74:syscalls.c    **** 
+  75:syscalls.c    **** 
+  76:syscalls.c    **** int _close_r(
+  77:syscalls.c    ****     struct _reent *r, 
+  78:syscalls.c    ****     int file)
+  79:syscalls.c    **** {
+ 175              		.loc 1 79 0
+ 176              		.cfi_startproc
+ 177              		@ Function supports interworking.
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 181              	.LVL17:
+  80:syscalls.c    **** 	return 0;
+  81:syscalls.c    **** }
+ 182              		.loc 1 81 0
+ 183 0000 0000A0E3 		mov	r0, #0
+ 184              	.LVL18:
+ 185 0004 1EFF2FE1 		bx	lr
+ 186              		.cfi_endproc
+ 187              	.LFE378:
+ 189              		.section	.text.isatty,"ax",%progbits
+ 190              		.align	2
+ 191              		.global	isatty
+ 193              	isatty:
+ 194              	.LFB379:
+  82:syscalls.c    **** 
+  83:syscalls.c    **** 
+  84:syscalls.c    **** int isatty(	int file )
+  85:syscalls.c    **** {
+ 195              		.loc 1 85 0
+ 196              		.cfi_startproc
+ 197              		@ Function supports interworking.
+ 198              		@ args = 0, pretend = 0, frame = 0
+ 199              		@ frame_needed = 0, uses_anonymous_args = 0
+ 200              		@ link register save eliminated.
+ 201              	.LVL19:
+  86:syscalls.c    **** 	return -1; // return error
+  87:syscalls.c    **** }
+ 202              		.loc 1 87 0
+ 203 0000 0000E0E3 		mvn	r0, #0
+ 204              	.LVL20:
+ 205 0004 1EFF2FE1 		bx	lr
+ 206              		.cfi_endproc
+ 207              	.LFE379:
+ 209              		.section	.text._lseek_r,"ax",%progbits
+ 210              		.align	2
+ 211              		.global	_lseek_r
+ 213              	_lseek_r:
+ 214              	.LFB380:
+  88:syscalls.c    **** 
+  89:syscalls.c    **** 
+  90:syscalls.c    **** _off_t _lseek_r(
+  91:syscalls.c    ****     struct _reent *r, 
+  92:syscalls.c    ****     int file, 
+  93:syscalls.c    ****     _off_t ptr, 
+  94:syscalls.c    ****     int dir)
+  95:syscalls.c    **** {
+ 215              		.loc 1 95 0
+ 216              		.cfi_startproc
+ 217              		@ Function supports interworking.
+ 218              		@ args = 0, pretend = 0, frame = 0
+ 219              		@ frame_needed = 0, uses_anonymous_args = 0
+ 220              		@ link register save eliminated.
+ 221              	.LVL21:
+  96:syscalls.c    **** 	return (_off_t)0;  /*  Always indicate we are at file beginning.  */
+  97:syscalls.c    **** }
+ 222              		.loc 1 97 0
+ 223 0000 0000A0E3 		mov	r0, #0
+ 224              	.LVL22:
+ 225 0004 1EFF2FE1 		bx	lr
+ 226              		.cfi_endproc
+ 227              	.LFE380:
+ 229              		.section	.text._fstat_r,"ax",%progbits
+ 230              		.align	2
+ 231              		.global	_fstat_r
+ 233              	_fstat_r:
+ 234              	.LFB381:
+  98:syscalls.c    **** 
+  99:syscalls.c    **** 
+ 100:syscalls.c    **** int _fstat_r(
+ 101:syscalls.c    ****     struct _reent *r, 
+ 102:syscalls.c    ****     int file, 
+ 103:syscalls.c    ****     struct stat *st)
+ 104:syscalls.c    **** {
+ 235              		.loc 1 104 0
+ 236              		.cfi_startproc
+ 237              		@ Function supports interworking.
+ 238              		@ args = 0, pretend = 0, frame = 0
+ 239              		@ frame_needed = 0, uses_anonymous_args = 0
+ 240              		@ link register save eliminated.
+ 241              	.LVL23:
+ 105:syscalls.c    **** 	/*  Always set as character device.             */
+ 106:syscalls.c    **** 	st->st_mode = S_IFCHR;
+ 242              		.loc 1 106 0
+ 243 0000 023AA0E3 		mov	r3, #8192
+ 244 0004 043082E5 		str	r3, [r2, #4]
+ 107:syscalls.c    **** 	/* assigned to strong type with implicit        */
+ 108:syscalls.c    **** 	/* signed/unsigned conversion.  Required by     */
+ 109:syscalls.c    **** 	/* newlib.                                      */
+ 110:syscalls.c    **** 
+ 111:syscalls.c    **** 	return 0;
+ 112:syscalls.c    **** }
+ 245              		.loc 1 112 0
+ 246 0008 0000A0E3 		mov	r0, #0
+ 247              	.LVL24:
+ 248 000c 1EFF2FE1 		bx	lr
+ 249              		.cfi_endproc
+ 250              	.LFE381:
+ 252              		.section	.text._sbrk_r,"ax",%progbits
+ 253              		.align	2
+ 254              		.global	_sbrk_r
+ 256              	_sbrk_r:
+ 257              	.LFB382:
+ 113:syscalls.c    **** 
+ 114:syscalls.c    **** 
+ 115:syscalls.c    **** #if 0
+ 116:syscalls.c    **** static void _exit( int n )
+ 117:syscalls.c    **** {
+ 118:syscalls.c    **** 
+ 119:syscalls.c    **** /* endless loop */
+ 120:syscalls.c    **** while( 1 )
+ 121:syscalls.c    ****   {
+ 122:syscalls.c    ****   }
+ 123:syscalls.c    **** }
+ 124:syscalls.c    **** #endif 
+ 125:syscalls.c    **** 
+ 126:syscalls.c    **** 
+ 127:syscalls.c    **** /* "malloc clue function" from newlib-lpc/Keil-Demo/"generic" */
+ 128:syscalls.c    **** /**** Locally used variables. ****/
+ 129:syscalls.c    **** // mt: "cleaner": extern char* end;
+ 130:syscalls.c    **** /* end is set in the linker command file and is the end of statically
+ 131:syscalls.c    ****    allocated data (thus start of heap).	*/
+ 132:syscalls.c    **** extern char end[];
+ 133:syscalls.c    **** static char *heap_ptr; /* Points to current end of the heap.  */
+ 134:syscalls.c    **** 
+ 135:syscalls.c    **** /************************** _sbrk_r *************************************
+ 136:syscalls.c    ****  * Support function. Adjusts end of heap to provide more memory to
+ 137:syscalls.c    ****  * memory allocator. Simple and dumb with no sanity checks.
+ 138:syscalls.c    **** 
+ 139:syscalls.c    ****  *  struct _reent *r -- re-entrancy structure, used by newlib to
+ 140:syscalls.c    ****  *                      support multiple threads of operation.
+ 141:syscalls.c    ****  *  ptrdiff_t nbytes -- number of bytes to add.
+ 142:syscalls.c    ****  *                      Returns pointer to start of new heap area.
+ 143:syscalls.c    ****  *
+ 144:syscalls.c    ****  *  Note:  This implementation is not thread safe (despite taking a
+ 145:syscalls.c    ****  *         _reent structure as a parameter).
+ 146:syscalls.c    ****  *         Since _s_r is not used in the current implementation, 
+ 147:syscalls.c    ****  *         the following messages must be suppressed.
+ 148:syscalls.c    ****  */
+ 149:syscalls.c    **** void * _sbrk_r(
+ 150:syscalls.c    ****     struct _reent *_s_r, 
+ 151:syscalls.c    ****     ptrdiff_t nbytes)
+ 152:syscalls.c    **** {
+ 258              		.loc 1 152 0
+ 259              		.cfi_startproc
+ 260              		@ Function supports interworking.
+ 261              		@ args = 0, pretend = 0, frame = 0
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263              		@ link register save eliminated.
+ 264              	.LVL25:
+ 153:syscalls.c    **** 	char  *base;        /*  errno should be set to  ENOMEM on error  */
+ 154:syscalls.c    **** 
+ 155:syscalls.c    **** 	if( !heap_ptr )
+ 265              		.loc 1 155 0
+ 266 0000 24309FE5 		ldr	r3, .L21
+ 267 0004 003093E5 		ldr	r3, [r3, #0]
+ 268 0008 000053E3 		cmp	r3, #0
+ 156:syscalls.c    ****       { /*  Initialize if first time through.  */
+ 157:syscalls.c    **** 	  heap_ptr = end;
+ 269              		.loc 1 157 0
+ 270 000c 1C209F05 		ldreq	r2, .L21+4
+ 271 0010 14309F05 		ldreq	r3, .L21
+ 272 0014 00208305 		streq	r2, [r3, #0]
+ 158:syscalls.c    **** 	  }
+ 159:syscalls.c    **** 	base = heap_ptr;    /*  Point to end of heap.  */
+ 273              		.loc 1 159 0
+ 274 0018 0C309FE5 		ldr	r3, .L21
+ 275 001c 000093E5 		ldr	r0, [r3, #0]
+ 276              	.LVL26:
+ 160:syscalls.c    **** 	heap_ptr += nbytes; /*  Increase heap.  */
+ 277              		.loc 1 160 0
+ 278 0020 011080E0 		add	r1, r0, r1
+ 279              	.LVL27:
+ 280 0024 001083E5 		str	r1, [r3, #0]
+ 161:syscalls.c    **** 	
+ 162:syscalls.c    **** 	return base;        /*  Return pointer to start of new heap area.  */
+ 163:syscalls.c    **** }
+ 281              		.loc 1 163 0
+ 282 0028 1EFF2FE1 		bx	lr
+ 283              	.L22:
+ 284              		.align	2
+ 285              	.L21:
+ 286 002c 00000000 		.word	.LANCHOR0
+ 287 0030 00000000 		.word	end
+ 288              		.cfi_endproc
+ 289              	.LFE382:
+ 291              		.comm	POWERtaskhandle,4,4
+ 292              		.comm	TWItaskhandle,4,4
+ 293              		.comm	SetTime,4,4
+ 294              		.section	.bss.heap_ptr,"aw",%nobits
+ 295              		.align	2
+ 296              		.set	.LANCHOR0,. + 0
+ 299              	heap_ptr:
+ 300 0000 00000000 		.space	4
+ 301              		.text
+ 302              	.Letext0:
+ 303              		.file 3 "./include/AT91SAM7A3.h"
+ 304              		.file 4 "c:\\gnuarm-471_eabi\\bin\\../lib/gcc/arm-none-eabi/4.7.1/include/stddef.h"
+ 305              		.file 5 "./portmacro.h"
+ 306              		.file 6 "./include/task.h"
+ 307              		.file 7 "./include/queue.h"
+ 308              		.file 8 "./include/semphr.h"
+ 309              		.file 9 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/sys/lock.h"
+ 310              		.file 10 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/sys/_types.h"
+ 311              		.file 11 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/sys/reent.h"
+ 312              		.file 12 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/sys/types.h"
+ 313              		.file 13 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/sys/stat.h"
+ 314              		.file 14 "Board.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 syscalls.c
+  C:\Temp\ccsVrQtG.s:17     .text._read_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:20     .text._read_r:00000000 _read_r
+  C:\Temp\ccsVrQtG.s:89     .text._read_r:0000006c $d
+  C:\Temp\ccsVrQtG.s:94     .text._write_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:97     .text._write_r:00000000 _write_r
+  C:\Temp\ccsVrQtG.s:165    .text._write_r:0000006c $d
+  C:\Temp\ccsVrQtG.s:170    .text._close_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:173    .text._close_r:00000000 _close_r
+  C:\Temp\ccsVrQtG.s:190    .text.isatty:00000000 $a
+  C:\Temp\ccsVrQtG.s:193    .text.isatty:00000000 isatty
+  C:\Temp\ccsVrQtG.s:210    .text._lseek_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:213    .text._lseek_r:00000000 _lseek_r
+  C:\Temp\ccsVrQtG.s:230    .text._fstat_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:233    .text._fstat_r:00000000 _fstat_r
+  C:\Temp\ccsVrQtG.s:253    .text._sbrk_r:00000000 $a
+  C:\Temp\ccsVrQtG.s:256    .text._sbrk_r:00000000 _sbrk_r
+  C:\Temp\ccsVrQtG.s:286    .text._sbrk_r:0000002c $d
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\ccsVrQtG.s:295    .bss.heap_ptr:00000000 $d
+  C:\Temp\ccsVrQtG.s:299    .bss.heap_ptr:00000000 heap_ptr
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.46fbfa20fa232e47f00874f3e1c302d6
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.stddef.h.161.e50ff8a9d5d1abbc15641da28ac571bf
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.161.c6104a0666cf681b6269ddc9b4f516d4
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.53.c69c7609933ff56d59c757cec2d13230
+                           .group:00000000 wm4.types.h.2.e9cec8c90ab35f77d9f499e06ae02400
+                           .group:00000000 wm4.reent.h.97.2ae38345dababbc3acb159bb773d0e93
+                           .group:00000000 wm4.time.h.2.9857e62ad6ac99431e29d58067232314
+                           .group:00000000 wm4.time.h.24.c499d4c1915694df17abb795fd34b719
+                           .group:00000000 wm4.types.h.23.0d949686bbcadd1621462d4fa1f884f9
+                           .group:00000000 wm4.types.h.80.4c41f90a958351ce40b14103f7ff82ee
+                           .group:00000000 wm4.time.h.124.2bfd3eac49eac0bfe71336144066db0d
+                           .group:00000000 wm4.stat.h.69.169a67369ef31f6ea38a12bc9ba4e5dd
+
+UNDEFINED SYMBOLS
+xQueueGenericReceive
+RxCOM0
+xQueueGenericSend
+TxCOM0
+end

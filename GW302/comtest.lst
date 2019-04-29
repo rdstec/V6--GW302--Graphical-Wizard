@@ -1,0 +1,489 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"comtest.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.vComRxTask,"ax",%progbits
+  18              		.align	2
+  19              		.code	16
+  20              		.thumb_func
+  22              	vComRxTask:
+  23              	.LFB377:
+  24              		.file 1 "comtest.c"
+   1:comtest.c     **** // -----------------------------------------------------------
+   2:comtest.c     **** // Software:         GW302 - McHale V6 Fixed Chamber Round Baler
+   3:comtest.c     **** // C Source File:    comtest.c
+   4:comtest.c     **** // Description:      Graphic Wizard Serial Coms Routines
+   5:comtest.c     **** // -----------------------------------------------------------
+   6:comtest.c     **** 
+   7:comtest.c     **** 
+   8:comtest.c     **** // Include Standard files
+   9:comtest.c     **** #include "Board.h"
+  10:comtest.c     **** 
+  11:comtest.c     **** #include "string.h"
+  12:comtest.c     **** #include "stdlib.h"
+  13:comtest.c     **** #include "stdio.h"
+  14:comtest.c     **** 
+  15:comtest.c     **** 
+  16:comtest.c     **** // global variables
+  17:comtest.c     **** /*-----------------------------------------------------------*/
+  18:comtest.c     **** /* Handle to the com port used by both tasks. */
+  19:comtest.c     **** xComPortHandle xPort = NULL;
+  20:comtest.c     **** 
+  21:comtest.c     **** // functions
+  22:comtest.c     **** /*-----------------------------------------------------------*/
+  23:comtest.c     **** static void vComTxTask( void *pvParameters )
+  24:comtest.c     **** {
+  25:comtest.c     **** portTickType xTimeToWait;
+  26:comtest.c     **** 
+  27:comtest.c     **** //signed portCHAR *pt;
+  28:comtest.c     **** 
+  29:comtest.c     **** unsigned char tstring[80];
+  30:comtest.c     **** 
+  31:comtest.c     **** while( 1 )
+  32:comtest.c     ****   {
+  33:comtest.c     **** 
+  34:comtest.c     ****  #if( configUSE_TRACE_FACILITY == 1 )
+  35:comtest.c     ****   if( key == (SW_NEW | SW_IR | SW_IL) )
+  36:comtest.c     ****     {
+  37:comtest.c     ****     while( uxQueueMessagesWaiting( TxCOM0 ) != 0 )
+  38:comtest.c     ****       {
+  39:comtest.c     ****       // wait for queue to empty
+  40:comtest.c     ****       }
+  41:comtest.c     **** 
+  42:comtest.c     ****     vTaskList( buffer );
+  43:comtest.c     ****       
+  44:comtest.c     ****     vTaskSuspendAll(); // stop task switching
+  45:comtest.c     ****   
+  46:comtest.c     ****     // send each character from here, rather than buffering on queue as
+  47:comtest.c     ****     //  queue may not be large enough, and queue blocking delay does not
+  48:comtest.c     ****     //  work if task are suspended 
+  49:comtest.c     ****     debug_message_wait(); // wait for com port ready
+  50:comtest.c     ****     debug_message( buffer );
+  51:comtest.c     ****     
+  52:comtest.c     **** //    // Send each character in the string, one at a time
+  53:comtest.c     **** //    pt = ( signed portCHAR * )&buffer[0];
+  54:comtest.c     **** //    while( *pt )
+  55:comtest.c     **** //      {
+  56:comtest.c     **** //      xSerialPutChar( xPort, *pt, (500 / portTICK_RATE_MS) ); // wait up to 0.5 seconds if full
+  57:comtest.c     **** //      pt++;
+  58:comtest.c     **** //      }
+  59:comtest.c     ****       
+  60:comtest.c     ****     xTaskResumeAll(); // restart task switching
+  61:comtest.c     ****     }
+  62:comtest.c     ****   else
+  63:comtest.c     ****  #endif 
+  64:comtest.c     ****     {
+  65:comtest.c     ****     // task is to send test string...
+  66:comtest.c     ****     sprintf( tstring, "TC1 %lu, EOC %lu, %02X:%02X:%02X\r\n", TC1_interrupt_count, EOC7_interrupt_c
+  67:comtest.c     ****     vSerialPutString( xPort, tstring, 0 );
+  68:comtest.c     ****     //vSerialPutString( xPort, UCkey, 0 ); // ' ÀÁÂÃÄÅÆABCÇDEÈÉÊËFGHIÌÍÎÏĞJKLMNÑOÒÓÔÕÖØPQRSTUÙÚÛÜVW
+  69:comtest.c     ****     //vSerialPutString( xPort, LCkey, 0 ); // ' aàáâãäåæbcçdeèéêëfghiìíîïğjklmnñoòóôõöøpqrstuùúûüvw
+  70:comtest.c     ****     //vSerialPutString( xPort, NCkey, 0 ); // ' 0123456789.+-±!#¢£$'
+  71:comtest.c     ****     }
+  72:comtest.c     ****     
+  73:comtest.c     ****   // wait before re-sending - wait a pseudo-random time as this will provide a better test
+  74:comtest.c     ****   xTimeToWait = xTaskGetTickCount() + comOFFSET_TIME;
+  75:comtest.c     **** 
+  76:comtest.c     ****   // make sure we don't wait too long...
+  77:comtest.c     ****   xTimeToWait %= comTX_MAX_BLOCK_TIME;
+  78:comtest.c     **** 
+  79:comtest.c     ****   // ...but we do want to wait
+  80:comtest.c     ****   if( xTimeToWait < comTX_MIN_BLOCK_TIME )
+  81:comtest.c     ****     {
+  82:comtest.c     ****     xTimeToWait = comTX_MIN_BLOCK_TIME;
+  83:comtest.c     ****     }
+  84:comtest.c     **** 
+  85:comtest.c     ****   vTaskDelay( xTimeToWait );
+  86:comtest.c     ****   }
+  87:comtest.c     ****   
+  88:comtest.c     **** }
+  89:comtest.c     **** /*-----------------------------------------------------------*/
+  90:comtest.c     **** 
+  91:comtest.c     **** 
+  92:comtest.c     **** /*-----------------------------------------------------------*/
+  93:comtest.c     **** static void vComRxTask( void *pvParameters )
+  94:comtest.c     **** {
+  25              		.loc 1 94 0
+  26              		.cfi_startproc
+  27              	.LVL0:
+  28 0000 10B5     		push	{r4, lr}
+  29              	.LCFI0:
+  30              		.cfi_def_cfa_offset 8
+  31              		.cfi_offset 4, -8
+  32              		.cfi_offset 14, -4
+  33 0002 82B0     		sub	sp, sp, #8
+  34              	.LCFI1:
+  35              		.cfi_def_cfa_offset 16
+  95:comtest.c     **** signed portCHAR cByteRxed;
+  96:comtest.c     **** 
+  97:comtest.c     **** while( 1 )
+  98:comtest.c     ****   {
+  99:comtest.c     ****   if( xSerialGetChar( xPort, &cByteRxed, comRX_BLOCK_TIME )== pdTRUE )
+  36              		.loc 1 99 0
+  37 0004 034C     		ldr	r4, .L3
+  38              	.LVL1:
+  39              	.L2:
+  40 0006 2068     		ldr	r0, [r4]
+  41 0008 6946     		mov	r1, sp
+  42 000a 0731     		add	r1, r1, #7
+  43 000c 3222     		mov	r2, #50
+  44 000e FFF7FEFF 		bl	xSerialGetChar
+  45              	.LVL2:
+  46 0012 F8E7     		b	.L2
+  47              	.L4:
+  48              		.align	2
+  49              	.L3:
+  50 0014 00000000 		.word	.LANCHOR0
+  51              		.cfi_endproc
+  52              	.LFE377:
+  54              		.global	__aeabi_uidivmod
+  55              		.section	.text.vComTxTask,"ax",%progbits
+  56              		.align	2
+  57              		.code	16
+  58              		.thumb_func
+  60              	vComTxTask:
+  61              	.LFB376:
+  24:comtest.c     **** {
+  62              		.loc 1 24 0
+  63              		.cfi_startproc
+  64              	.LVL3:
+  65 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  66              	.LCFI2:
+  67              		.cfi_def_cfa_offset 20
+  68              		.cfi_offset 4, -20
+  69              		.cfi_offset 5, -16
+  70              		.cfi_offset 6, -12
+  71              		.cfi_offset 7, -8
+  72              		.cfi_offset 14, -4
+  73 0002 99B0     		sub	sp, sp, #100
+  74              	.LCFI3:
+  75              		.cfi_def_cfa_offset 120
+  35:comtest.c     ****   if( key == (SW_NEW | SW_IR | SW_IL) )
+  76              		.loc 1 35 0
+  77 0004 1E4F     		ldr	r7, .L14
+  78 0006 1F4E     		ldr	r6, .L14+4
+  77:comtest.c     ****   xTimeToWait %= comTX_MAX_BLOCK_TIME;
+  79              		.loc 1 77 0
+  80 0008 C825     		mov	r5, #200
+  81 000a AD00     		lsl	r5, r5, #2
+  82              	.LVL4:
+  83              	.L10:
+  35:comtest.c     ****   if( key == (SW_NEW | SW_IR | SW_IL) )
+  84              		.loc 1 35 0
+  85 000c 3B68     		ldr	r3, [r7]
+  86 000e B342     		cmp	r3, r6
+  87 0010 13D1     		bne	.L6
+  37:comtest.c     ****     while( uxQueueMessagesWaiting( TxCOM0 ) != 0 )
+  88              		.loc 1 37 0 discriminator 1
+  89 0012 1D4C     		ldr	r4, .L14+8
+  90              	.L12:
+  91 0014 2068     		ldr	r0, [r4]
+  92 0016 FFF7FEFF 		bl	uxQueueMessagesWaiting
+  93              	.LVL5:
+  94 001a 0028     		cmp	r0, #0
+  95 001c FAD1     		bne	.L12
+  42:comtest.c     ****     vTaskList( buffer );
+  96              		.loc 1 42 0
+  97 001e 1B4C     		ldr	r4, .L14+12
+  98 0020 201C     		mov	r0, r4
+  99 0022 FFF7FEFF 		bl	vTaskList
+ 100              	.LVL6:
+  44:comtest.c     ****     vTaskSuspendAll(); // stop task switching
+ 101              		.loc 1 44 0
+ 102 0026 FFF7FEFF 		bl	vTaskSuspendAll
+ 103              	.LVL7:
+  49:comtest.c     ****     debug_message_wait(); // wait for com port ready
+ 104              		.loc 1 49 0
+ 105 002a FFF7FEFF 		bl	debug_message_wait
+ 106              	.LVL8:
+  50:comtest.c     ****     debug_message( buffer );
+ 107              		.loc 1 50 0
+ 108 002e 201C     		mov	r0, r4
+ 109 0030 FFF7FEFF 		bl	debug_message
+ 110              	.LVL9:
+  60:comtest.c     ****     xTaskResumeAll(); // restart task switching
+ 111              		.loc 1 60 0
+ 112 0034 FFF7FEFF 		bl	xTaskResumeAll
+ 113              	.LVL10:
+ 114 0038 14E0     		b	.L8
+ 115              	.L6:
+  66:comtest.c     ****     sprintf( tstring, "TC1 %lu, EOC %lu, %02X:%02X:%02X\r\n", TC1_interrupt_count, EOC7_interrupt_c
+ 116              		.loc 1 66 0
+ 117 003a 154B     		ldr	r3, .L14+16
+ 118 003c 1A68     		ldr	r2, [r3]
+ 119 003e 154B     		ldr	r3, .L14+20
+ 120 0040 1B68     		ldr	r3, [r3]
+ 121 0042 1548     		ldr	r0, .L14+24
+ 122 0044 8178     		ldrb	r1, [r0, #2]
+ 123 0046 0091     		str	r1, [sp]
+ 124 0048 4178     		ldrb	r1, [r0, #1]
+ 125 004a 0191     		str	r1, [sp, #4]
+ 126 004c 0178     		ldrb	r1, [r0]
+ 127 004e 0291     		str	r1, [sp, #8]
+ 128 0050 04A8     		add	r0, sp, #16
+ 129 0052 1249     		ldr	r1, .L14+28
+ 130 0054 FFF7FEFF 		bl	sprintf
+ 131              	.LVL11:
+  67:comtest.c     ****     vSerialPutString( xPort, tstring, 0 );
+ 132              		.loc 1 67 0
+ 133 0058 114B     		ldr	r3, .L14+32
+ 134 005a 1868     		ldr	r0, [r3]
+ 135 005c 04A9     		add	r1, sp, #16
+ 136 005e 0022     		mov	r2, #0
+ 137 0060 FFF7FEFF 		bl	vSerialPutString
+ 138              	.LVL12:
+ 139              	.L8:
+  74:comtest.c     ****   xTimeToWait = xTaskGetTickCount() + comOFFSET_TIME;
+ 140              		.loc 1 74 0
+ 141 0064 FFF7FEFF 		bl	xTaskGetTickCount
+ 142              	.LVL13:
+ 143 0068 3730     		add	r0, r0, #55
+ 144              	.LVL14:
+  77:comtest.c     ****   xTimeToWait %= comTX_MAX_BLOCK_TIME;
+ 145              		.loc 1 77 0
+ 146 006a 291C     		mov	r1, r5
+ 147 006c FFF7FEFF 		bl	__aeabi_uidivmod
+ 148              	.LVL15:
+ 149 0070 081C     		mov	r0, r1
+ 150              	.LVL16:
+  80:comtest.c     ****   if( xTimeToWait < comTX_MIN_BLOCK_TIME )
+ 151              		.loc 1 80 0
+ 152 0072 C729     		cmp	r1, #199
+ 153 0074 00D8     		bhi	.L9
+  82:comtest.c     ****     xTimeToWait = comTX_MIN_BLOCK_TIME;
+ 154              		.loc 1 82 0
+ 155 0076 C820     		mov	r0, #200
+ 156              	.LVL17:
+ 157              	.L9:
+  85:comtest.c     ****   vTaskDelay( xTimeToWait );
+ 158              		.loc 1 85 0
+ 159 0078 FFF7FEFF 		bl	vTaskDelay
+ 160              	.LVL18:
+  86:comtest.c     ****   }
+ 161              		.loc 1 86 0
+ 162 007c C6E7     		b	.L10
+ 163              	.L15:
+ 164 007e C046     		.align	2
+ 165              	.L14:
+ 166 0080 00000000 		.word	key
+ 167 0084 0C000080 		.word	-2147483636
+ 168 0088 00000000 		.word	TxCOM0
+ 169 008c 00000000 		.word	buffer
+ 170 0090 00000000 		.word	TC1_interrupt_count
+ 171 0094 00000000 		.word	EOC7_interrupt_count
+ 172 0098 00000000 		.word	ClockRam
+ 173 009c 00000000 		.word	.LC4
+ 174 00a0 00000000 		.word	.LANCHOR0
+ 175              		.cfi_endproc
+ 176              	.LFE376:
+ 178              		.section	.text.vStartComTasks,"ax",%progbits
+ 179              		.align	2
+ 180              		.global	vStartComTasks
+ 181              		.code	16
+ 182              		.thumb_func
+ 184              	vStartComTasks:
+ 185              	.LFB378:
+ 100:comtest.c     ****     {
+ 101:comtest.c     ****     // byte received so do something with it!
+ 102:comtest.c     ****     }
+ 103:comtest.c     ****     
+ 104:comtest.c     ****   }
+ 105:comtest.c     ****   
+ 106:comtest.c     **** }
+ 107:comtest.c     **** /*-----------------------------------------------------------*/
+ 108:comtest.c     **** 
+ 109:comtest.c     **** 
+ 110:comtest.c     **** /*-----------------------------------------------------------*/
+ 111:comtest.c     **** void vStartComTasks( unsigned portBASE_TYPE uxPriority, unsigned portLONG ulBaudRate )
+ 112:comtest.c     **** {
+ 186              		.loc 1 112 0
+ 187              		.cfi_startproc
+ 188              	.LVL19:
+ 189 0000 30B5     		push	{r4, r5, lr}
+ 190              	.LCFI4:
+ 191              		.cfi_def_cfa_offset 12
+ 192              		.cfi_offset 4, -12
+ 193              		.cfi_offset 5, -8
+ 194              		.cfi_offset 14, -4
+ 195 0002 85B0     		sub	sp, sp, #20
+ 196              	.LCFI5:
+ 197              		.cfi_def_cfa_offset 32
+ 198 0004 051C     		mov	r5, r0
+ 113:comtest.c     **** 
+ 114:comtest.c     **** /* Initialise the com port then spawn the Rx and Tx tasks. */
+ 115:comtest.c     **** xSerialPortInit( ulBaudRate, comBUFFER_LEN );
+ 199              		.loc 1 115 0
+ 200 0006 081C     		mov	r0, r1
+ 201              	.LVL20:
+ 202 0008 8021     		mov	r1, #128
+ 203              	.LVL21:
+ 204 000a FFF7FEFF 		bl	xSerialPortInit
+ 205              	.LVL22:
+ 116:comtest.c     **** 
+ 117:comtest.c     **** /* The Tx task is spawned with a lower priority than the Rx task. */
+ 118:comtest.c     **** xTaskCreate( vComTxTask, "COMTx", comTx_STACK_SIZE, NULL, uxPriority - 1, NULL );
+ 206              		.loc 1 118 0
+ 207 000e 6B1E     		sub	r3, r5, #1
+ 208 0010 0093     		str	r3, [sp]
+ 209 0012 0024     		mov	r4, #0
+ 210 0014 0194     		str	r4, [sp, #4]
+ 211 0016 0294     		str	r4, [sp, #8]
+ 212 0018 0394     		str	r4, [sp, #12]
+ 213 001a 0A48     		ldr	r0, .L17
+ 214 001c 0A49     		ldr	r1, .L17+4
+ 215 001e 9122     		mov	r2, #145
+ 216 0020 9200     		lsl	r2, r2, #2
+ 217 0022 0023     		mov	r3, #0
+ 218 0024 FFF7FEFF 		bl	xTaskGenericCreate
+ 219              	.LVL23:
+ 119:comtest.c     **** xTaskCreate( vComRxTask, "COMRx", comRx_STACK_SIZE, NULL, uxPriority,  NULL );
+ 220              		.loc 1 119 0
+ 221 0028 0095     		str	r5, [sp]
+ 222 002a 0194     		str	r4, [sp, #4]
+ 223 002c 0294     		str	r4, [sp, #8]
+ 224 002e 0394     		str	r4, [sp, #12]
+ 225 0030 0648     		ldr	r0, .L17+8
+ 226 0032 0749     		ldr	r1, .L17+12
+ 227 0034 6422     		mov	r2, #100
+ 228 0036 0023     		mov	r3, #0
+ 229 0038 FFF7FEFF 		bl	xTaskGenericCreate
+ 230              	.LVL24:
+ 120:comtest.c     **** }
+ 231              		.loc 1 120 0
+ 232 003c 05B0     		add	sp, sp, #20
+ 233              		@ sp needed for prologue
+ 234              	.LVL25:
+ 235 003e 30BC     		pop	{r4, r5}
+ 236 0040 01BC     		pop	{r0}
+ 237 0042 0047     		bx	r0
+ 238              	.L18:
+ 239              		.align	2
+ 240              	.L17:
+ 241 0044 00000000 		.word	vComTxTask
+ 242 0048 24000000 		.word	.LC11
+ 243 004c 00000000 		.word	vComRxTask
+ 244 0050 2C000000 		.word	.LC14
+ 245              		.cfi_endproc
+ 246              	.LFE378:
+ 248              		.global	xPort
+ 249              		.comm	POWERtaskhandle,4,4
+ 250              		.comm	TWItaskhandle,4,4
+ 251              		.comm	SetTime,4,4
+ 252              		.section	.bss.xPort,"aw",%nobits
+ 253              		.align	2
+ 254              		.set	.LANCHOR0,. + 0
+ 257              	xPort:
+ 258 0000 00000000 		.space	4
+ 259              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 260              		.align	2
+ 261              	.LC4:
+ 262 0000 54433120 		.ascii	"TC1 %lu, EOC %lu, %02X:%02X:%02X\015\012\000"
+ 262      256C752C 
+ 262      20454F43 
+ 262      20256C75 
+ 262      2C202530 
+ 263 0023 00       		.space	1
+ 264              	.LC11:
+ 265 0024 434F4D54 		.ascii	"COMTx\000"
+ 265      7800
+ 266 002a 0000     		.space	2
+ 267              	.LC14:
+ 268 002c 434F4D52 		.ascii	"COMRx\000"
+ 268      7800
+ 269 0032 0000     		.text
+ 270              	.Letext0:
+ 271              		.file 2 "./include/projdefs.h"
+ 272              		.file 3 "./portmacro.h"
+ 273              		.file 4 "./include/task.h"
+ 274              		.file 5 "./include/queue.h"
+ 275              		.file 6 "./include/semphr.h"
+ 276              		.file 7 "Board.h"
+ 277              		.file 8 "c:/gnuarm-471_eabi/lib/gcc/../../arm-none-eabi/sys-include/stdio.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 comtest.c
+  C:\Temp\ccChLGhF.s:18     .text.vComRxTask:00000000 $t
+  C:\Temp\ccChLGhF.s:22     .text.vComRxTask:00000000 vComRxTask
+  C:\Temp\ccChLGhF.s:50     .text.vComRxTask:00000014 $d
+  C:\Temp\ccChLGhF.s:56     .text.vComTxTask:00000000 $t
+  C:\Temp\ccChLGhF.s:60     .text.vComTxTask:00000000 vComTxTask
+  C:\Temp\ccChLGhF.s:166    .text.vComTxTask:00000080 $d
+  C:\Temp\ccChLGhF.s:179    .text.vStartComTasks:00000000 $t
+  C:\Temp\ccChLGhF.s:184    .text.vStartComTasks:00000000 vStartComTasks
+  C:\Temp\ccChLGhF.s:241    .text.vStartComTasks:00000044 $d
+  C:\Temp\ccChLGhF.s:257    .bss.xPort:00000000 xPort
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\ccChLGhF.s:253    .bss.xPort:00000000 $d
+  C:\Temp\ccChLGhF.s:260    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.161.c6104a0666cf681b6269ddc9b4f516d4
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.cdefs.h.45.6b392759c8a421d1199268021d4987e3
+                           .group:00000000 wm4.stddef.h.161.e50ff8a9d5d1abbc15641da28ac571bf
+                           .group:00000000 wm4.string.h.118.0034ce03f0efcb6576b1b96865c749d5
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.53.c69c7609933ff56d59c757cec2d13230
+                           .group:00000000 wm4.stdio.h.27.f2ac352bab34f31f9f478442827b2ba6
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.types.h.23.0d949686bbcadd1621462d4fa1f884f9
+                           .group:00000000 wm4.types.h.2.e9cec8c90ab35f77d9f499e06ae02400
+                           .group:00000000 wm4.types.h.80.4c41f90a958351ce40b14103f7ff82ee
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.63.dfdea6580b080784d08faace69b6ed76
+
+UNDEFINED SYMBOLS
+xSerialGetChar
+__aeabi_uidivmod
+uxQueueMessagesWaiting
+vTaskList
+vTaskSuspendAll
+debug_message_wait
+debug_message
+xTaskResumeAll
+sprintf
+vSerialPutString
+xTaskGetTickCount
+vTaskDelay
+key
+TxCOM0
+buffer
+TC1_interrupt_count
+EOC7_interrupt_count
+ClockRam
+xSerialPortInit
+xTaskGenericCreate

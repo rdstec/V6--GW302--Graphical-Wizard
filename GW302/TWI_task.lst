@@ -1,0 +1,433 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"TWI_task.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.vTWI_task,"ax",%progbits
+  18              		.align	2
+  19              		.code	16
+  20              		.thumb_func
+  22              	vTWI_task:
+  23              	.LFB376:
+  24              		.file 1 "TWI_task.c"
+   1:TWI_task.c    **** // C Source File:    TWI_task.c
+   2:TWI_task.c    **** 
+   3:TWI_task.c    **** 
+   4:TWI_task.c    **** // Include Standard files
+   5:TWI_task.c    **** #include "Board.h"
+   6:TWI_task.c    **** 
+   7:TWI_task.c    **** #include <stdlib.h>
+   8:TWI_task.c    **** 
+   9:TWI_task.c    **** // global variables
+  10:TWI_task.c    **** /*-----------------------------------------------------------*/
+  11:TWI_task.c    **** xSemaphoreHandle SetTime;
+  12:TWI_task.c    **** xTaskHandle TWItaskhandle;
+  13:TWI_task.c    **** 
+  14:TWI_task.c    **** // functions
+  15:TWI_task.c    **** /*-----------------------------------------------------------*/
+  16:TWI_task.c    **** static void vTWI_task( void *pvParameters )
+  17:TWI_task.c    **** {
+  25              		.loc 1 17 0
+  26              		.cfi_startproc
+  27              	.LVL0:
+  28 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  29              	.LCFI0:
+  30              		.cfi_def_cfa_offset 24
+  31              		.cfi_offset 3, -24
+  32              		.cfi_offset 4, -20
+  33              		.cfi_offset 5, -16
+  34              		.cfi_offset 6, -12
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  18:TWI_task.c    **** unsigned char c;
+  19:TWI_task.c    **** 
+  20:TWI_task.c    **** // Create the semaphore to set time
+  21:TWI_task.c    **** vSemaphoreCreateBinary( SetTime );
+  37              		.loc 1 21 0
+  38 0002 0120     		mov	r0, #1
+  39              	.LVL1:
+  40 0004 0021     		mov	r1, #0
+  41 0006 FFF7FEFF 		bl	xQueueCreate
+  42              	.LVL2:
+  43 000a 334B     		ldr	r3, .L20
+  44 000c 1860     		str	r0, [r3]
+  45 000e 0028     		cmp	r0, #0
+  46 0010 04D0     		beq	.L2
+  47              		.loc 1 21 0 is_stmt 0 discriminator 1
+  48 0012 0021     		mov	r1, #0
+  49 0014 0022     		mov	r2, #0
+  50 0016 0023     		mov	r3, #0
+  51 0018 FFF7FEFF 		bl	xQueueGenericSend
+  52              	.LVL3:
+  53              	.L2:
+  22:TWI_task.c    ****     
+  23:TWI_task.c    **** // set control register Master Enabled / Slave Disabled
+  24:TWI_task.c    **** AT91C_BASE_TWI->TWI_CR = AT91C_TWI_MSEN;
+  54              		.loc 1 24 0 is_stmt 1
+  55 001c 0422     		mov	r2, #4
+  56 001e 2F4B     		ldr	r3, .L20+4
+  57 0020 1A60     		str	r2, [r3]
+  25:TWI_task.c    **** 
+  26:TWI_task.c    **** while( 1 )
+  27:TWI_task.c    ****   {
+  28:TWI_task.c    ****   vTaskDelay( 500 / portTICK_RATE_MS ); // 500ms
+  58              		.loc 1 28 0
+  59 0022 FA26     		mov	r6, #250
+  60 0024 7600     		lsl	r6, r6, #1
+  29:TWI_task.c    ****   
+  30:TWI_task.c    ****   // check semaphore, if available read time, else set time
+  31:TWI_task.c    ****   if( xSemaphoreTake( SetTime, (portTickType)0 ) == pdTRUE )
+  32:TWI_task.c    ****     {
+  33:TWI_task.c    ****     // TWI read
+  34:TWI_task.c    ****     // set master mode register, Slave Address, 1 byte internal address, MREAD = 1 
+  35:TWI_task.c    ****     AT91C_BASE_TWI->TWI_MMR = (0x32 << 16) | AT91C_TWI_IADRSZ_1_BYTE | AT91C_TWI_MREAD;
+  36:TWI_task.c    ****     // set internal address to 0
+  37:TWI_task.c    ****     AT91C_BASE_TWI->TWI_IADR = 0x0000;
+  38:TWI_task.c    ****     // start transfer
+  39:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_START;
+  40:TWI_task.c    ****   
+  41:TWI_task.c    ****     for( c = 0; c < 15; c++ )
+  42:TWI_task.c    ****       {
+  43:TWI_task.c    ****   	  while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_RXRDY) )
+  44:TWI_task.c    ****         {
+  45:TWI_task.c    ****         }
+  46:TWI_task.c    ****       ClockRam[c] = AT91C_BASE_TWI->TWI_RHR;
+  47:TWI_task.c    ****       }
+  48:TWI_task.c    **** 
+  49:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_STOP;
+  50:TWI_task.c    ****   
+  51:TWI_task.c    ****     // Wait until transfer is finished
+  52:TWI_task.c    ****     while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_TXCOMP) )
+  53:TWI_task.c    ****       {
+  54:TWI_task.c    ****       }
+  55:TWI_task.c    ****     
+  56:TWI_task.c    ****     // get last byte  
+  57:TWI_task.c    ****     ClockRam[c] = AT91C_BASE_TWI->TWI_RHR;
+  58:TWI_task.c    **** 
+  59:TWI_task.c    ****     }
+  60:TWI_task.c    ****   else // can't take semaphore - so set time
+  61:TWI_task.c    ****     {
+  62:TWI_task.c    ****     // TWI write
+  63:TWI_task.c    ****     // set master mode register, Slave Address, 1 byte internal address, MREAD = 0 
+  64:TWI_task.c    ****     AT91C_BASE_TWI->TWI_MMR = ((0x32 << 16) | AT91C_TWI_IADRSZ_1_BYTE) & ~AT91C_TWI_MREAD;
+  65:TWI_task.c    ****     // set internal address to 0
+  66:TWI_task.c    ****     AT91C_BASE_TWI->TWI_IADR = 0x0000;
+  67:TWI_task.c    ****     
+  68:TWI_task.c    ****     // set first byte to send
+  69:TWI_task.c    ****     AT91C_BASE_TWI->TWI_THR = ClockRam[0]; 
+  61              		.loc 1 69 0
+  62 0026 2E4D     		ldr	r5, .L20+8
+  63 0028 6F1C     		add	r7, r5, #1
+  64              	.L11:
+  28:TWI_task.c    ****   vTaskDelay( 500 / portTICK_RATE_MS ); // 500ms
+  65              		.loc 1 28 0
+  66 002a 301C     		mov	r0, r6
+  67 002c FFF7FEFF 		bl	vTaskDelay
+  68              	.LVL4:
+  31:TWI_task.c    ****   if( xSemaphoreTake( SetTime, (portTickType)0 ) == pdTRUE )
+  69              		.loc 1 31 0
+  70 0030 294B     		ldr	r3, .L20
+  71 0032 1868     		ldr	r0, [r3]
+  72 0034 0021     		mov	r1, #0
+  73 0036 0022     		mov	r2, #0
+  74 0038 0023     		mov	r3, #0
+  75 003a FFF7FEFF 		bl	xQueueGenericReceive
+  76              	.LVL5:
+  77 003e 0128     		cmp	r0, #1
+  78 0040 20D1     		bne	.L3
+  35:TWI_task.c    ****     AT91C_BASE_TWI->TWI_MMR = (0x32 << 16) | AT91C_TWI_IADRSZ_1_BYTE | AT91C_TWI_MREAD;
+  79              		.loc 1 35 0
+  80 0042 264B     		ldr	r3, .L20+4
+  81 0044 274A     		ldr	r2, .L20+12
+  82 0046 5A60     		str	r2, [r3, #4]
+  37:TWI_task.c    ****     AT91C_BASE_TWI->TWI_IADR = 0x0000;
+  83              		.loc 1 37 0
+  84 0048 0022     		mov	r2, #0
+  85 004a DA60     		str	r2, [r3, #12]
+  39:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_START;
+  86              		.loc 1 39 0
+  87 004c 0122     		mov	r2, #1
+  88 004e 1A60     		str	r2, [r3]
+  89              	.LVL6:
+  90 0050 2348     		ldr	r0, .L20+8
+  16:TWI_task.c    **** static void vTWI_task( void *pvParameters )
+  91              		.loc 1 16 0
+  92 0052 041C     		mov	r4, r0
+  93 0054 0F34     		add	r4, r4, #15
+  43:TWI_task.c    ****   	  while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_RXRDY) )
+  94              		.loc 1 43 0
+  95 0056 1A1C     		mov	r2, r3
+  96 0058 0221     		mov	r1, #2
+  97              	.LVL7:
+  98              	.L18:
+  43:TWI_task.c    ****   	  while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_RXRDY) )
+  99              		.loc 1 43 0 is_stmt 0 discriminator 1
+ 100 005a 136A     		ldr	r3, [r2, #32]
+ 101 005c 1942     		tst	r1, r3
+ 102 005e FCD0     		beq	.L18
+  46:TWI_task.c    ****       ClockRam[c] = AT91C_BASE_TWI->TWI_RHR;
+ 103              		.loc 1 46 0 is_stmt 1
+ 104 0060 136B     		ldr	r3, [r2, #48]
+ 105 0062 0370     		strb	r3, [r0]
+ 106 0064 0130     		add	r0, r0, #1
+  41:TWI_task.c    ****     for( c = 0; c < 15; c++ )
+ 107              		.loc 1 41 0
+ 108 0066 A042     		cmp	r0, r4
+ 109 0068 F7D1     		bne	.L18
+  49:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_STOP;
+ 110              		.loc 1 49 0
+ 111 006a 0222     		mov	r2, #2
+ 112 006c 1B4B     		ldr	r3, .L20+4
+ 113 006e 1A60     		str	r2, [r3]
+  52:TWI_task.c    ****     while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_TXCOMP) )
+ 114              		.loc 1 52 0
+ 115 0070 191C     		mov	r1, r3
+ 116 0072 0122     		mov	r2, #1
+ 117              	.L6:
+  52:TWI_task.c    ****     while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_TXCOMP) )
+ 118              		.loc 1 52 0 is_stmt 0 discriminator 1
+ 119 0074 0B6A     		ldr	r3, [r1, #32]
+ 120 0076 1A42     		tst	r2, r3
+ 121 0078 FCD0     		beq	.L6
+  57:TWI_task.c    ****     ClockRam[c] = AT91C_BASE_TWI->TWI_RHR;
+ 122              		.loc 1 57 0 is_stmt 1
+ 123 007a 184B     		ldr	r3, .L20+4
+ 124 007c 1A6B     		ldr	r2, [r3, #48]
+ 125 007e 184B     		ldr	r3, .L20+8
+ 126 0080 DA73     		strb	r2, [r3, #15]
+ 127 0082 1DE0     		b	.L7
+ 128              	.L3:
+  64:TWI_task.c    ****     AT91C_BASE_TWI->TWI_MMR = ((0x32 << 16) | AT91C_TWI_IADRSZ_1_BYTE) & ~AT91C_TWI_MREAD;
+ 129              		.loc 1 64 0
+ 130 0084 154B     		ldr	r3, .L20+4
+ 131 0086 184A     		ldr	r2, .L20+16
+ 132 0088 5A60     		str	r2, [r3, #4]
+  66:TWI_task.c    ****     AT91C_BASE_TWI->TWI_IADR = 0x0000;
+ 133              		.loc 1 66 0
+ 134 008a 0022     		mov	r2, #0
+ 135 008c DA60     		str	r2, [r3, #12]
+ 136              		.loc 1 69 0
+ 137 008e 2A78     		ldrb	r2, [r5]
+ 138 0090 5A63     		str	r2, [r3, #52]
+  70:TWI_task.c    ****     
+  71:TWI_task.c    ****     // start transfer
+  72:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_START;
+ 139              		.loc 1 72 0
+ 140 0092 0122     		mov	r2, #1
+ 141 0094 1A60     		str	r2, [r3]
+ 142              	.LVL8:
+ 143 0096 3C1C     		mov	r4, r7
+  16:TWI_task.c    **** static void vTWI_task( void *pvParameters )
+ 144              		.loc 1 16 0
+ 145 0098 281C     		mov	r0, r5
+ 146 009a 1030     		add	r0, r0, #16
+  73:TWI_task.c    ****   
+  74:TWI_task.c    ****     // send remaining 15 bytes
+  75:TWI_task.c    ****     for( c = 1; c < 16; c++ )
+  76:TWI_task.c    ****       {
+  77:TWI_task.c    ****   	  while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_TXRDY) )
+ 147              		.loc 1 77 0
+ 148 009c 1A1C     		mov	r2, r3
+ 149 009e 0421     		mov	r1, #4
+ 150              	.LVL9:
+ 151              	.L19:
+ 152              		.loc 1 77 0 is_stmt 0 discriminator 1
+ 153 00a0 136A     		ldr	r3, [r2, #32]
+ 154 00a2 1942     		tst	r1, r3
+ 155 00a4 FCD0     		beq	.L19
+  78:TWI_task.c    ****         {
+  79:TWI_task.c    ****         }
+  80:TWI_task.c    ****       AT91C_BASE_TWI->TWI_THR = ClockRam[c];
+ 156              		.loc 1 80 0 is_stmt 1
+ 157 00a6 2378     		ldrb	r3, [r4]
+ 158 00a8 5363     		str	r3, [r2, #52]
+ 159 00aa 0134     		add	r4, r4, #1
+  75:TWI_task.c    ****     for( c = 1; c < 16; c++ )
+ 160              		.loc 1 75 0
+ 161 00ac 8442     		cmp	r4, r0
+ 162 00ae F7D1     		bne	.L19
+  81:TWI_task.c    ****       }
+  82:TWI_task.c    **** 
+  83:TWI_task.c    ****     AT91C_BASE_TWI->TWI_CR = AT91C_TWI_STOP;
+ 163              		.loc 1 83 0
+ 164 00b0 0222     		mov	r2, #2
+ 165 00b2 0A4B     		ldr	r3, .L20+4
+ 166 00b4 1A60     		str	r2, [r3]
+  84:TWI_task.c    ****     
+  85:TWI_task.c    ****     // Wait until transfer is finished
+  86:TWI_task.c    ****     while( !(AT91C_BASE_TWI->TWI_SR & AT91C_TWI_TXCOMP) )
+ 167              		.loc 1 86 0
+ 168 00b6 191C     		mov	r1, r3
+ 169 00b8 0122     		mov	r2, #1
+ 170              	.L10:
+ 171              		.loc 1 86 0 is_stmt 0 discriminator 1
+ 172 00ba 0B6A     		ldr	r3, [r1, #32]
+ 173 00bc 1A42     		tst	r2, r3
+ 174 00be FCD0     		beq	.L10
+ 175              	.L7:
+  87:TWI_task.c    ****       {
+  88:TWI_task.c    ****       }    
+  89:TWI_task.c    ****   
+  90:TWI_task.c    ****     }
+  91:TWI_task.c    ****       
+  92:TWI_task.c    ****   // We have finished accessing ClockRam, so release the semaphore
+  93:TWI_task.c    ****   xSemaphoreGive( SetTime );
+ 176              		.loc 1 93 0 is_stmt 1
+ 177 00c0 054B     		ldr	r3, .L20
+ 178 00c2 1868     		ldr	r0, [r3]
+ 179 00c4 0021     		mov	r1, #0
+ 180 00c6 0022     		mov	r2, #0
+ 181 00c8 0023     		mov	r3, #0
+ 182 00ca FFF7FEFF 		bl	xQueueGenericSend
+ 183              	.LVL10:
+  94:TWI_task.c    ****   
+  95:TWI_task.c    ****   vTaskPrioritySet( NULL, mainTWI_TASK_READ_PRIORITY );
+ 184              		.loc 1 95 0
+ 185 00ce 0020     		mov	r0, #0
+ 186 00d0 0121     		mov	r1, #1
+ 187 00d2 FFF7FEFF 		bl	vTaskPrioritySet
+ 188              	.LVL11:
+  96:TWI_task.c    ****   }
+ 189              		.loc 1 96 0
+ 190 00d6 A8E7     		b	.L11
+ 191              	.L21:
+ 192              		.align	2
+ 193              	.L20:
+ 194 00d8 00000000 		.word	SetTime
+ 195 00dc 0080FBFF 		.word	-294912
+ 196 00e0 00000000 		.word	ClockRam
+ 197 00e4 00113200 		.word	3281152
+ 198 00e8 00013200 		.word	3277056
+ 199              		.cfi_endproc
+ 200              	.LFE376:
+ 202              		.section	.text.vStartTWITask,"ax",%progbits
+ 203              		.align	2
+ 204              		.global	vStartTWITask
+ 205              		.code	16
+ 206              		.thumb_func
+ 208              	vStartTWITask:
+ 209              	.LFB377:
+  97:TWI_task.c    ****   
+  98:TWI_task.c    **** }  
+  99:TWI_task.c    **** /*-----------------------------------------------------------*/
+ 100:TWI_task.c    **** 
+ 101:TWI_task.c    **** 
+ 102:TWI_task.c    **** /*-----------------------------------------------------------*/
+ 103:TWI_task.c    **** void vStartTWITask( unsigned portBASE_TYPE uxPriority )
+ 104:TWI_task.c    **** {
+ 210              		.loc 1 104 0
+ 211              		.cfi_startproc
+ 212              	.LVL12:
+ 213 0000 00B5     		push	{lr}
+ 214              	.LCFI1:
+ 215              		.cfi_def_cfa_offset 4
+ 216              		.cfi_offset 14, -4
+ 217 0002 85B0     		sub	sp, sp, #20
+ 218              	.LCFI2:
+ 219              		.cfi_def_cfa_offset 24
+ 105:TWI_task.c    **** 
+ 106:TWI_task.c    **** /* Spawn the task. */
+ 107:TWI_task.c    **** xTaskCreate( vTWI_task, "TWI", twiSTACK_SIZE, (void *)NULL, uxPriority, (xTaskHandle *)&TWItaskhand
+ 220              		.loc 1 107 0
+ 221 0004 0090     		str	r0, [sp]
+ 222 0006 064B     		ldr	r3, .L23
+ 223 0008 0193     		str	r3, [sp, #4]
+ 224 000a 0023     		mov	r3, #0
+ 225 000c 0293     		str	r3, [sp, #8]
+ 226 000e 0393     		str	r3, [sp, #12]
+ 227 0010 0448     		ldr	r0, .L23+4
+ 228              	.LVL13:
+ 229 0012 0549     		ldr	r1, .L23+8
+ 230 0014 6422     		mov	r2, #100
+ 231 0016 FFF7FEFF 		bl	xTaskGenericCreate
+ 232              	.LVL14:
+ 108:TWI_task.c    **** }
+ 233              		.loc 1 108 0
+ 234 001a 05B0     		add	sp, sp, #20
+ 235              		@ sp needed for prologue
+ 236 001c 01BC     		pop	{r0}
+ 237 001e 0047     		bx	r0
+ 238              	.L24:
+ 239              		.align	2
+ 240              	.L23:
+ 241 0020 00000000 		.word	TWItaskhandle
+ 242 0024 00000000 		.word	vTWI_task
+ 243 0028 00000000 		.word	.LC8
+ 244              		.cfi_endproc
+ 245              	.LFE377:
+ 247              		.comm	POWERtaskhandle,4,4
+ 248              		.comm	TWItaskhandle,4,4
+ 249              		.comm	SetTime,4,4
+ 250              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 251              		.align	2
+ 252              	.LC8:
+ 253 0000 54574900 		.ascii	"TWI\000"
+ 254              		.text
+ 255              	.Letext0:
+ 256              		.file 2 "./include/AT91SAM7A3.h"
+ 257              		.file 3 "./include/projdefs.h"
+ 258              		.file 4 "./portmacro.h"
+ 259              		.file 5 "./include/task.h"
+ 260              		.file 6 "./include/queue.h"
+ 261              		.file 7 "./include/semphr.h"
+ 262              		.file 8 "Board.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 TWI_task.c
+  C:\Temp\ccC4Rp6l.s:18     .text.vTWI_task:00000000 $t
+  C:\Temp\ccC4Rp6l.s:22     .text.vTWI_task:00000000 vTWI_task
+  C:\Temp\ccC4Rp6l.s:194    .text.vTWI_task:000000d8 $d
+                            *COM*:00000004 SetTime
+  C:\Temp\ccC4Rp6l.s:203    .text.vStartTWITask:00000000 $t
+  C:\Temp\ccC4Rp6l.s:208    .text.vStartTWITask:00000000 vStartTWITask
+  C:\Temp\ccC4Rp6l.s:241    .text.vStartTWITask:00000020 $d
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 POWERtaskhandle
+  C:\Temp\ccC4Rp6l.s:251    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.stddef.h.161.e50ff8a9d5d1abbc15641da28ac571bf
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.161.c6104a0666cf681b6269ddc9b4f516d4
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.53.c69c7609933ff56d59c757cec2d13230
+
+UNDEFINED SYMBOLS
+xQueueCreate
+xQueueGenericSend
+vTaskDelay
+xQueueGenericReceive
+vTaskPrioritySet
+ClockRam
+xTaskGenericCreate

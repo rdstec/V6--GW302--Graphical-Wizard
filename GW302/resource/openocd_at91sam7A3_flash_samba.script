@@ -1,0 +1,52 @@
+# 
+# The following command wills be executed on
+# reset (because of run_and_init in the config-file)
+# - halt target
+# - init ecr
+# - flash content of file main.bin into target-memory
+# - shutdown openocd
+#
+# created by Martin Thomas 
+# http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects
+# based on information from Dominic Rath 
+#
+
+halt
+sleep 10
+
+# cp - if watchdog enabled without 'stop if debugging' use this...
+# reset device so watchdog can be disabled
+# mww 0xfffffd00 0xa5000005
+# sleep 20
+
+# Init - taken from the script openocd_at91sam7_ecr.script
+mww 0xfffffd44 0x00008000	# disable watchdog
+mww 0xfffffd08 0xa5000001	# enable user reset
+mww 0xfffffc20 0x00000601	# CKGR_MOR : enable the main oscillator
+sleep 10
+mww 0xfffffc2c 0x00481c0e 	# CKGR_PLLR: 96.1097 MHz
+sleep 10
+mww 0xfffffc30 0x00000007	# PMC_MCKR : MCK = PLL / 2 ~= 48 MHz
+sleep 10
+mww 0xffffff60 0x003c0100	# MC_FMR: flash mode (FWS=1,FMCN=60)
+
+# arm7_9 force_hw_bkpts enable	# program resides in flash
+
+# AT91SAM7 flash command-"batch"
+# adapted by Martin Thomas based on information from Dominic Rath - Thanks
+arm7_9 dcc_downloads enable
+sleep 10
+poll
+flash probe 0
+
+#flash write <num> <file> <offset> [DEPRECATED] - Write the binary <file> to flash bank <num>, starting at <offset> bytes from the beginning of the bank. This command was replaced by the new command 'flash write_binary' using the same syntax. 
+#flash write_binary <num> <file> <offset> - Write the binary <file> to flash bank <num>, starting at <offset> bytes from the beginning of the bank. 
+#flash write_image <file> [offset] [type] - Write the image <file> to the current target's flash bank(s). A relocation [offset] can be specified and the file [type] can be specified explicitly as 'bin' (binary), 'ihex' (Intel hex), 'elf' (ELF file) or 's19' (Motorola s19). 
+
+#flash write 0 .\resource\samba.bin 0x0
+flash write_bank 0 .\resource\samba.bin 0x0
+#flash write_image .\resource\samba.bin 0x0 bin
+
+reset run
+sleep 10
+shutdown

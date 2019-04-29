@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+environment/project/0.833063108/HOME/delimiter=;
+environment/project/0.833063108/HOME/operation=replace
+environment/project/0.833063108/HOME/value=C\:\\Software
+environment/project/0.833063108/PATH/delimiter=;
+environment/project/0.833063108/PATH/operation=replace
+environment/project/0.833063108/PATH/value=C\:\\MinGW\\bin;C\:\\msys\\1.0\\bin;C\:\\H8\\IAR\\EXE;C\:\\GNUARM-471_EABI\\bin
+environment/project/0.833063108/TMP/delimiter=;
+environment/project/0.833063108/TMP/operation=replace
+environment/project/0.833063108/TMP/value=C\:\\Temp
+environment/project/0.833063108/append=true
+environment/project/0.833063108/appendContributed=false

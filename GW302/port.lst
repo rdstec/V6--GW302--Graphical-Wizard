@@ -1,0 +1,604 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"port.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.pxPortInitialiseStack,"ax",%progbits
+  18              		.align	2
+  19              		.global	pxPortInitialiseStack
+  20              		.code	16
+  21              		.thumb_func
+  23              	pxPortInitialiseStack:
+  24              	.LFB376:
+  25              		.file 1 "port.c"
+   1:port.c        **** /*
+   2:port.c        ****     FreeRTOS V6.1.0 - Copyright (C) 2010 Real Time Engineers Ltd.
+   3:port.c        **** 
+   4:port.c        ****     ***************************************************************************
+   5:port.c        ****     *                                                                         *
+   6:port.c        ****     * If you are:                                                             *
+   7:port.c        ****     *                                                                         *
+   8:port.c        ****     *    + New to FreeRTOS,                                                   *
+   9:port.c        ****     *    + Wanting to learn FreeRTOS or multitasking in general quickly       *
+  10:port.c        ****     *    + Looking for basic training,                                        *
+  11:port.c        ****     *    + Wanting to improve your FreeRTOS skills and productivity           *
+  12:port.c        ****     *                                                                         *
+  13:port.c        ****     * then take a look at the FreeRTOS books - available as PDF or paperback  *
+  14:port.c        ****     *                                                                         *
+  15:port.c        ****     *        "Using the FreeRTOS Real Time Kernel - a Practical Guide"        *
+  16:port.c        ****     *                  http://www.FreeRTOS.org/Documentation                  *
+  17:port.c        ****     *                                                                         *
+  18:port.c        ****     * A pdf reference manual is also available.  Both are usually delivered   *
+  19:port.c        ****     * to your inbox within 20 minutes to two hours when purchased between 8am *
+  20:port.c        ****     * and 8pm GMT (although please allow up to 24 hours in case of            *
+  21:port.c        ****     * exceptional circumstances).  Thank you for your support!                *
+  22:port.c        ****     *                                                                         *
+  23:port.c        ****     ***************************************************************************
+  24:port.c        **** 
+  25:port.c        ****     This file is part of the FreeRTOS distribution.
+  26:port.c        **** 
+  27:port.c        ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  28:port.c        ****     the terms of the GNU General Public License (version 2) as published by the
+  29:port.c        ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  30:port.c        ****     ***NOTE*** The exception to the GPL is included to allow you to distribute
+  31:port.c        ****     a combined work that includes FreeRTOS without being obliged to provide the
+  32:port.c        ****     source code for proprietary components outside of the FreeRTOS kernel.
+  33:port.c        ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT
+  34:port.c        ****     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  35:port.c        ****     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  36:port.c        ****     more details. You should have received a copy of the GNU General Public 
+  37:port.c        ****     License and the FreeRTOS license exception along with FreeRTOS; if not it 
+  38:port.c        ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained 
+  39:port.c        ****     by writing to Richard Barry, contact details for whom are available on the
+  40:port.c        ****     FreeRTOS WEB site.
+  41:port.c        **** 
+  42:port.c        ****     1 tab == 4 spaces!
+  43:port.c        **** 
+  44:port.c        ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  45:port.c        ****     contact details.
+  46:port.c        **** 
+  47:port.c        ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  48:port.c        ****     critical systems.
+  49:port.c        **** 
+  50:port.c        ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  51:port.c        ****     licensing and training services.
+  52:port.c        **** */
+  53:port.c        **** 
+  54:port.c        **** 
+  55:port.c        **** /*-----------------------------------------------------------
+  56:port.c        ****  * Implementation of functions defined in portable.h for the ARM7 port.
+  57:port.c        ****  *
+  58:port.c        ****  * Components that can be compiled to either ARM or THUMB mode are
+  59:port.c        ****  * contained in this file.  The ISR routines, which can only be compiled
+  60:port.c        ****  * to ARM mode are contained in portISR.c.
+  61:port.c        ****  *----------------------------------------------------------*/
+  62:port.c        **** 
+  63:port.c        **** /*
+  64:port.c        **** 	Changes from V2.5.2
+  65:port.c        **** 		
+  66:port.c        **** 	+ ulCriticalNesting is now saved as part of the task context, as is 
+  67:port.c        **** 	  therefore added to the initial task stack during pxPortInitialiseStack.
+  68:port.c        **** */
+  69:port.c        **** 
+  70:port.c        **** 
+  71:port.c        **** /* Standard includes. */
+  72:port.c        **** #include <stdlib.h>
+  73:port.c        **** 
+  74:port.c        **** /* Scheduler includes. */
+  75:port.c        **** #include "FreeRTOS.h"
+  76:port.c        **** #include "task.h"
+  77:port.c        **** 
+  78:port.c        **** /* Processor constants. */
+  79:port.c        **** #include "Board.h"
+  80:port.c        **** 
+  81:port.c        **** /* Constants required to setup the task context. */
+  82:port.c        **** #define portINITIAL_SPSR                ( ( portSTACK_TYPE ) 0x1f ) /* System mode, ARM mode, inter
+  83:port.c        **** #define portTHUMB_MODE_BIT              ( ( portSTACK_TYPE ) 0x20 )
+  84:port.c        **** #define portINSTRUCTION_SIZE            ( ( portSTACK_TYPE ) 4 )
+  85:port.c        **** #define portNO_CRITICAL_SECTION_NESTING ( ( portSTACK_TYPE ) 0 )
+  86:port.c        **** 
+  87:port.c        **** /* Constants required to setup the tick ISR. */
+  88:port.c        **** #define portENABLE_TIMER            ( ( unsigned char ) 0x01 )
+  89:port.c        **** #define portPRESCALE_VALUE          0x00
+  90:port.c        **** #define portINTERRUPT_ON_MATCH      ( ( unsigned long ) 0x01 )
+  91:port.c        **** #define portRESET_COUNT_ON_MATCH    ( ( unsigned long ) 0x02 )
+  92:port.c        **** 
+  93:port.c        **** /* Constants required to setup the PIT. */
+  94:port.c        **** #define portPIT_CLOCK_DIVISOR       ( ( unsigned long ) 16 )
+  95:port.c        **** #define portPIT_COUNTER_VALUE       ( ( ( configCPU_CLOCK_HZ / portPIT_CLOCK_DIVISOR ) / 1000UL ) *
+  96:port.c        **** 
+  97:port.c        **** #define portINT_LEVEL_SENSITIVE  0
+  98:port.c        **** #define portPIT_ENABLE          ( ( unsigned short ) 0x1 << 24 )
+  99:port.c        **** #define portPIT_INT_ENABLE      ( ( unsigned short ) 0x1 << 25 )
+ 100:port.c        **** /*-----------------------------------------------------------*/
+ 101:port.c        **** 
+ 102:port.c        **** /* Setup the timer to generate the tick interrupts. */
+ 103:port.c        **** static void prvSetupTimerInterrupt( void );
+ 104:port.c        **** 
+ 105:port.c        **** /* 
+ 106:port.c        ****  * The scheduler can only be started from ARM mode, so 
+ 107:port.c        ****  * vPortISRStartFirstSTask() is defined in portISR.c. 
+ 108:port.c        ****  */
+ 109:port.c        **** extern void vPortISRStartFirstTask( void );
+ 110:port.c        **** 
+ 111:port.c        **** /*-----------------------------------------------------------*/
+ 112:port.c        **** 
+ 113:port.c        **** /* 
+ 114:port.c        ****  * Initialise the stack of a task to look exactly as if a call to 
+ 115:port.c        ****  * portSAVE_CONTEXT had been called.
+ 116:port.c        ****  *
+ 117:port.c        ****  * See header file for description. 
+ 118:port.c        ****  */
+ 119:port.c        **** portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE pxCode, void *pvPa
+ 120:port.c        **** {
+  26              		.loc 1 120 0
+  27              		.cfi_startproc
+  28              	.LVL0:
+  29 0000 10B5     		push	{r4, lr}
+  30              	.LCFI0:
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+  34              	.LVL1:
+ 121:port.c        **** portSTACK_TYPE *pxOriginalTOS;
+ 122:port.c        **** 
+ 123:port.c        **** 	pxOriginalTOS = pxTopOfStack;
+ 124:port.c        **** 
+ 125:port.c        **** 	/* Setup the initial stack of the task.  The stack is set exactly as 
+ 126:port.c        **** 	expected by the portRESTORE_CONTEXT() macro. */
+ 127:port.c        **** 
+ 128:port.c        **** 	/* First on the stack is the return address - which in this case is the
+ 129:port.c        **** 	start of the task.  The offset is added to make the return address appear
+ 130:port.c        **** 	as it would within an IRQ ISR. */
+ 131:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) pxCode + portINSTRUCTION_SIZE;
+  35              		.loc 1 131 0
+  36 0002 0431     		add	r1, r1, #4
+  37              	.LVL2:
+  38 0004 0160     		str	r1, [r0]
+  39              	.LVL3:
+ 132:port.c        **** 	pxTopOfStack--;
+ 133:port.c        **** 
+ 134:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x00000000;  /* R14 */
+  40              		.loc 1 134 0
+  41 0006 011F     		sub	r1, r0, #4
+  42              	.LVL4:
+  43 0008 0023     		mov	r3, #0
+  44 000a 0B60     		str	r3, [r1]
+  45              	.LVL5:
+ 135:port.c        **** 	pxTopOfStack--;	
+ 136:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) pxOriginalTOS; /* Stack used when task starts goes in R13. */
+  46              		.loc 1 136 0
+  47 000c 0439     		sub	r1, r1, #4
+  48 000e 0860     		str	r0, [r1]
+  49              	.LVL6:
+ 137:port.c        **** 	pxTopOfStack--;
+ 138:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x12121212;  /* R12 */
+  50              		.loc 1 138 0
+  51 0010 0439     		sub	r1, r1, #4
+  52 0012 174C     		ldr	r4, .L2
+  53 0014 0C60     		str	r4, [r1]
+  54              	.LVL7:
+ 139:port.c        **** 	pxTopOfStack--;	
+ 140:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x11111111;  /* R11 */
+  55              		.loc 1 140 0
+  56 0016 0439     		sub	r1, r1, #4
+  57 0018 164C     		ldr	r4, .L2+4
+  58 001a 0C60     		str	r4, [r1]
+  59              	.LVL8:
+ 141:port.c        **** 	pxTopOfStack--;	
+ 142:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x10101010;  /* R10 */
+  60              		.loc 1 142 0
+  61 001c 0439     		sub	r1, r1, #4
+  62 001e 164C     		ldr	r4, .L2+8
+  63 0020 0C60     		str	r4, [r1]
+  64              	.LVL9:
+ 143:port.c        **** 	pxTopOfStack--;	
+ 144:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x09090909;  /* R9 */
+  65              		.loc 1 144 0
+  66 0022 0439     		sub	r1, r1, #4
+  67 0024 154C     		ldr	r4, .L2+12
+  68 0026 0C60     		str	r4, [r1]
+  69              	.LVL10:
+ 145:port.c        **** 	pxTopOfStack--;	
+ 146:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x08080808;  /* R8 */
+  70              		.loc 1 146 0
+  71 0028 0439     		sub	r1, r1, #4
+  72 002a 154C     		ldr	r4, .L2+16
+  73 002c 0C60     		str	r4, [r1]
+  74              	.LVL11:
+ 147:port.c        **** 	pxTopOfStack--;	
+ 148:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x07070707;  /* R7 */
+  75              		.loc 1 148 0
+  76 002e 0439     		sub	r1, r1, #4
+  77 0030 144C     		ldr	r4, .L2+20
+  78 0032 0C60     		str	r4, [r1]
+  79              	.LVL12:
+ 149:port.c        **** 	pxTopOfStack--;	
+ 150:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x06060606;  /* R6 */
+  80              		.loc 1 150 0
+  81 0034 0439     		sub	r1, r1, #4
+  82 0036 144C     		ldr	r4, .L2+24
+  83 0038 0C60     		str	r4, [r1]
+  84              	.LVL13:
+ 151:port.c        **** 	pxTopOfStack--;	
+ 152:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x05050505;  /* R5 */
+  85              		.loc 1 152 0
+  86 003a 0439     		sub	r1, r1, #4
+  87 003c 134C     		ldr	r4, .L2+28
+  88 003e 0C60     		str	r4, [r1]
+  89              	.LVL14:
+ 153:port.c        **** 	pxTopOfStack--;	
+ 154:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x04040404;  /* R4 */
+  90              		.loc 1 154 0
+  91 0040 0439     		sub	r1, r1, #4
+  92 0042 134C     		ldr	r4, .L2+32
+  93 0044 0C60     		str	r4, [r1]
+  94              	.LVL15:
+ 155:port.c        **** 	pxTopOfStack--;	
+ 156:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x03030303;  /* R3 */
+  95              		.loc 1 156 0
+  96 0046 0439     		sub	r1, r1, #4
+  97 0048 124C     		ldr	r4, .L2+36
+  98 004a 0C60     		str	r4, [r1]
+  99              	.LVL16:
+ 157:port.c        **** 	pxTopOfStack--;	
+ 158:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x02020202;  /* R2 */
+ 100              		.loc 1 158 0
+ 101 004c 0439     		sub	r1, r1, #4
+ 102 004e 124C     		ldr	r4, .L2+40
+ 103 0050 0C60     		str	r4, [r1]
+ 104              	.LVL17:
+ 159:port.c        **** 	pxTopOfStack--;	
+ 160:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) 0x01010101;  /* R1 */
+ 105              		.loc 1 160 0
+ 106 0052 0439     		sub	r1, r1, #4
+ 107 0054 114C     		ldr	r4, .L2+44
+ 108 0056 0C60     		str	r4, [r1]
+ 109              	.LVL18:
+ 161:port.c        **** 	pxTopOfStack--;	
+ 162:port.c        **** 
+ 163:port.c        **** 	/* When the task starts is will expect to find the function parameter in
+ 164:port.c        **** 	R0. */
+ 165:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) pvParameters; /* R0 */
+ 110              		.loc 1 165 0
+ 111 0058 0439     		sub	r1, r1, #4
+ 112 005a 0A60     		str	r2, [r1]
+ 113              	.LVL19:
+ 166:port.c        **** 	pxTopOfStack--;
+ 167:port.c        **** 
+ 168:port.c        **** 	/* The last thing onto the stack is the status register, which is set for
+ 169:port.c        **** 	system mode, with interrupts enabled. */
+ 170:port.c        **** 	*pxTopOfStack = ( portSTACK_TYPE ) portINITIAL_SPSR;
+ 171:port.c        **** 
+ 172:port.c        **** 	#ifdef THUMB_INTERWORK
+ 173:port.c        **** 	{
+ 174:port.c        **** 		/* We want the task to start in thumb mode. */
+ 175:port.c        **** 		*pxTopOfStack |= portTHUMB_MODE_BIT;
+ 114              		.loc 1 175 0
+ 115 005c 021C     		mov	r2, r0
+ 116              	.LVL20:
+ 117 005e 403A     		sub	r2, r2, #64
+ 118              	.LVL21:
+ 119 0060 3F21     		mov	r1, #63
+ 120              	.LVL22:
+ 121 0062 1160     		str	r1, [r2]
+ 122              	.LVL23:
+ 176:port.c        **** 	}
+ 177:port.c        **** 	#endif
+ 178:port.c        **** 
+ 179:port.c        **** 	pxTopOfStack--;
+ 180:port.c        **** 
+ 181:port.c        **** 	/* Some optimisation levels use the stack differently to others.  This 
+ 182:port.c        **** 	means the interrupt flags cannot always be stored on the stack and will
+ 183:port.c        **** 	instead be stored in a variable, which is then saved as part of the
+ 184:port.c        **** 	tasks context. */
+ 185:port.c        **** 	*pxTopOfStack = portNO_CRITICAL_SECTION_NESTING;
+ 123              		.loc 1 185 0
+ 124 0064 4438     		sub	r0, r0, #68
+ 125              	.LVL24:
+ 126 0066 0360     		str	r3, [r0]
+ 186:port.c        **** 
+ 187:port.c        **** 	return pxTopOfStack;
+ 188:port.c        **** }
+ 127              		.loc 1 188 0
+ 128              		@ sp needed for prologue
+ 129 0068 10BC     		pop	{r4}
+ 130 006a 02BC     		pop	{r1}
+ 131 006c 0847     		bx	r1
+ 132              	.L3:
+ 133 006e C046     		.align	2
+ 134              	.L2:
+ 135 0070 12121212 		.word	303174162
+ 136 0074 11111111 		.word	286331153
+ 137 0078 10101010 		.word	269488144
+ 138 007c 09090909 		.word	151587081
+ 139 0080 08080808 		.word	134744072
+ 140 0084 07070707 		.word	117901063
+ 141 0088 06060606 		.word	101058054
+ 142 008c 05050505 		.word	84215045
+ 143 0090 04040404 		.word	67372036
+ 144 0094 03030303 		.word	50529027
+ 145 0098 02020202 		.word	33686018
+ 146 009c 01010101 		.word	16843009
+ 147              		.cfi_endproc
+ 148              	.LFE376:
+ 150              		.section	.text.xPortStartScheduler,"ax",%progbits
+ 151              		.align	2
+ 152              		.global	xPortStartScheduler
+ 153              		.code	16
+ 154              		.thumb_func
+ 156              	xPortStartScheduler:
+ 157              	.LFB377:
+ 189:port.c        **** /*-----------------------------------------------------------*/
+ 190:port.c        **** 
+ 191:port.c        **** portBASE_TYPE xPortStartScheduler( void )
+ 192:port.c        **** {
+ 158              		.loc 1 192 0
+ 159              		.cfi_startproc
+ 160 0000 08B5     		push	{r3, lr}
+ 161              	.LCFI1:
+ 162              		.cfi_def_cfa_offset 8
+ 163              		.cfi_offset 3, -8
+ 164              		.cfi_offset 14, -4
+ 165              	.LVL25:
+ 166              	.LBB8:
+ 167              	.LBB9:
+ 168              	.LBB10:
+ 169              	.LBB11:
+ 170              		.file 2 "./include/lib_AT91SAM7A3.h"
+   1:./include/lib_AT91SAM7A3.h **** //* ----------------------------------------------------------------------------
+   2:./include/lib_AT91SAM7A3.h **** //*         ATMEL Microcontroller Software Support  -  ROUSSET  -
+   3:./include/lib_AT91SAM7A3.h **** //* ----------------------------------------------------------------------------
+   4:./include/lib_AT91SAM7A3.h **** //* DISCLAIMER:  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+   5:./include/lib_AT91SAM7A3.h **** //* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+   6:./include/lib_AT91SAM7A3.h **** //* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+   7:./include/lib_AT91SAM7A3.h **** //* DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+   8:./include/lib_AT91SAM7A3.h **** //* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+   9:./include/lib_AT91SAM7A3.h **** //* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+  10:./include/lib_AT91SAM7A3.h **** //* OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  11:./include/lib_AT91SAM7A3.h **** //* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  12:./include/lib_AT91SAM7A3.h **** //* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  13:./include/lib_AT91SAM7A3.h **** //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  14:./include/lib_AT91SAM7A3.h **** //* ----------------------------------------------------------------------------
+  15:./include/lib_AT91SAM7A3.h **** //* File Name           : lib_AT91SAM7A3.h
+  16:./include/lib_AT91SAM7A3.h **** //* Object              : AT91SAM7A3 inlined functions
+  17:./include/lib_AT91SAM7A3.h **** //* Generated           : AT91 SW Application Group  01/16/2006 (16:35:45)
+  18:./include/lib_AT91SAM7A3.h **** //*
+  19:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_MC_SAM.h/1.3/Thu Mar 25 15:19:14 2004//
+  20:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_pdc.h/1.2/Tue Jul  2 13:29:40 2002//
+  21:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_dbgu.h/1.1/Thu Aug 25 12:56:22 2005//
+  22:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_shdwc_6122A.h/1.1/Wed Oct  6 14:06:00 2004//
+  23:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_spi2.h/1.2/Tue Aug 23 15:37:28 2005//
+  24:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_ssc.h/1.4/Fri Jan 31 12:19:20 2003//
+  25:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_PWM_SAM.h/1.3/Thu Jan 22 10:10:50 2004//
+  26:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_tc_1753b.h/1.1/Fri Jan 31 12:20:02 2003//
+  27:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_pitc_6079A.h/1.2/Tue Nov  9 14:43:56 2004//
+  28:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_adc.h/1.6/Fri Oct 17 09:12:38 2003//
+  29:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_pmc_SAM.h/1.10/Fri Nov  4 09:39:44 2005//
+  30:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_rstc_6098A.h/1.1/Wed Oct  6 10:39:20 2004//
+  31:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_pio.h/1.3/Fri Jan 31 12:18:56 2003//
+  32:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_rttc_6081A.h/1.1/Wed Oct  6 10:39:38 2004//
+  33:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_twi.h/1.3/Mon Jul 19 14:27:58 2004//
+  34:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_usart.h/1.5/Thu Nov 21 16:01:54 2002//
+  35:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_mci.h/1.7/Wed May 19 09:27:28 2004//
+  36:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_wdtc_6080A.h/1.1/Wed Oct  6 10:38:30 2004//
+  37:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_udp.h/1.5/Tue Aug 30 12:13:47 2005//
+  38:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_aic_6075b.h/1.2/Thu Jul  7 07:48:22 2005//
+  39:./include/lib_AT91SAM7A3.h **** //* CVS Reference       : /lib_can_AT91.h/1.5/Tue Aug 23 15:37:07 2005//
+  40:./include/lib_AT91SAM7A3.h **** //* ----------------------------------------------------------------------------
+  41:./include/lib_AT91SAM7A3.h **** 
+  42:./include/lib_AT91SAM7A3.h **** #ifndef lib_AT91SAM7A3_H
+  43:./include/lib_AT91SAM7A3.h **** #define lib_AT91SAM7A3_H
+  44:./include/lib_AT91SAM7A3.h **** 
+  45:./include/lib_AT91SAM7A3.h **** /* *****************************************************************************
+  46:./include/lib_AT91SAM7A3.h ****                 SOFTWARE API FOR AIC
+  47:./include/lib_AT91SAM7A3.h ****    ***************************************************************************** */
+  48:./include/lib_AT91SAM7A3.h **** #define AT91C_AIC_BRANCH_OPCODE ((void (*) ()) 0xE51FFF20) // ldr, pc, [pc, #-&F20]
+  49:./include/lib_AT91SAM7A3.h **** 
+  50:./include/lib_AT91SAM7A3.h **** //*----------------------------------------------------------------------------
+  51:./include/lib_AT91SAM7A3.h **** //* \fn    AT91F_AIC_ConfigureIt
+  52:./include/lib_AT91SAM7A3.h **** //* \brief Interrupt Handler Initialization
+  53:./include/lib_AT91SAM7A3.h **** //*----------------------------------------------------------------------------
+  54:./include/lib_AT91SAM7A3.h **** __inline unsigned int AT91F_AIC_ConfigureIt (
+  55:./include/lib_AT91SAM7A3.h **** 	AT91PS_AIC pAic,  // \arg pointer to the AIC registers
+  56:./include/lib_AT91SAM7A3.h **** 	unsigned int irq_id,     // \arg interrupt number to initialize
+  57:./include/lib_AT91SAM7A3.h **** 	unsigned int priority,   // \arg priority to give to the interrupt
+  58:./include/lib_AT91SAM7A3.h **** 	unsigned int src_type,   // \arg activation and sense of activation
+  59:./include/lib_AT91SAM7A3.h **** 	void (*newHandler) () ) // \arg address of the interrupt handler
+  60:./include/lib_AT91SAM7A3.h **** {
+  61:./include/lib_AT91SAM7A3.h **** 	unsigned int oldHandler;
+  62:./include/lib_AT91SAM7A3.h ****     unsigned int mask ;
+  63:./include/lib_AT91SAM7A3.h **** 
+  64:./include/lib_AT91SAM7A3.h ****     oldHandler = pAic->AIC_SVR[irq_id];
+ 171              		.loc 2 64 0
+ 172 0002 0D4B     		ldr	r3, .L5
+ 173 0004 8421     		mov	r1, #132
+ 174 0006 5A58     		ldr	r2, [r3, r1]
+ 175              	.LVL26:
+  65:./include/lib_AT91SAM7A3.h **** 
+  66:./include/lib_AT91SAM7A3.h ****     mask = 0x1 << irq_id ;
+  67:./include/lib_AT91SAM7A3.h ****     //* Disable the interrupt on the interrupt controller
+  68:./include/lib_AT91SAM7A3.h ****     pAic->AIC_IDCR = mask ;
+ 176              		.loc 2 68 0
+ 177 0008 0222     		mov	r2, #2
+ 178 000a 9220     		mov	r0, #146
+ 179 000c 4000     		lsl	r0, r0, #1
+ 180 000e 1A50     		str	r2, [r3, r0]
+  69:./include/lib_AT91SAM7A3.h ****     //* Save the interrupt handler routine pointer and the interrupt priority
+  70:./include/lib_AT91SAM7A3.h ****     pAic->AIC_SVR[irq_id] = (unsigned int) newHandler ;
+ 181              		.loc 2 70 0
+ 182 0010 0A48     		ldr	r0, .L5+4
+ 183 0012 5850     		str	r0, [r3, r1]
+  71:./include/lib_AT91SAM7A3.h ****     //* Store the Source Mode Register
+  72:./include/lib_AT91SAM7A3.h ****     pAic->AIC_SMR[irq_id] = src_type | priority  ;
+ 184              		.loc 2 72 0
+ 185 0014 0721     		mov	r1, #7
+ 186 0016 5960     		str	r1, [r3, #4]
+  73:./include/lib_AT91SAM7A3.h ****     //* Clear the interrupt on the interrupt controller
+  74:./include/lib_AT91SAM7A3.h ****     pAic->AIC_ICCR = mask ;
+ 187              		.loc 2 74 0
+ 188 0018 9421     		mov	r1, #148
+ 189 001a 4900     		lsl	r1, r1, #1
+ 190 001c 5A50     		str	r2, [r3, r1]
+ 191              	.LBE11:
+ 192              	.LBE10:
+ 193:port.c        **** 	/* Start the timer that generates the tick ISR.  Interrupts are disabled
+ 194:port.c        **** 	here already. */
+ 195:port.c        **** 	prvSetupTimerInterrupt();
+ 196:port.c        **** 
+ 197:port.c        **** 	/* Start the first task. */
+ 198:port.c        **** 	vPortISRStartFirstTask();
+ 199:port.c        **** 
+ 200:port.c        **** 	/* Should not get here! */
+ 201:port.c        **** 	return 0;
+ 202:port.c        **** }
+ 203:port.c        **** /*-----------------------------------------------------------*/
+ 204:port.c        **** 
+ 205:port.c        **** void vPortEndScheduler( void )
+ 206:port.c        **** {
+ 207:port.c        **** 	/* It is unlikely that the ARM port will require this function as there
+ 208:port.c        **** 	is nothing to return to.  */
+ 209:port.c        **** }
+ 210:port.c        **** /*-----------------------------------------------------------*/
+ 211:port.c        **** 
+ 212:port.c        **** /*
+ 213:port.c        ****  * Setup the timer 0 to generate the tick interrupts at the required frequency.
+ 214:port.c        ****  */
+ 215:port.c        **** static void prvSetupTimerInterrupt( void )
+ 216:port.c        **** {
+ 217:port.c        **** AT91PS_PITC pxPIT = AT91C_BASE_PITC;
+ 218:port.c        **** 
+ 219:port.c        **** 	/* Setup the AIC for PIT interrupts.  The interrupt routine chosen depends
+ 220:port.c        **** 	on whether the preemptive or cooperative scheduler is being used. */
+ 221:port.c        **** 	#if configUSE_PREEMPTION == 0
+ 222:port.c        **** 
+ 223:port.c        **** 		extern void ( vNonPreemptiveTick ) ( void );
+ 224:port.c        **** 		AT91F_AIC_ConfigureIt( AT91C_BASE_AIC, AT91C_ID_SYS, AT91C_AIC_PRIOR_HIGHEST, portINT_LEVEL_SENSI
+ 225:port.c        **** 
+ 226:port.c        **** 	#else
+ 227:port.c        **** 		
+ 228:port.c        **** 		extern void ( vPreemptiveTick )( void );
+ 229:port.c        **** 		AT91F_AIC_ConfigureIt( AT91C_BASE_AIC, AT91C_ID_SYS, AT91C_AIC_PRIOR_HIGHEST, portINT_LEVEL_SENSI
+ 230:port.c        **** 
+ 231:port.c        **** 	#endif
+ 232:port.c        **** 
+ 233:port.c        **** 	/* Configure the PIT period. */
+ 234:port.c        **** 	pxPIT->PITC_PIMR = portPIT_ENABLE | portPIT_INT_ENABLE | portPIT_COUNTER_VALUE;
+ 193              		.loc 1 234 0
+ 194 001e 0848     		ldr	r0, .L5+8
+ 195 0020 0849     		ldr	r1, .L5+12
+ 196 0022 0860     		str	r0, [r1]
+ 235:port.c        **** 
+ 236:port.c        **** 	/* Enable the interrupt.  Global interrupts are disables at this point so 
+ 237:port.c        **** 	this is safe. */
+ 238:port.c        ****     AT91C_BASE_AIC->AIC_IECR = 0x1 << AT91C_ID_SYS;
+ 197              		.loc 1 238 0
+ 198 0024 9021     		mov	r1, #144
+ 199 0026 4900     		lsl	r1, r1, #1
+ 200 0028 5A50     		str	r2, [r3, r1]
+ 201              	.LBE9:
+ 202              	.LBE8:
+ 198:port.c        **** 	vPortISRStartFirstTask();
+ 203              		.loc 1 198 0
+ 204 002a FFF7FEFF 		bl	vPortISRStartFirstTask
+ 205              	.LVL27:
+ 202:port.c        **** }
+ 206              		.loc 1 202 0
+ 207 002e 0020     		mov	r0, #0
+ 208              		@ sp needed for prologue
+ 209 0030 08BC     		pop	{r3}
+ 210 0032 02BC     		pop	{r1}
+ 211 0034 0847     		bx	r1
+ 212              	.L6:
+ 213 0036 C046     		.align	2
+ 214              	.L5:
+ 215 0038 00F0FFFF 		.word	-4096
+ 216 003c 00000000 		.word	vPreemptiveTick
+ 217 0040 B30B0003 		.word	50334643
+ 218 0044 30FDFFFF 		.word	-720
+ 219              		.cfi_endproc
+ 220              	.LFE377:
+ 222              		.section	.text.vPortEndScheduler,"ax",%progbits
+ 223              		.align	2
+ 224              		.global	vPortEndScheduler
+ 225              		.code	16
+ 226              		.thumb_func
+ 228              	vPortEndScheduler:
+ 229              	.LFB378:
+ 206:port.c        **** {
+ 230              		.loc 1 206 0
+ 231              		.cfi_startproc
+ 209:port.c        **** }
+ 232              		.loc 1 209 0
+ 233              		@ sp needed for prologue
+ 234 0000 7047     		bx	lr
+ 235              		.cfi_endproc
+ 236              	.LFE378:
+ 238              		.comm	POWERtaskhandle,4,4
+ 239              		.comm	TWItaskhandle,4,4
+ 240              		.comm	SetTime,4,4
+ 241 0002 C046     		.text
+ 242              	.Letext0:
+ 243              		.file 3 "./include/projdefs.h"
+ 244              		.file 4 "./portmacro.h"
+ 245              		.file 5 "./include/task.h"
+ 246              		.file 6 "./include/AT91SAM7A3.h"
+ 247              		.file 7 "./include/queue.h"
+ 248              		.file 8 "./include/semphr.h"
+ 249              		.file 9 "Board.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 port.c
+  C:\Temp\ccRnBoKx.s:18     .text.pxPortInitialiseStack:00000000 $t
+  C:\Temp\ccRnBoKx.s:23     .text.pxPortInitialiseStack:00000000 pxPortInitialiseStack
+  C:\Temp\ccRnBoKx.s:135    .text.pxPortInitialiseStack:00000070 $d
+  C:\Temp\ccRnBoKx.s:151    .text.xPortStartScheduler:00000000 $t
+  C:\Temp\ccRnBoKx.s:156    .text.xPortStartScheduler:00000000 xPortStartScheduler
+  C:\Temp\ccRnBoKx.s:215    .text.xPortStartScheduler:00000038 $d
+  C:\Temp\ccRnBoKx.s:223    .text.vPortEndScheduler:00000000 $t
+  C:\Temp\ccRnBoKx.s:228    .text.vPortEndScheduler:00000000 vPortEndScheduler
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.e755308d0f97ac5a4d77c88bfa88161b
+                           .group:00000000 wm4.config.h.193.5fb8ef056cdff92dec3dee9552839d8c
+                           .group:00000000 wm4._ansi.h.23.95dee4059009fe3ab635a191bb73dc66
+                           .group:00000000 wm4.stdlib.h.13.603ed7eb09a1561ab06840b7c0fcff58
+                           .group:00000000 wm4.stddef.h.187.40b3a084f9bc2c020a9e00b9eabe9c14
+                           .group:00000000 wm4._default_types.h.6.1dbd2e581fd590860c7c17f21d147e91
+                           .group:00000000 wm4.lock.h.2.9bc98482741e5e2a9450b12934a684ea
+                           .group:00000000 wm4.stddef.h.349.31f4c5baff3fa2689010b32028da9c47
+                           .group:00000000 wm4.reent.h.16.9e42f0e588b85e70b2bf6572af57ce64
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.50.f5923f1950ced340a337f4676566f65a
+                           .group:00000000 wm4.stddef.h.40.b60a1c1ee3f272eef5327a730cbabca6
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+UNDEFINED SYMBOLS
+vPortISRStartFirstTask
+vPreemptiveTick

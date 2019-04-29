@@ -1,0 +1,810 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"portISR.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.vPortISRStartFirstTask,"ax",%progbits
+  17              		.align	2
+  18              		.global	vPortISRStartFirstTask
+  20              	vPortISRStartFirstTask:
+  21              	.LFB376:
+  22              		.file 1 "portISR.c"
+   1:portISR.c     **** /*
+   2:portISR.c     ****  cp 20061201
+   3:portISR.c     ****  
+   4:portISR.c     ****  This file modified so system interrupt can output serial data on debug port
+   5:portISR.c     ****  system interrupt handled by vPreemptiveTick()
+   6:portISR.c     **** 	 
+   7:portISR.c     **** */ 
+   8:portISR.c     **** 
+   9:portISR.c     **** /*
+  10:portISR.c     ****     FreeRTOS V6.1.0 - Copyright (C) 2010 Real Time Engineers Ltd.
+  11:portISR.c     **** 
+  12:portISR.c     ****     ***************************************************************************
+  13:portISR.c     ****     *                                                                         *
+  14:portISR.c     ****     * If you are:                                                             *
+  15:portISR.c     ****     *                                                                         *
+  16:portISR.c     ****     *    + New to FreeRTOS,                                                   *
+  17:portISR.c     ****     *    + Wanting to learn FreeRTOS or multitasking in general quickly       *
+  18:portISR.c     ****     *    + Looking for basic training,                                        *
+  19:portISR.c     ****     *    + Wanting to improve your FreeRTOS skills and productivity           *
+  20:portISR.c     ****     *                                                                         *
+  21:portISR.c     ****     * then take a look at the FreeRTOS books - available as PDF or paperback  *
+  22:portISR.c     ****     *                                                                         *
+  23:portISR.c     ****     *        "Using the FreeRTOS Real Time Kernel - a Practical Guide"        *
+  24:portISR.c     ****     *                  http://www.FreeRTOS.org/Documentation                  *
+  25:portISR.c     ****     *                                                                         *
+  26:portISR.c     ****     * A pdf reference manual is also available.  Both are usually delivered   *
+  27:portISR.c     ****     * to your inbox within 20 minutes to two hours when purchased between 8am *
+  28:portISR.c     ****     * and 8pm GMT (although please allow up to 24 hours in case of            *
+  29:portISR.c     ****     * exceptional circumstances).  Thank you for your support!                *
+  30:portISR.c     ****     *                                                                         *
+  31:portISR.c     ****     ***************************************************************************
+  32:portISR.c     **** 
+  33:portISR.c     ****     This file is part of the FreeRTOS distribution.
+  34:portISR.c     **** 
+  35:portISR.c     ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  36:portISR.c     ****     the terms of the GNU General Public License (version 2) as published by the
+  37:portISR.c     ****     Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+  38:portISR.c     ****     ***NOTE*** The exception to the GPL is included to allow you to distribute
+  39:portISR.c     ****     a combined work that includes FreeRTOS without being obliged to provide the
+  40:portISR.c     ****     source code for proprietary components outside of the FreeRTOS kernel.
+  41:portISR.c     ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT
+  42:portISR.c     ****     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  43:portISR.c     ****     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+  44:portISR.c     ****     more details. You should have received a copy of the GNU General Public 
+  45:portISR.c     ****     License and the FreeRTOS license exception along with FreeRTOS; if not it 
+  46:portISR.c     ****     can be viewed here: http://www.freertos.org/a00114.html and also obtained 
+  47:portISR.c     ****     by writing to Richard Barry, contact details for whom are available on the
+  48:portISR.c     ****     FreeRTOS WEB site.
+  49:portISR.c     **** 
+  50:portISR.c     ****     1 tab == 4 spaces!
+  51:portISR.c     **** 
+  52:portISR.c     ****     http://www.FreeRTOS.org - Documentation, latest information, license and
+  53:portISR.c     ****     contact details.
+  54:portISR.c     **** 
+  55:portISR.c     ****     http://www.SafeRTOS.com - A version that is certified for use in safety
+  56:portISR.c     ****     critical systems.
+  57:portISR.c     **** 
+  58:portISR.c     ****     http://www.OpenRTOS.com - Commercial support, development, porting,
+  59:portISR.c     ****     licensing and training services.
+  60:portISR.c     **** */
+  61:portISR.c     **** 
+  62:portISR.c     **** 
+  63:portISR.c     **** /*-----------------------------------------------------------
+  64:portISR.c     ****  * Components that can be compiled to either ARM or THUMB mode are
+  65:portISR.c     ****  * contained in port.c  The ISR routines, which can only be compiled
+  66:portISR.c     ****  * to ARM mode, are contained in this file.
+  67:portISR.c     ****  *----------------------------------------------------------*/
+  68:portISR.c     **** 
+  69:portISR.c     **** /*
+  70:portISR.c     **** 	Changes from V3.2.4
+  71:portISR.c     **** 
+  72:portISR.c     **** 	+ The assembler statements are now included in a single asm block rather
+  73:portISR.c     **** 	  than each line having its own asm block.
+  74:portISR.c     **** */
+  75:portISR.c     **** 
+  76:portISR.c     **** /* Scheduler includes now in Board.h */
+  77:portISR.c     **** // Include Standard files
+  78:portISR.c     **** #include "Board.h"
+  79:portISR.c     **** 
+  80:portISR.c     **** //#include "FreeRTOS.h"
+  81:portISR.c     **** //#include "task.h"
+  82:portISR.c     **** 
+  83:portISR.c     **** //#include "AT91SAM7X256.h"
+  84:portISR.c     **** 
+  85:portISR.c     **** /* Constants required to handle interrupts. */
+  86:portISR.c     **** #define portTIMER_MATCH_ISR_BIT     ( ( unsigned char ) 0x01 )
+  87:portISR.c     **** #define portCLEAR_VIC_INTERRUPT     ( ( unsigned long ) 0 )
+  88:portISR.c     **** 
+  89:portISR.c     **** /* Constants required to handle critical sections. */
+  90:portISR.c     **** #define portNO_CRITICAL_NESTING     ( ( unsigned long ) 0 )
+  91:portISR.c     **** volatile unsigned long ulCriticalNesting = 9999UL;
+  92:portISR.c     **** 
+  93:portISR.c     **** /*-----------------------------------------------------------*/
+  94:portISR.c     **** 
+  95:portISR.c     **** /* ISR to handle manual context switches (from a call to taskYIELD()). */
+  96:portISR.c     **** void vPortYieldProcessor( void ) __attribute__((interrupt("SWI"), naked));
+  97:portISR.c     **** 
+  98:portISR.c     **** /* 
+  99:portISR.c     ****  * The scheduler can only be started from ARM mode, hence the inclusion of this
+ 100:portISR.c     ****  * function here.
+ 101:portISR.c     ****  */
+ 102:portISR.c     **** void vPortISRStartFirstTask( void );
+ 103:portISR.c     **** /*-----------------------------------------------------------*/
+ 104:portISR.c     **** 
+ 105:portISR.c     **** void vPortISRStartFirstTask( void )
+ 106:portISR.c     **** {
+  23              		.loc 1 106 0
+  24              		.cfi_startproc
+  25              		@ Function supports interworking.
+  26              		@ args = 0, pretend = 0, frame = 0
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28              		@ link register save eliminated.
+  29              	.LBB2:
+ 107:portISR.c     **** 	/* Simply start the scheduler.  This is included here as it can only be
+ 108:portISR.c     **** 	called from ARM mode. */
+ 109:portISR.c     **** 	portRESTORE_CONTEXT();
+  30              		.loc 1 109 0
+  31              	@ 109 "portISR.c" 1
+  32 0000 44009FE5 		LDR		R0, =pxCurrentTCB								
+  33 0004 000090E5 		LDR		R0, [R0]										
+  34 0008 00E090E5 		LDR		LR, [R0]										
+  35 000c 3C009FE5 		LDR		R0, =ulCriticalNesting							
+  36 0010 0200BEE8 		LDMFD	LR!, {R1}											
+  37 0014 001080E5 		STR		R1, [R0]										
+  38 0018 0100BEE8 		LDMFD	LR!, {R0}											
+  39 001c 00F069E1 		MSR		SPSR, R0										
+  40 0020 FF7FDEE8 		LDMFD	LR, {R0-R14}^										
+  41 0024 0000A0E1 		NOP														
+  42 0028 3CE09EE5 		LDR		LR, [LR, #+60]									
+  43 002c 04F05EE2 		SUBS	PC, LR, #4											
+  44              		
+  45              	@ 0 "" 2
+  46 0030 0C309FE5 		ldr	r3, .L2
+  47 0034 003093E5 		ldr	r3, [r3, #0]
+  48 0038 08309FE5 		ldr	r3, .L2+4
+  49 003c 003093E5 		ldr	r3, [r3, #0]
+  50 0040 1EFF2FE1 		bx	lr
+  51              	.L3:
+  52              		.align	2
+  53              	.L2:
+  54 0044 00000000 		.word	.LANCHOR0
+  55 0048 00000000 		.word	pxCurrentTCB
+  56              	.LBE2:
+  57              		.cfi_endproc
+  58              	.LFE376:
+  60              		.section	.text.vPortYieldProcessor,"ax",%progbits
+  61              		.align	2
+  62              		.global	vPortYieldProcessor
+  64              	vPortYieldProcessor:
+  65              	.LFB377:
+ 110:portISR.c     **** }
+ 111:portISR.c     **** /*-----------------------------------------------------------*/
+ 112:portISR.c     **** 
+ 113:portISR.c     **** /*
+ 114:portISR.c     ****  * Called by portYIELD() or taskYIELD() to manually force a context switch.
+ 115:portISR.c     ****  *
+ 116:portISR.c     ****  * When a context switch is performed from the task level the saved task 
+ 117:portISR.c     ****  * context is made to look as if it occurred from within the tick ISR.  This
+ 118:portISR.c     ****  * way the same restore context function can be used when restoring the context
+ 119:portISR.c     ****  * saved from the ISR or that saved from a call to vPortYieldProcessor.
+ 120:portISR.c     ****  */
+ 121:portISR.c     **** void vPortYieldProcessor( void )
+ 122:portISR.c     **** {
+  66              		.loc 1 122 0
+  67              		.cfi_startproc
+  68              		@ ARM Exception Handler.
+  69              		@ Naked Function: prologue and epilogue provided by programmer.
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123:portISR.c     **** 	/* Within an IRQ ISR the link register has an offset from the true return 
+ 124:portISR.c     **** 	address, but an SWI ISR does not.  Add the offset manually so the same 
+ 125:portISR.c     **** 	ISR return code can be used in both cases. */
+ 126:portISR.c     **** 	asm volatile ( "ADD		LR, LR, #4" );
+  72              		.loc 1 126 0
+  73              	@ 126 "portISR.c" 1
+  74 0000 04E08EE2 		ADD		LR, LR, #4
+  75              	@ 0 "" 2
+  76              	.LBB3:
+ 127:portISR.c     **** 
+ 128:portISR.c     **** 	/* Perform the context switch.  First save the context of the current task. */
+ 129:portISR.c     **** 	portSAVE_CONTEXT();
+  77              		.loc 1 129 0
+  78              	@ 129 "portISR.c" 1
+  79 0004 01002DE9 		STMDB	SP!, {R0}											
+  80 0008 00204DE9 		STMDB	SP,{SP}^											
+  81 000c 0000A0E1 		NOP														
+  82 0010 04D04DE2 		SUB	SP, SP, #4											
+  83 0014 0100BDE8 		LDMIA	SP!,{R0}											
+  84 0018 004020E9 		STMDB	R0!, {LR}											
+  85 001c 00E0A0E1 		MOV	LR, R0												
+  86 0020 0100BDE8 		LDMIA	SP!, {R0}											
+  87 0024 FF7F4EE9 		STMDB	LR,{R0-LR}^											
+  88 0028 0000A0E1 		NOP														
+  89 002c 3CE04EE2 		SUB	LR, LR, #60											
+  90 0030 00004FE1 		MRS	R0, SPSR											
+  91 0034 01002EE9 		STMDB	LR!, {R0}											
+  92 0038 64009FE5 		LDR	R0, =ulCriticalNesting								
+  93 003c 000090E5 		LDR	R0, [R0]											
+  94 0040 01002EE9 		STMDB	LR!, {R0}											
+  95 0044 5C009FE5 		LDR	R0, =pxCurrentTCB									
+  96 0048 000090E5 		LDR	R0, [R0]											
+  97 004c 00E080E5 		STR	LR, [R0]											
+  98              		
+  99              	@ 0 "" 2
+ 100 0050 44509FE5 		ldr	r5, .L5
+ 101 0054 003095E5 		ldr	r3, [r5, #0]
+ 102 0058 40409FE5 		ldr	r4, .L5+4
+ 103 005c 003094E5 		ldr	r3, [r4, #0]
+ 104              	.LBE3:
+ 130:portISR.c     **** 
+ 131:portISR.c     **** 	/* Find the highest priority task that is ready to run. */
+ 132:portISR.c     **** 	vTaskSwitchContext();
+ 105              		.loc 1 132 0
+ 106 0060 FEFFFFEB 		bl	vTaskSwitchContext
+ 107              	.LVL0:
+ 108              	.LBB4:
+ 133:portISR.c     **** 
+ 134:portISR.c     **** 	/* Restore the context of the new task. */
+ 135:portISR.c     **** 	portRESTORE_CONTEXT();	
+ 109              		.loc 1 135 0
+ 110              	@ 135 "portISR.c" 1
+ 111 0064 3C009FE5 		LDR		R0, =pxCurrentTCB								
+ 112 0068 000090E5 		LDR		R0, [R0]										
+ 113 006c 00E090E5 		LDR		LR, [R0]										
+ 114 0070 2C009FE5 		LDR		R0, =ulCriticalNesting							
+ 115 0074 0200BEE8 		LDMFD	LR!, {R1}											
+ 116 0078 001080E5 		STR		R1, [R0]										
+ 117 007c 0100BEE8 		LDMFD	LR!, {R0}											
+ 118 0080 00F069E1 		MSR		SPSR, R0										
+ 119 0084 FF7FDEE8 		LDMFD	LR, {R0-R14}^										
+ 120 0088 0000A0E1 		NOP														
+ 121 008c 3CE09EE5 		LDR		LR, [LR, #+60]									
+ 122 0090 04F05EE2 		SUBS	PC, LR, #4											
+ 123              		
+ 124              	@ 0 "" 2
+ 125 0094 003095E5 		ldr	r3, [r5, #0]
+ 126 0098 003094E5 		ldr	r3, [r4, #0]
+ 127              	.LBE4:
+ 136:portISR.c     **** }
+ 128              		.loc 1 136 0
+ 129              	.L6:
+ 130              		.align	2
+ 131              	.L5:
+ 132 009c 00000000 		.word	.LANCHOR0
+ 133 00a0 00000000 		.word	pxCurrentTCB
+ 134              		.cfi_endproc
+ 135              	.LFE377:
+ 137              		.section	.text.SystemInterruptHandler,"ax",%progbits
+ 138              		.align	2
+ 139              		.global	SystemInterruptHandler
+ 141              	SystemInterruptHandler:
+ 142              	.LFB378:
+ 137:portISR.c     **** /*-----------------------------------------------------------*/
+ 138:portISR.c     **** 
+ 139:portISR.c     **** /* 
+ 140:portISR.c     ****  * The ISR used for the scheduler tick depends on whether the cooperative or
+ 141:portISR.c     ****  * the preemptive scheduler is being used.
+ 142:portISR.c     ****  */
+ 143:portISR.c     **** 
+ 144:portISR.c     **** #if configUSE_PREEMPTION == 0
+ 145:portISR.c     **** 
+ 146:portISR.c     **** 	/* The cooperative scheduler requires a normal IRQ service routine to 
+ 147:portISR.c     **** 	simply increment the system tick. */
+ 148:portISR.c     **** 	void vNonPreemptiveTick( void ) __attribute__ ((interrupt ("IRQ")));
+ 149:portISR.c     **** 	void vNonPreemptiveTick( void )
+ 150:portISR.c     **** 	{
+ 151:portISR.c     **** 		unsigned long ulDummy;
+ 152:portISR.c     **** 		
+ 153:portISR.c     **** 		/* Increment the tick count - which may wake some tasks but as the
+ 154:portISR.c     **** 		preemptive scheduler is not being used any woken task is not given
+ 155:portISR.c     **** 		processor time no matter what its priority. */
+ 156:portISR.c     **** 		vTaskIncrementTick();
+ 157:portISR.c     **** 		
+ 158:portISR.c     **** 		/* Clear the PIT interrupt. */
+ 159:portISR.c     **** 		ulDummy = AT91C_BASE_PITC->PITC_PIVR;
+ 160:portISR.c     **** 		
+ 161:portISR.c     **** 		/* End the interrupt in the AIC. */
+ 162:portISR.c     **** 		AT91C_BASE_AIC->AIC_EOICR = ulDummy;
+ 163:portISR.c     **** 	}
+ 164:portISR.c     **** 
+ 165:portISR.c     **** #else
+ 166:portISR.c     **** 
+ 167:portISR.c     **** void SystemInterruptHandler( void );
+ 168:portISR.c     **** void SystemInterruptHandler( void )
+ 169:portISR.c     **** {
+ 143              		.loc 1 169 0
+ 144              		.cfi_startproc
+ 145              		@ Function supports interworking.
+ 146              		@ args = 0, pretend = 0, frame = 8
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148 0000 10402DE9 		stmfd	sp!, {r4, lr}
+ 149              	.LCFI0:
+ 150              		.cfi_def_cfa_offset 8
+ 151              		.cfi_offset 4, -8
+ 152              		.cfi_offset 14, -4
+ 153 0004 08D04DE2 		sub	sp, sp, #8
+ 154              	.LCFI1:
+ 155              		.cfi_def_cfa_offset 16
+ 170:portISR.c     ****     signed char cChar;
+ 171:portISR.c     ****     unsigned long ulStatus;
+ 172:portISR.c     ****     portBASE_TYPE SwitchRequired = pdFALSE;
+ 156              		.loc 1 172 0
+ 157 0008 0030A0E3 		mov	r3, #0
+ 158 000c 00308DE5 		str	r3, [sp, #0]
+ 159              	.LVL1:
+ 173:portISR.c     **** 
+ 174:portISR.c     ****     ulStatus = AT91C_BASE_DBGU->DBGU_CSR & AT91C_BASE_DBGU->DBGU_IMR;
+ 160              		.loc 1 174 0
+ 161 0010 0030E0E3 		mvn	r3, #0
+ 162 0014 EB2D13E5 		ldr	r2, [r3, #-3563]
+ 163 0018 EF4D13E5 		ldr	r4, [r3, #-3567]
+ 164 001c 024004E0 		and	r4, r4, r2
+ 165              	.LVL2:
+ 175:portISR.c     **** 
+ 176:portISR.c     ****     // check for DBGU RX interrupt
+ 177:portISR.c     ****     if( ulStatus & AT91C_US_RXRDY )
+ 166              		.loc 1 177 0
+ 167 0020 010014E3 		tst	r4, #1
+ 168 0024 0700000A 		beq	.L8
+ 178:portISR.c     ****     {
+ 179:portISR.c     ****     	// The interrupt was caused by the receiver getting data.
+ 180:portISR.c     ****         cChar = AT91C_BASE_DBGU->DBGU_RHR;
+ 169              		.loc 1 180 0
+ 170 0028 E73D13E5 		ldr	r3, [r3, #-3559]
+ 171 002c 08108DE2 		add	r1, sp, #8
+ 172 0030 013061E5 		strb	r3, [r1, #-1]!
+ 173              	.LVL3:
+ 181:portISR.c     **** 
+ 182:portISR.c     ****         // post received character to queue
+ 183:portISR.c     ****         xQueueSendFromISR( RxCOM0, &cChar, &SwitchRequired );
+ 174              		.loc 1 183 0
+ 175 0034 90309FE5 		ldr	r3, .L14
+ 176 0038 000093E5 		ldr	r0, [r3, #0]
+ 177 003c 0D20A0E1 		mov	r2, sp
+ 178 0040 0030A0E3 		mov	r3, #0
+ 179 0044 FEFFFFEB 		bl	xQueueGenericSendFromISR
+ 180              	.LVL4:
+ 181              	.L8:
+ 184:portISR.c     ****         
+ 185:portISR.c     ****     }
+ 186:portISR.c     **** 
+ 187:portISR.c     ****     // check for DBGU TX interrupt
+ 188:portISR.c     ****     if( ulStatus & AT91C_US_TXRDY )
+ 182              		.loc 1 188 0
+ 183 0048 020014E3 		tst	r4, #2
+ 184 004c 0B00000A 		beq	.L9
+ 189:portISR.c     ****     {
+ 190:portISR.c     ****         // The interrupt was caused by the THR becoming empty. Are there any more characters to tra
+ 191:portISR.c     ****         if( xQueueReceiveFromISR( TxCOM0, &cChar, &SwitchRequired ) == pdTRUE )
+ 185              		.loc 1 191 0
+ 186 0050 78309FE5 		ldr	r3, .L14+4
+ 187 0054 000093E5 		ldr	r0, [r3, #0]
+ 188 0058 07108DE2 		add	r1, sp, #7
+ 189 005c 0D20A0E1 		mov	r2, sp
+ 190 0060 FEFFFFEB 		bl	xQueueReceiveFromISR
+ 191              	.LVL5:
+ 192 0064 010050E3 		cmp	r0, #1
+ 193              	.LVL6:
+ 192:portISR.c     ****         {
+ 193:portISR.c     ****         	// A character was retrieved from the queue so can be sent to the THR now
+ 194:portISR.c     ****         	AT91C_BASE_DBGU->DBGU_THR = cChar;
+ 194              		.loc 1 194 0
+ 195 0068 D720DD01 		ldreqsb	r2, [sp, #7]
+ 196 006c 0030E003 		mvneq	r3, #0
+ 197 0070 E32D0305 		streq	r2, [r3, #-3555]
+ 195:portISR.c     ****         }
+ 196:portISR.c     ****         else
+ 197:portISR.c     ****     	{
+ 198:portISR.c     ****         	// Queue empty, nothing to send so turn off the Tx interrupt
+ 199:portISR.c     ****         	AT91C_BASE_DBGU->DBGU_IDR = AT91C_US_TXRDY;
+ 198              		.loc 1 199 0
+ 199 0074 0220A013 		movne	r2, #2
+ 200 0078 0030E013 		mvnne	r3, #0
+ 201 007c F32D0315 		strne	r2, [r3, #-3571]
+ 202              	.L9:
+ 200:portISR.c     ****         }    
+ 201:portISR.c     ****     }
+ 202:portISR.c     **** 
+ 203:portISR.c     ****     // check for PIT interrupt
+ 204:portISR.c     ****     if( AT91C_BASE_PITC->PITC_PISR & AT91C_PITC_PITS )
+ 203              		.loc 1 204 0
+ 204 0080 0030E0E3 		mvn	r3, #0
+ 205 0084 CB3213E5 		ldr	r3, [r3, #-715]
+ 206 0088 010013E3 		tst	r3, #1
+ 207 008c 0500000A 		beq	.L11
+ 205:portISR.c     ****     {
+ 206:portISR.c     ****         // Increment the tick count - this may wake a task
+ 207:portISR.c     ****         vTaskIncrementTick();
+ 208              		.loc 1 207 0
+ 209 0090 FEFFFFEB 		bl	vTaskIncrementTick
+ 210              	.LVL7:
+ 208:portISR.c     ****       
+ 209:portISR.c     ****         // Clear the PIT interrupt
+ 210:portISR.c     ****         ulStatus = AT91C_BASE_PITC->PITC_PIVR;
+ 211              		.loc 1 210 0
+ 212 0094 0030E0E3 		mvn	r3, #0
+ 213 0098 C74213E5 		ldr	r4, [r3, #-711]
+ 214              	.LVL8:
+ 211:portISR.c     ****       
+ 212:portISR.c     ****         // set for task switch
+ 213:portISR.c     ****         SwitchRequired = pdTRUE;
+ 215              		.loc 1 213 0
+ 216 009c 0130A0E3 		mov	r3, #1
+ 217 00a0 00308DE5 		str	r3, [sp, #0]
+ 218 00a4 020000EA 		b	.L12
+ 219              	.L11:
+ 214:portISR.c     ****     }
+ 215:portISR.c     **** 
+ 216:portISR.c     **** 	if( SwitchRequired )                                         \
+ 220              		.loc 1 216 0
+ 221 00a8 00309DE5 		ldr	r3, [sp, #0]
+ 222 00ac 000053E3 		cmp	r3, #0
+ 223 00b0 0000000A 		beq	.L13
+ 224              	.L12:
+ 217:portISR.c     **** 	{
+ 218:portISR.c     **** 		portYIELD_FROM_ISR();
+ 225              		.loc 1 218 0
+ 226 00b4 FEFFFFEB 		bl	vTaskSwitchContext
+ 227              	.LVL9:
+ 228              	.L13:
+ 219:portISR.c     **** 	}
+ 220:portISR.c     ****     
+ 221:portISR.c     ****     /* End the interrupt in the AIC. */
+ 222:portISR.c     **** 	AT91C_BASE_AIC->AIC_EOICR = ulStatus;
+ 229              		.loc 1 222 0
+ 230 00b8 0030E0E3 		mvn	r3, #0
+ 231 00bc CF4E03E5 		str	r4, [r3, #-3791]
+ 223:portISR.c     **** 
+ 224:portISR.c     **** }
+ 232              		.loc 1 224 0
+ 233 00c0 08D08DE2 		add	sp, sp, #8
+ 234 00c4 1040BDE8 		ldmfd	sp!, {r4, lr}
+ 235 00c8 1EFF2FE1 		bx	lr
+ 236              	.L15:
+ 237              		.align	2
+ 238              	.L14:
+ 239 00cc 00000000 		.word	RxCOM0
+ 240 00d0 00000000 		.word	TxCOM0
+ 241              		.cfi_endproc
+ 242              	.LFE378:
+ 244              		.section	.text.vPreemptiveTick,"ax",%progbits
+ 245              		.align	2
+ 246              		.global	vPreemptiveTick
+ 248              	vPreemptiveTick:
+ 249              	.LFB379:
+ 225:portISR.c     **** 
+ 226:portISR.c     **** 
+ 227:portISR.c     **** /* The preemptive scheduler is defined as "naked" as the full context is saved on entry as part of 
+ 228:portISR.c     **** void vPreemptiveTick( void ) __attribute__((naked));
+ 229:portISR.c     **** void vPreemptiveTick( void )
+ 230:portISR.c     **** {
+ 250              		.loc 1 230 0
+ 251              		.cfi_startproc
+ 252              		@ Function supports interworking.
+ 253              		@ Naked Function: prologue and epilogue provided by programmer.
+ 254              		@ args = 0, pretend = 0, frame = 0
+ 255              		@ frame_needed = 0, uses_anonymous_args = 0
+ 256              	.LBB5:
+ 231:portISR.c     ****     /* Save the context of the interrupted task. */
+ 232:portISR.c     ****     portSAVE_CONTEXT();
+ 257              		.loc 1 232 0
+ 258              	@ 232 "portISR.c" 1
+ 259 0000 01002DE9 		STMDB	SP!, {R0}											
+ 260 0004 00204DE9 		STMDB	SP,{SP}^											
+ 261 0008 0000A0E1 		NOP														
+ 262 000c 04D04DE2 		SUB	SP, SP, #4											
+ 263 0010 0100BDE8 		LDMIA	SP!,{R0}											
+ 264 0014 004020E9 		STMDB	R0!, {LR}											
+ 265 0018 00E0A0E1 		MOV	LR, R0												
+ 266 001c 0100BDE8 		LDMIA	SP!, {R0}											
+ 267 0020 FF7F4EE9 		STMDB	LR,{R0-LR}^											
+ 268 0024 0000A0E1 		NOP														
+ 269 0028 3CE04EE2 		SUB	LR, LR, #60											
+ 270 002c 00004FE1 		MRS	R0, SPSR											
+ 271 0030 01002EE9 		STMDB	LR!, {R0}											
+ 272 0034 64009FE5 		LDR	R0, =ulCriticalNesting								
+ 273 0038 000090E5 		LDR	R0, [R0]											
+ 274 003c 01002EE9 		STMDB	LR!, {R0}											
+ 275 0040 5C009FE5 		LDR	R0, =pxCurrentTCB									
+ 276 0044 000090E5 		LDR	R0, [R0]											
+ 277 0048 00E080E5 		STR	LR, [R0]											
+ 278              		
+ 279              	@ 0 "" 2
+ 280 004c 44509FE5 		ldr	r5, .L17
+ 281 0050 003095E5 		ldr	r3, [r5, #0]
+ 282 0054 40409FE5 		ldr	r4, .L17+4
+ 283 0058 003094E5 		ldr	r3, [r4, #0]
+ 284              	.LBE5:
+ 233:portISR.c     ****     
+ 234:portISR.c     ****     /* Call the handler function.  This must be a separate 
+ 235:portISR.c     ****     function unless you can guarantee that handling the 
+ 236:portISR.c     ****     interrupt will never use any stack space. */
+ 237:portISR.c     **** 	SystemInterruptHandler();
+ 285              		.loc 1 237 0
+ 286 005c FEFFFFEB 		bl	SystemInterruptHandler
+ 287              	.LVL10:
+ 288              	.LBB6:
+ 238:portISR.c     **** 
+ 239:portISR.c     ****     /* Restore the context of the task that is going to 
+ 240:portISR.c     ****     execute next. This might not be the same as the originally 
+ 241:portISR.c     ****     interrupted task.*/
+ 242:portISR.c     ****     portRESTORE_CONTEXT();
+ 289              		.loc 1 242 0
+ 290              	@ 242 "portISR.c" 1
+ 291 0060 3C009FE5 		LDR		R0, =pxCurrentTCB								
+ 292 0064 000090E5 		LDR		R0, [R0]										
+ 293 0068 00E090E5 		LDR		LR, [R0]										
+ 294 006c 2C009FE5 		LDR		R0, =ulCriticalNesting							
+ 295 0070 0200BEE8 		LDMFD	LR!, {R1}											
+ 296 0074 001080E5 		STR		R1, [R0]										
+ 297 0078 0100BEE8 		LDMFD	LR!, {R0}											
+ 298 007c 00F069E1 		MSR		SPSR, R0										
+ 299 0080 FF7FDEE8 		LDMFD	LR, {R0-R14}^										
+ 300 0084 0000A0E1 		NOP														
+ 301 0088 3CE09EE5 		LDR		LR, [LR, #+60]									
+ 302 008c 04F05EE2 		SUBS	PC, LR, #4											
+ 303              		
+ 304              	@ 0 "" 2
+ 305 0090 003095E5 		ldr	r3, [r5, #0]
+ 306 0094 003094E5 		ldr	r3, [r4, #0]
+ 307              	.LBE6:
+ 243:portISR.c     **** }
+ 308              		.loc 1 243 0
+ 309              	.L18:
+ 310              		.align	2
+ 311              	.L17:
+ 312 0098 00000000 		.word	.LANCHOR0
+ 313 009c 00000000 		.word	pxCurrentTCB
+ 314              		.cfi_endproc
+ 315              	.LFE379:
+ 317              		.section	.text.vPortDisableInterruptsFromThumb,"ax",%progbits
+ 318              		.align	2
+ 319              		.global	vPortDisableInterruptsFromThumb
+ 321              	vPortDisableInterruptsFromThumb:
+ 322              	.LFB380:
+ 244:portISR.c     **** 
+ 245:portISR.c     **** 
+ 246:portISR.c     **** #endif
+ 247:portISR.c     **** /*-----------------------------------------------------------*/
+ 248:portISR.c     **** 
+ 249:portISR.c     **** /*
+ 250:portISR.c     ****  * The interrupt management utilities can only be called from ARM mode.  When
+ 251:portISR.c     ****  * THUMB_INTERWORK is defined the utilities are defined as functions here to
+ 252:portISR.c     ****  * ensure a switch to ARM mode.  When THUMB_INTERWORK is not defined then
+ 253:portISR.c     ****  * the utilities are defined as macros in portmacro.h - as per other ports.
+ 254:portISR.c     ****  */
+ 255:portISR.c     **** void vPortDisableInterruptsFromThumb( void ) __attribute__ ((naked));
+ 256:portISR.c     **** void vPortEnableInterruptsFromThumb( void ) __attribute__ ((naked));
+ 257:portISR.c     **** 
+ 258:portISR.c     **** void vPortDisableInterruptsFromThumb( void )
+ 259:portISR.c     **** {
+ 323              		.loc 1 259 0
+ 324              		.cfi_startproc
+ 325              		@ Function supports interworking.
+ 326              		@ Naked Function: prologue and epilogue provided by programmer.
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 260:portISR.c     **** 	asm volatile ( 
+ 329              		.loc 1 260 0
+ 330              	@ 260 "portISR.c" 1
+ 331 0000 01002DE9 		STMDB	SP!, {R0}		
+ 332 0004 00000FE1 		MRS	R0, CPSR		
+ 333 0008 C00080E3 		ORR	R0, R0, #0xC0	
+ 334 000c 00F029E1 		MSR	CPSR, R0		
+ 335 0010 0100BDE8 		LDMIA	SP!, {R0}		
+ 336 0014 1EFF2FE1 		BX		R14
+ 337              	@ 0 "" 2
+ 261:portISR.c     **** 		"STMDB	SP!, {R0}		\n\t"	/* Push R0.									*/
+ 262:portISR.c     **** 		"MRS	R0, CPSR		\n\t"	/* Get CPSR.								*/
+ 263:portISR.c     **** 		"ORR	R0, R0, #0xC0	\n\t"	/* Disable IRQ, FIQ.						*/
+ 264:portISR.c     **** 		"MSR	CPSR, R0		\n\t"	/* Write back modified value.				*/
+ 265:portISR.c     **** 		"LDMIA	SP!, {R0}		\n\t"	/* Pop R0.									*/
+ 266:portISR.c     **** 		"BX		R14" );					/* Return back to thumb.					*/
+ 267:portISR.c     **** }
+ 338              		.loc 1 267 0
+ 339              		.cfi_endproc
+ 340              	.LFE380:
+ 342              		.section	.text.vPortEnableInterruptsFromThumb,"ax",%progbits
+ 343              		.align	2
+ 344              		.global	vPortEnableInterruptsFromThumb
+ 346              	vPortEnableInterruptsFromThumb:
+ 347              	.LFB381:
+ 268:portISR.c     **** 		
+ 269:portISR.c     **** void vPortEnableInterruptsFromThumb( void )
+ 270:portISR.c     **** {
+ 348              		.loc 1 270 0
+ 349              		.cfi_startproc
+ 350              		@ Function supports interworking.
+ 351              		@ Naked Function: prologue and epilogue provided by programmer.
+ 352              		@ args = 0, pretend = 0, frame = 0
+ 353              		@ frame_needed = 0, uses_anonymous_args = 0
+ 271:portISR.c     **** 	asm volatile ( 
+ 354              		.loc 1 271 0
+ 355              	@ 271 "portISR.c" 1
+ 356 0000 01002DE9 		STMDB	SP!, {R0}		
+ 357 0004 00000FE1 		MRS	R0, CPSR		
+ 358 0008 C000C0E3 		BIC	R0, R0, #0xC0	
+ 359 000c 00F029E1 		MSR	CPSR, R0		
+ 360 0010 0100BDE8 		LDMIA	SP!, {R0}		
+ 361 0014 1EFF2FE1 		BX		R14
+ 362              	@ 0 "" 2
+ 272:portISR.c     **** 		"STMDB	SP!, {R0}		\n\t"	/* Push R0.									*/	
+ 273:portISR.c     **** 		"MRS	R0, CPSR		\n\t"	/* Get CPSR.								*/	
+ 274:portISR.c     **** 		"BIC	R0, R0, #0xC0	\n\t"	/* Enable IRQ, FIQ.							*/	
+ 275:portISR.c     **** 		"MSR	CPSR, R0		\n\t"	/* Write back modified value.				*/	
+ 276:portISR.c     **** 		"LDMIA	SP!, {R0}		\n\t"	/* Pop R0.									*/
+ 277:portISR.c     **** 		"BX		R14" );					/* Return back to thumb.					*/
+ 278:portISR.c     **** }
+ 363              		.loc 1 278 0
+ 364              		.cfi_endproc
+ 365              	.LFE381:
+ 367              		.section	.text.vPortEnterCritical,"ax",%progbits
+ 368              		.align	2
+ 369              		.global	vPortEnterCritical
+ 371              	vPortEnterCritical:
+ 372              	.LFB382:
+ 279:portISR.c     **** 
+ 280:portISR.c     **** 
+ 281:portISR.c     **** /* The code generated by the GCC compiler uses the stack in different ways at
+ 282:portISR.c     **** different optimisation levels.  The interrupt flags can therefore not always
+ 283:portISR.c     **** be saved to the stack.  Instead the critical section nesting level is stored
+ 284:portISR.c     **** in a variable, which is then saved as part of the stack context. */
+ 285:portISR.c     **** void vPortEnterCritical( void )
+ 286:portISR.c     **** {
+ 373              		.loc 1 286 0
+ 374              		.cfi_startproc
+ 375              		@ Function supports interworking.
+ 376              		@ args = 0, pretend = 0, frame = 0
+ 377              		@ frame_needed = 0, uses_anonymous_args = 0
+ 378              		@ link register save eliminated.
+ 287:portISR.c     **** 	/* Disable interrupts as per portDISABLE_INTERRUPTS(); 							*/
+ 288:portISR.c     **** 	asm volatile ( 
+ 379              		.loc 1 288 0
+ 380              	@ 288 "portISR.c" 1
+ 381 0000 01002DE9 		STMDB	SP!, {R0}			
+ 382 0004 00000FE1 		MRS	R0, CPSR			
+ 383 0008 C00080E3 		ORR	R0, R0, #0xC0		
+ 384 000c 00F029E1 		MSR	CPSR, R0			
+ 385 0010 0100BDE8 		LDMIA	SP!, {R0}
+ 386              	@ 0 "" 2
+ 289:portISR.c     **** 		"STMDB	SP!, {R0}			\n\t"	/* Push R0.								*/
+ 290:portISR.c     **** 		"MRS	R0, CPSR			\n\t"	/* Get CPSR.							*/
+ 291:portISR.c     **** 		"ORR	R0, R0, #0xC0		\n\t"	/* Disable IRQ, FIQ.					*/
+ 292:portISR.c     **** 		"MSR	CPSR, R0			\n\t"	/* Write back modified value.			*/
+ 293:portISR.c     **** 		"LDMIA	SP!, {R0}" );				/* Pop R0.								*/
+ 294:portISR.c     **** 
+ 295:portISR.c     **** 	/* Now interrupts are disabled ulCriticalNesting can be accessed 
+ 296:portISR.c     **** 	directly.  Increment ulCriticalNesting to keep a count of how many times
+ 297:portISR.c     **** 	portENTER_CRITICAL() has been called. */
+ 298:portISR.c     **** 	ulCriticalNesting++;
+ 387              		.loc 1 298 0
+ 388 0014 0C309FE5 		ldr	r3, .L22
+ 389 0018 002093E5 		ldr	r2, [r3, #0]
+ 390 001c 012082E2 		add	r2, r2, #1
+ 391 0020 002083E5 		str	r2, [r3, #0]
+ 392 0024 1EFF2FE1 		bx	lr
+ 393              	.L23:
+ 394              		.align	2
+ 395              	.L22:
+ 396 0028 00000000 		.word	.LANCHOR0
+ 397              		.cfi_endproc
+ 398              	.LFE382:
+ 400              		.section	.text.vPortExitCritical,"ax",%progbits
+ 401              		.align	2
+ 402              		.global	vPortExitCritical
+ 404              	vPortExitCritical:
+ 405              	.LFB383:
+ 299:portISR.c     **** }
+ 300:portISR.c     **** 
+ 301:portISR.c     **** void vPortExitCritical( void )
+ 302:portISR.c     **** {
+ 406              		.loc 1 302 0
+ 407              		.cfi_startproc
+ 408              		@ Function supports interworking.
+ 409              		@ args = 0, pretend = 0, frame = 0
+ 410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 411              		@ link register save eliminated.
+ 303:portISR.c     **** 	if( ulCriticalNesting > portNO_CRITICAL_NESTING )
+ 412              		.loc 1 303 0
+ 413 0000 3C309FE5 		ldr	r3, .L26
+ 414 0004 003093E5 		ldr	r3, [r3, #0]
+ 415 0008 000053E3 		cmp	r3, #0
+ 416 000c 1EFF2F01 		bxeq	lr
+ 304:portISR.c     **** 	{
+ 305:portISR.c     **** 		/* Decrement the nesting count as we are leaving a critical section. */
+ 306:portISR.c     **** 		ulCriticalNesting--;
+ 417              		.loc 1 306 0
+ 418 0010 2C309FE5 		ldr	r3, .L26
+ 419 0014 002093E5 		ldr	r2, [r3, #0]
+ 420 0018 012042E2 		sub	r2, r2, #1
+ 421 001c 002083E5 		str	r2, [r3, #0]
+ 307:portISR.c     **** 
+ 308:portISR.c     **** 		/* If the nesting level has reached zero then interrupts should be
+ 309:portISR.c     **** 		re-enabled. */
+ 310:portISR.c     **** 		if( ulCriticalNesting == portNO_CRITICAL_NESTING )
+ 422              		.loc 1 310 0
+ 423 0020 003093E5 		ldr	r3, [r3, #0]
+ 424 0024 000053E3 		cmp	r3, #0
+ 425 0028 1EFF2F11 		bxne	lr
+ 311:portISR.c     **** 		{
+ 312:portISR.c     **** 			/* Enable interrupts as per portEXIT_CRITICAL().					*/
+ 313:portISR.c     **** 			asm volatile ( 
+ 426              		.loc 1 313 0
+ 427              	@ 313 "portISR.c" 1
+ 428 002c 01002DE9 		STMDB	SP!, {R0}		
+ 429 0030 00000FE1 		MRS	R0, CPSR		
+ 430 0034 C000C0E3 		BIC	R0, R0, #0xC0	
+ 431 0038 00F029E1 		MSR	CPSR, R0		
+ 432 003c 0100BDE8 		LDMIA	SP!, {R0}
+ 433              	@ 0 "" 2
+ 434 0040 1EFF2FE1 		bx	lr
+ 435              	.L27:
+ 436              		.align	2
+ 437              	.L26:
+ 438 0044 00000000 		.word	.LANCHOR0
+ 439              		.cfi_endproc
+ 440              	.LFE383:
+ 442              		.global	ulCriticalNesting
+ 443              		.comm	POWERtaskhandle,4,4
+ 444              		.comm	TWItaskhandle,4,4
+ 445              		.comm	SetTime,4,4
+ 446              		.section	.data.ulCriticalNesting,"aw",%progbits
+ 447              		.align	2
+ 448              		.set	.LANCHOR0,. + 0
+ 451              	ulCriticalNesting:
+ 452 0000 0F270000 		.word	9999
+ 453              		.text
+ 454              	.Letext0:
+ 455              		.file 2 "./include/AT91SAM7A3.h"
+ 456              		.file 3 "./include/task.h"
+ 457              		.file 4 "./include/queue.h"
+ 458              		.file 5 "./include/semphr.h"
+ 459              		.file 6 "Board.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 portISR.c
+  C:\Temp\cc6LJyFg.s:17     .text.vPortISRStartFirstTask:00000000 $a
+  C:\Temp\cc6LJyFg.s:20     .text.vPortISRStartFirstTask:00000000 vPortISRStartFirstTask
+  C:\Temp\cc6LJyFg.s:451    .data.ulCriticalNesting:00000000 ulCriticalNesting
+  C:\Temp\cc6LJyFg.s:54     .text.vPortISRStartFirstTask:00000044 $d
+  C:\Temp\cc6LJyFg.s:61     .text.vPortYieldProcessor:00000000 $a
+  C:\Temp\cc6LJyFg.s:64     .text.vPortYieldProcessor:00000000 vPortYieldProcessor
+  C:\Temp\cc6LJyFg.s:132    .text.vPortYieldProcessor:0000009c $d
+  C:\Temp\cc6LJyFg.s:138    .text.SystemInterruptHandler:00000000 $a
+  C:\Temp\cc6LJyFg.s:141    .text.SystemInterruptHandler:00000000 SystemInterruptHandler
+  C:\Temp\cc6LJyFg.s:239    .text.SystemInterruptHandler:000000cc $d
+  C:\Temp\cc6LJyFg.s:245    .text.vPreemptiveTick:00000000 $a
+  C:\Temp\cc6LJyFg.s:248    .text.vPreemptiveTick:00000000 vPreemptiveTick
+  C:\Temp\cc6LJyFg.s:312    .text.vPreemptiveTick:00000098 $d
+  C:\Temp\cc6LJyFg.s:318    .text.vPortDisableInterruptsFromThumb:00000000 $a
+  C:\Temp\cc6LJyFg.s:321    .text.vPortDisableInterruptsFromThumb:00000000 vPortDisableInterruptsFromThumb
+  C:\Temp\cc6LJyFg.s:343    .text.vPortEnableInterruptsFromThumb:00000000 $a
+  C:\Temp\cc6LJyFg.s:346    .text.vPortEnableInterruptsFromThumb:00000000 vPortEnableInterruptsFromThumb
+  C:\Temp\cc6LJyFg.s:368    .text.vPortEnterCritical:00000000 $a
+  C:\Temp\cc6LJyFg.s:371    .text.vPortEnterCritical:00000000 vPortEnterCritical
+  C:\Temp\cc6LJyFg.s:396    .text.vPortEnterCritical:00000028 $d
+  C:\Temp\cc6LJyFg.s:401    .text.vPortExitCritical:00000000 $a
+  C:\Temp\cc6LJyFg.s:404    .text.vPortExitCritical:00000000 vPortExitCritical
+  C:\Temp\cc6LJyFg.s:438    .text.vPortExitCritical:00000044 $d
+                            *COM*:00000004 POWERtaskhandle
+                            *COM*:00000004 TWItaskhandle
+                            *COM*:00000004 SetTime
+  C:\Temp\cc6LJyFg.s:447    .data.ulCriticalNesting:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.1.46fbfa20fa232e47f00874f3e1c302d6
+                           .group:00000000 wm4.Board.h.9.fb7d243db0e7e4c70fc5c5308962051c
+                           .group:00000000 wm4.AT91SAM7A3.h.47.d520374ed0d352801eee6a21dd2220a3
+                           .group:00000000 wm4.lib_AT91SAM7A3.h.43.b96965aef7b64d3c61b53421dff32f3d
+                           .group:00000000 wm4.stddef.h.40.50cf36416e06376af8a9dca28536f2e4
+                           .group:00000000 wm4.projdefs.h.55.cdae9ead80b5a2ac004f41bb277aad45
+                           .group:00000000 wm4.FreeRTOSConfig.h.55.21a0bf6949661856eb9bd458ca526d69
+                           .group:00000000 wm4.portmacro.h.78.312ea2a2591c2c784e5cb239eea0b39c
+                           .group:00000000 wm4.portable.h.311.02653c2286cc0addcb8e7b32211fdde5
+                           .group:00000000 wm4.mpu_wrappers.h.55.46a4a008a193040c38098e9a5f07ff9d
+                           .group:00000000 wm4.FreeRTOS.h.136.ac0125896626c2d69b79b44ea315652b
+                           .group:00000000 wm4.list.h.90.ffdb657f66139f74e2982d5a33457923
+                           .group:00000000 wm4.task.h.75.6c9adf28cb16a37dd5593a2f9c33f128
+                           .group:00000000 wm4.queue.h.62.c626e69c2c492f5b1e4920732a8be821
+                           .group:00000000 wm4.semphr.h.65.030ef7caa4665b46960b9de8a1cccba7
+                           .group:00000000 wm4.Board.h.1257.275975018c8e952526c2554b98141b95
+                           .group:00000000 wm4.Board.h.1481.126b635f2c4daf829686312d1e66f9ec
+
+UNDEFINED SYMBOLS
+pxCurrentTCB
+vTaskSwitchContext
+xQueueGenericSendFromISR
+xQueueReceiveFromISR
+vTaskIncrementTick
+RxCOM0
+TxCOM0
